@@ -16,6 +16,7 @@ export interface FeedbackValues {
 
 const Keys = {
   ADDRESS_BOOK: network => 'addressbook-' + network,
+  ADDRESS_BOOKCOIN: coin => 'addressbook-' + coin,
   AGREE_DISCLAIMER: 'agreeDisclaimer',
   AMAZON_GIFT_CARDS: network => 'amazonGiftCards-' + network,
   AMAZON_USER_INFO: 'amazonUserInfo',
@@ -285,12 +286,24 @@ export class PersistenceProvider {
     return this.storage.set(Keys.ADDRESS_BOOK(network), addressbook);
   }
 
+  setAddressBookCoin(coin: string, addressbook) {
+    return this.storage.set(Keys.ADDRESS_BOOKCOIN(coin), addressbook);
+  }
+
   getAddressBook(network: string) {
     return this.storage.get(Keys.ADDRESS_BOOK(network));
   }
 
+  getAddressBookCoin(coin: string) {
+    return this.storage.get(Keys.ADDRESS_BOOKCOIN(coin));
+  }
+
   removeAddressbook(network: string) {
     return this.storage.remove(Keys.ADDRESS_BOOK(network));
+  }
+
+  removeAddressbookCoin(coin: string) {
+    return this.storage.remove(Keys.ADDRESS_BOOKCOIN(coin));
   }
 
   setLastCurrencyUsed(lastCurrencyUsed) {

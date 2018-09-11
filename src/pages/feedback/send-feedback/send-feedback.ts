@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { ModalController, NavController, NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
-import { Observable } from 'rxjs';
 
 // native
 import { Device } from '@ionic-native/device';
@@ -42,8 +41,6 @@ export class SendFeedbackPage {
   public isCordova: boolean;
   public fromCard: boolean;
 
-  private isAndroid: boolean;
-
   constructor(
     private actionSheetProvider: ActionSheetProvider,
     private configProvider: ConfigProvider,
@@ -72,7 +69,6 @@ export class SendFeedbackPage {
     this.appName = this.appProvider.info.nameCase;
     this.leavingFeedback = false;
     this.isCordova = this.platformProvider.isCordova;
-    this.isAndroid = this.platformProvider.isAndroid;
   }
 
   ionViewWillEnter() {
@@ -90,13 +86,13 @@ export class SendFeedbackPage {
         );
         break;
       case 3:
-        this.reaction = this.translate.instant('Thanks!');
+        this.reaction = 'Thanks!';
         this.comment = this.translate.instant(
           "We're always listening for ways we can improve your experience. Feel free to leave us a review in the app store or request a new feature."
         );
         break;
       default:
-        this.reaction = this.translate.instant('Feedback!');
+        this.reaction = 'Feedback!';
         this.comment = this.translate.instant(
           "We're always listening for ways we can improve your experience. Feel free to leave us a review in the app store or request a new feature. Also, let us know if you experience any technical issues."
         );
@@ -105,10 +101,8 @@ export class SendFeedbackPage {
   }
 
   public showAppreciationSheet(): void {
-    const storeName = this.isAndroid ? 'Play Store' : 'App Store';
     const infoSheet = this.actionSheetProvider.createInfoSheet(
-      'appreciate-review',
-      { storeName }
+      'appreciate-review'
     );
     infoSheet.present();
     infoSheet.onDidDismiss(async option => {
@@ -121,12 +115,12 @@ export class SendFeedbackPage {
     });
   }
 
-  public async leaveFeedback() {
+  public leaveFeedback() {
     this.leavingFeedback = this.leavingFeedback ? false : true;
-    if (this.leavingFeedback) {
-      await Observable.timer(50).toPromise();
-      this.feedbackTextarea.setFocus();
-    }
+    if (this.leavingFeedback)
+      setTimeout(() => {
+        this.feedbackTextarea.setFocus();
+      }, 50);
   }
 
   public async openExternalLink(url: string): Promise<void> {

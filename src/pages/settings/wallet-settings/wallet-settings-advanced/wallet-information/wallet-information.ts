@@ -65,7 +65,7 @@ export class WalletInformationPage {
     this.addressType = this.wallet.credentials.addressType || 'P2SH';
     this.derivationStrategy =
       this.wallet.credentials.derivationStrategy || 'BIP45';
-    this.basePath = this.wallet.credentials.getBaseAddressDerivationPath();
+    this.basePath = this.wallet.credentials.getBaseAddressDerivationPath(this.coin);
     this.pubKeys = _.map(this.wallet.credentials.publicKeyRing, 'xPubKey');
     this.externalSource = null;
     this.canSign = this.wallet.canSign();

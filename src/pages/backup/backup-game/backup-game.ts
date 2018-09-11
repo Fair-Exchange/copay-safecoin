@@ -262,7 +262,23 @@ export class BackupGamePage {
       .then(() => {
         this.onGoingProcessProvider.clear();
         const walletType =
-          this.wallet.coin === 'btc' ? 'bitcoin' : 'bitcoin cash';
+          this.wallet.coin === 'btc' 
+           ? 'bitcoin' 
+            : this.wallet.coin === 'safe' 
+              ? 'safecoin'
+               : this.wallet.coin === 'btcz' 
+                 ? 'bitcoinz'
+                  : this.wallet.coin === 'zcl' 
+                   ? 'zclassic'
+                  : this.wallet.coin === 'anon' 
+                   ? 'anonymous'
+                  : this.wallet.coin === 'zel' 
+                   ? 'zelcash'
+                    : this.wallet.coin === 'rvn' 
+                     ? 'ravencoin'
+                      : this.wallet.coin === 'ltc' 
+                       ? 'litecoin'
+                        : 'bitcoin cash';
         const infoSheet = this.actionSheetProvider.createInfoSheet(
           'backup-ready',
           { walletType }
@@ -273,7 +289,7 @@ export class BackupGamePage {
             this.navCtrl.push(DisclaimerPage);
           } else {
             this.navCtrl.popToRoot();
-            this.events.publish('Wallet/setAddress', true);
+            this.events.publish('Wallet/setAddress');
           }
         });
       })

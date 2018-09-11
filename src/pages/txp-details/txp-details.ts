@@ -117,7 +117,7 @@ export class TxpDetailsPage {
     // this.tx.hasMultiplesOutputs = true;
   }
 
-  ionViewDidLoad() {
+  ionViewWillEnter() {
     this.displayFeeValues();
     this.initActionList();
     this.checkPaypro();
@@ -134,9 +134,7 @@ export class TxpDetailsPage {
           this.GLIDERA_LOCK_TIME;
       }
     }
-  }
 
-  ionViewWillEnter() {
     this.events.subscribe('bwsEvent', (walletId: string, type: string) => {
       _.each(
         [
@@ -224,7 +222,7 @@ export class TxpDetailsPage {
     }, 10);
   }
 
-  private checkPaypro(): void {
+  private checkPaypro() {
     if (this.tx.payProUrl) {
       this.wallet.fetchPayPro(
         {
@@ -247,7 +245,7 @@ export class TxpDetailsPage {
     }
   }
 
-  private paymentTimeControl(expirationTime): void {
+  private paymentTimeControl(expirationTime) {
     let setExpirationTime = (): void => {
       let now = Math.floor(Date.now() / 1000);
       if (now > expirationTime) {

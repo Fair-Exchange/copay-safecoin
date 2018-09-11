@@ -90,6 +90,13 @@ describe('HomePage', () => {
         incomingDataProvider = testBed.get(IncomingDataProvider);
         spyOn(clipboardProvider, 'getData').and.returnValue(Promise.resolve());
       });
+      it('should ignore SafecoinAddress', async () => {
+        spyOn(incomingDataProvider, 'parseData').and.returnValue({
+          type: 'SafecoinAddress'
+        });
+        await instance.checkClipboard();
+        expect(instance.validDataFromClipboard).toBeNull();
+      });
       it('should ignore BitcoinAddress', async () => {
         spyOn(incomingDataProvider, 'parseData').and.returnValue({
           type: 'BitcoinAddress'

@@ -19,19 +19,19 @@ export { UserAgent } from '@ionic-native/user-agent';
 export { ActionSheetProvider } from '../providers/action-sheet/action-sheet';
 export { AddressBookProvider } from '../providers/address-book/address-book';
 export { AddressProvider } from '../providers/address/address';
-export { AmazonProvider } from '../providers/amazon/amazon';
+// export { AmazonProvider } from '../providers/amazon/amazon';
 export { AppIdentityProvider } from '../providers/app-identity/app-identity';
 export { AppProvider } from '../providers/app/app';
 export { BackupProvider } from '../providers/backup/backup';
-export {
-  BitPayAccountProvider
-} from '../providers/bitpay-account/bitpay-account';
-export { BitPayCardProvider } from '../providers/bitpay-card/bitpay-card';
-export { BitPayProvider } from '../providers/bitpay/bitpay';
+// export {
+//  BitPayAccountProvider
+// } from '../providers/bitpay-account/bitpay-account';
+// export { BitPayCardProvider } from '../providers/bitpay-card/bitpay-card';
+// export { BitPayProvider } from '../providers/bitpay/bitpay';
 export { BwcErrorProvider } from '../providers/bwc-error/bwc-error';
 export { BwcProvider } from '../providers/bwc/bwc';
 export { ClipboardProvider } from '../providers/clipboard/clipboard';
-export { CoinbaseProvider } from '../providers/coinbase/coinbase';
+// export { CoinbaseProvider } from '../providers/coinbase/coinbase';
 export { ConfigProvider } from '../providers/config/config';
 export {
   DerivationPathHelperProvider
@@ -44,14 +44,14 @@ export { ExternalLinkProvider } from '../providers/external-link/external-link';
 export { FeeProvider } from '../providers/fee/fee';
 export { FeedbackProvider } from '../providers/feedback/feedback';
 export { FilterProvider } from '../providers/filter/filter';
-export { GlideraProvider } from '../providers/glidera/glidera';
+// export { GlideraProvider } from '../providers/glidera/glidera';
 export {
   HomeIntegrationsProvider
 } from '../providers/home-integrations/home-integrations';
 export { IncomingDataProvider } from '../providers/incoming-data/incoming-data';
 export { LanguageProvider } from '../providers/language/language';
 export { Logger } from '../providers/logger/logger';
-export { MercadoLibreProvider } from '../providers/mercado-libre/mercado-libre';
+// export { MercadoLibreProvider } from '../providers/mercado-libre/mercado-libre';
 export { NodeWebkitProvider } from '../providers/node-webkit/node-webkit';
 export {
   OnGoingProcessProvider
@@ -70,7 +70,7 @@ export {
   ReplaceParametersProvider
 } from '../providers/replace-parameters/replace-parameters';
 export { ScanProvider } from '../providers/scan/scan';
-export { ShapeshiftProvider } from '../providers/shapeshift/shapeshift';
+// export { ShapeshiftProvider } from '../providers/shapeshift/shapeshift';
 export { TimeProvider } from '../providers/time/time';
 export { TouchIdProvider } from '../providers/touchid/touchid';
 export {

@@ -69,8 +69,22 @@ export class TxDetailsPage {
     let defaults = this.configProvider.getDefaults();
     this.blockexplorerUrl =
       this.wallet.coin === 'bch'
-        ? defaults.blockExplorerUrl.bch
-        : defaults.blockExplorerUrl.btc;
+       ? defaults.blockExplorerUrl.bch
+        : this.wallet.coin === 'safe' 
+         ? defaults.blockExplorerUrl.safe
+          : this.wallet.coin === 'btcz' 
+           ? defaults.blockExplorerUrl.btcz
+            : this.wallet.coin === 'zcl' 
+             ? defaults.blockExplorerUrl.zcl
+            : this.wallet.coin === 'anon' 
+             ? defaults.blockExplorerUrl.anon
+            : this.wallet.coin === 'zel' 
+             ? defaults.blockExplorerUrl.zel
+              : this.wallet.coin === 'rvn' 
+               ? defaults.blockExplorerUrl.rvn
+                : this.wallet.coin === 'ltc' 
+                 ? defaults.blockExplorerUrl.ltc
+                  : defaults.blockExplorerUrl.btc;
 
     this.txConfirmNotificationProvider.checkIfEnabled(this.txId).then(res => {
       this.txNotification = {
@@ -252,8 +266,10 @@ export class TxDetailsPage {
 
   public viewOnBlockchain(): void {
     let btx = this.btx;
+    let https = 'https://';
+    if (this.btx.amountUnitStr == 'ZCL') https = 'http://';
     let url =
-      'https://' +
+      https +
       (this.getShortNetworkName() == 'test' ? 'test-' : '') +
       this.blockexplorerUrl +
       '/tx/' +

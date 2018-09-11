@@ -4,11 +4,9 @@ import {
   Events,
   ModalController,
   NavController,
-  NavParams,
-  Platform
+  NavParams
 } from 'ionic-angular';
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs';
 
 // providers
 import { AddressBookProvider } from '../../providers/address-book/address-book';
@@ -39,8 +37,7 @@ const HISTORY_SHOW_LIMIT = 10;
 })
 export class WalletDetailsPage extends WalletTabsChild {
   private currentPage: number = 0;
-  private showBackupNeededMsg: boolean = true;
-  private onResumeSubscription: Subscription;
+  private showPaperKeyUnverifiedMsg: boolean = true;
 
   public requiresMultipleSignatures: boolean;
   public wallet;
@@ -73,8 +70,7 @@ export class WalletDetailsPage extends WalletTabsChild {
     private onGoingProcessProvider: OnGoingProcessProvider,
     private externalLinkProvider: ExternalLinkProvider,
     walletTabsProvider: WalletTabsProvider,
-    private actionSheetProvider: ActionSheetProvider,
-    private platform: Platform
+    private actionSheetProvider: ActionSheetProvider
   ) {
     super(navCtrl, profileProvider, walletTabsProvider);
   }
@@ -104,13 +100,6 @@ export class WalletDetailsPage extends WalletTabsChild {
     this.events.subscribe('Wallet/updateAll', () => {
       this.updateAll();
     });
-
-    this.onResumeSubscription = this.platform.resume.subscribe(() => {
-      this.updateAll();
-      this.events.subscribe('Wallet/updateAll', () => {
-        this.updateAll();
-      });
-    });
   }
 
   ionViewDidEnter() {
@@ -119,7 +108,6 @@ export class WalletDetailsPage extends WalletTabsChild {
 
   ionViewWillLeave() {
     this.events.unsubscribe('Wallet/updateAll');
-    this.onResumeSubscription.unsubscribe();
   }
 
   shouldShowZeroState() {
@@ -206,7 +194,7 @@ export class WalletDetailsPage extends WalletTabsChild {
         let hasTx = txHistory[0];
         this.showNoTransactionsYetMsg = hasTx ? false : true;
 
-        if (this.wallet.needsBackup && hasTx && this.showBackupNeededMsg)
+        if (this.wallet.needsBackup && hasTx && this.showPaperKeyUnverifiedMsg)
           this.openBackupModal();
 
         this.wallet.completeHistory = txHistory;
@@ -302,9 +290,9 @@ export class WalletDetailsPage extends WalletTabsChild {
   }
 
   public openBackupModal(): void {
-    this.showBackupNeededMsg = false;
+    this.showPaperKeyUnverifiedMsg = false;
     const infoSheet = this.actionSheetProvider.createInfoSheet(
-      'backup-needed-with-activity'
+      'paper-key-unverified-with-activity'
     );
     infoSheet.present();
     infoSheet.onDidDismiss(option => {
@@ -408,12 +396,5 @@ export class WalletDetailsPage extends WalletTabsChild {
       okText,
       cancelText
     );
-  }
-
-  public doRefresh(refresher) {
-    this.updateAll(true);
-    setTimeout(() => {
-      refresher.complete();
-    }, 2000);
   }
 }

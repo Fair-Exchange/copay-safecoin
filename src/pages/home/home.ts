@@ -8,17 +8,17 @@ import {
 } from 'ionic-angular';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 // Pages
 import { AddPage } from '../add/add';
-import { AmazonPage } from '../integrations/amazon/amazon';
-import { BitPayCardPage } from '../integrations/bitpay-card/bitpay-card';
-import { BitPayCardIntroPage } from '../integrations/bitpay-card/bitpay-card-intro/bitpay-card-intro';
-import { CoinbasePage } from '../integrations/coinbase/coinbase';
-import { GlideraPage } from '../integrations/glidera/glidera';
-import { MercadoLibrePage } from '../integrations/mercado-libre/mercado-libre';
-import { ShapeshiftPage } from '../integrations/shapeshift/shapeshift';
+// import { AmazonPage } from '../integrations/amazon/amazon';
+// import { BitPayCardPage } from '../integrations/bitpay-card/bitpay-card';
+// import { BitPayCardIntroPage } from '../integrations/bitpay-card/bitpay-card-intro/bitpay-card-intro';
+// import { CoinbasePage } from '../integrations/coinbase/coinbase';
+// import { GlideraPage } from '../integrations/glidera/glidera';
+// import { MercadoLibrePage } from '../integrations/mercado-libre/mercado-libre';
+// import { ShapeshiftPage } from '../integrations/shapeshift/shapeshift';
 import { PaperWalletPage } from '../paper-wallet/paper-wallet';
 import { AmountPage } from '../send/amount/amount';
 import { AddressbookAddPage } from '../settings/addressbook/add/add';
@@ -29,17 +29,17 @@ import { ProposalsPage } from './proposals/proposals';
 
 // Providers
 import { AddressBookProvider } from '../../providers/address-book/address-book';
-import { AddressProvider } from '../../providers/address/address';
-import { AmazonProvider } from '../../providers/amazon/amazon';
+// import { AddressProvider } from '../../providers/address/address';
+// import { AmazonProvider } from '../../providers/amazon/amazon';
 import { AppProvider } from '../../providers/app/app';
-import { BitPayCardProvider } from '../../providers/bitpay-card/bitpay-card';
+// import { BitPayCardProvider } from '../../providers/bitpay-card/bitpay-card';
 import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
 import { ClipboardProvider } from '../../providers/clipboard/clipboard';
 import { ConfigProvider } from '../../providers/config/config';
 import { EmailNotificationsProvider } from '../../providers/email-notifications/email-notifications';
 import { ExternalLinkProvider } from '../../providers/external-link/external-link';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
-import { HomeIntegrationsProvider } from '../../providers/home-integrations/home-integrations';
+// import { HomeIntegrationsProvider } from '../../providers/home-integrations/home-integrations';
 import { IncomingDataProvider } from '../../providers/incoming-data/incoming-data';
 import { Logger } from '../../providers/logger/logger';
 import { OnGoingProcessProvider } from '../../providers/on-going-process/on-going-process';
@@ -60,10 +60,19 @@ export class HomePage {
   @ViewChild('showCard')
   showCard;
   public wallets;
+  public walletsAll;
   public walletsBtc;
   public walletsBch;
+  public walletsSafe;
+  public walletsBtcz;
+  public walletsZcl;
+  public walletsAnon;
+  public walletsZel;
+  public walletsRvn;
+  public walletsLtc;
   public cachedBalanceUpdateOn: string;
   public recentTransactionsEnabled: boolean;
+  public homepageSimpleViewEnabled: boolean;
   public txps;
   public txpsN: number;
   public notifications;
@@ -73,18 +82,25 @@ export class HomePage {
   public newRelease: boolean;
   public updateText: string;
   public homeIntegrations;
-  public bitpayCardItems;
-  public showBitPayCard: boolean = false;
-  public showAnnouncement: boolean = false;
+//  public bitpayCardItems;
+//  public showBitPayCard: boolean = false;
+//  public showAnnouncement: boolean = false;
   public validDataFromClipboard;
   public payProDetailsData;
   public remainingTimeStr: string;
-  public slideDown: boolean;
 
   public showRateCard: boolean;
   public homeTip: boolean;
+  public showReorderAll: boolean;
   public showReorderBtc: boolean;
   public showReorderBch: boolean;
+  public showReorderSafe: boolean;
+  public showReorderBtcz: boolean;
+  public showReorderZcl: boolean;
+  public showReorderAnon: boolean;
+  public showReorderZel: boolean;
+  public showReorderRvn: boolean;
+  public showReorderLtc: boolean;
   public showIntegration;
 
   private isNW: boolean;
@@ -93,7 +109,6 @@ export class HomePage {
   private countDown;
   private onResumeSubscription: Subscription;
   private onPauseSubscription: Subscription;
-  private latestVersion: string;
 
   constructor(
     private plt: Platform,
@@ -112,30 +127,46 @@ export class HomePage {
     private addressBookProvider: AddressBookProvider,
     private appProvider: AppProvider,
     private platformProvider: PlatformProvider,
-    private homeIntegrationsProvider: HomeIntegrationsProvider,
+//    private homeIntegrationsProvider: HomeIntegrationsProvider,
     private persistenceProvider: PersistenceProvider,
     private feedbackProvider: FeedbackProvider,
-    private bitPayCardProvider: BitPayCardProvider,
+//    private bitPayCardProvider: BitPayCardProvider,
     private translate: TranslateService,
     private emailProvider: EmailNotificationsProvider,
     private replaceParametersProvider: ReplaceParametersProvider,
-    private amazonProvider: AmazonProvider,
+//    private amazonProvider: AmazonProvider,
     private clipboardProvider: ClipboardProvider,
-    private incomingDataProvider: IncomingDataProvider,
-    private addressProvider: AddressProvider
+    private incomingDataProvider: IncomingDataProvider
+//    private addressProvider: AddressProvider
   ) {
-    this.slideDown = false;
     this.updatingWalletId = {};
     this.addressbook = {};
     this.cachedBalanceUpdateOn = '';
     this.isNW = this.platformProvider.isNW;
+    this.showReorderAll = false;
     this.showReorderBtc = false;
+    this.showReorderSafe = false;
+    this.showReorderBtcz = false;
+    this.showReorderZcl = false;
+    this.showReorderAnon = false;
+    this.showReorderZel = false;
+    this.showReorderRvn = false;
+    this.showReorderLtc = false;
     this.showReorderBch = false;
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.events.subscribe('Home/reloadStatus', () => {
       this._willEnter();
       this._didEnter();
+      this.subscribeBwsEvents();
     });
+
+    if (this.isNW) {
+      let gui = (window as any).require('nw.gui');
+      let win = gui.Window.get();
+      win.on('focus', () => {
+        this.checkClipboard();
+      });
+    }
   }
 
   ionViewWillEnter() {
@@ -148,6 +179,7 @@ export class HomePage {
 
   private _willEnter() {
     this.recentTransactionsEnabled = this.configProvider.get().recentTransactions.enabled;
+    this.homepageSimpleViewEnabled = this.configProvider.get().homepageSimpleView.enabled;
 
     // Update list of wallets, status and TXPs
     this.setWallets();
@@ -163,29 +195,24 @@ export class HomePage {
 
     // Update Tx Notifications
     this.getNotifications();
-
-    // Update Wallet on Focus
-    if (this.isNW) {
-      this.updateDesktopOnFocus();
-    }
   }
 
   private _didEnter() {
     if (this.isNW) this.checkUpdate();
     this.checkHomeTip();
     this.checkFeedbackInfo();
-    this.checkAnnouncement();
+//    this.checkAnnouncement();
     this.checkClipboard();
 
     this.subscribeIncomingDataMenuEvent();
     this.subscribeBwsEvents();
 
     // Show integrations
-    let integrations = _.filter(this.homeIntegrationsProvider.get(), {
-      show: true
-    });
+//    let integrations = _.filter(this.homeIntegrationsProvider.get(), {
+//      show: true
+//    });
 
-    // Hide BitPay if linked
+/*    // Hide BitPay if linked
     setTimeout(() => {
       this.homeIntegrations = _.remove(_.clone(integrations), x => {
         if (x.name == 'debitcard' && x.linked) return;
@@ -201,7 +228,7 @@ export class HomePage {
           : false;
         this.bitpayCardItems = cards;
       });
-    });
+    }); */
   }
 
   ionViewDidLoad() {
@@ -236,13 +263,6 @@ export class HomePage {
   ionViewWillLeave() {
     this.events.unsubscribe('finishIncomingDataMenuEvent');
     this.events.unsubscribe('bwsEvent');
-    this.resetValuesForAnimationCard();
-  }
-
-  private async resetValuesForAnimationCard() {
-    await Observable.timer(50).toPromise();
-    this.validDataFromClipboard = null;
-    this.slideDown = false;
   }
 
   private subscribeBwsEvents() {
@@ -298,19 +318,9 @@ export class HomePage {
     this.navCtrl.push(PaperWalletPage, { privateKey });
   }
 
-  private updateDesktopOnFocus() {
-    let gui = (window as any).require('nw.gui');
-    let win = gui.Window.get();
-    win.on('focus', () => {
-      this.checkClipboard();
-      this.getNotifications();
-      this.setWallets();
-    });
-  }
-
   private openEmailDisclaimer() {
     let message = this.translate.instant(
-      'By providing your email address, you give explicit consent to BitPay to use your email address to send you email notifications about payments.'
+      'By providing your email address, you give explicit consent to Safecoin to use your email address to send you email notifications about payments.'
     );
     let title = this.translate.instant('Privacy Policy update');
     let okText = this.translate.instant('Accept');
@@ -355,8 +365,30 @@ export class HomePage {
   private setWallets = _.debounce(
     () => {
       this.wallets = this.profileProvider.getWallets();
+      this.walletsAll = this.wallets;
       this.walletsBtc = _.filter(this.wallets, (x: any) => {
         return x.credentials.coin == 'btc';
+      });
+      this.walletsSafe = _.filter(this.wallets, (x: any) => {
+        return x.credentials.coin == 'safe';
+      });
+      this.walletsBtcz = _.filter(this.wallets, (x: any) => {
+        return x.credentials.coin == 'btcz';
+      });
+      this.walletsZcl = _.filter(this.wallets, (x: any) => {
+        return x.credentials.coin == 'zcl';
+      });
+      this.walletsAnon = _.filter(this.wallets, (x: any) => {
+        return x.credentials.coin == 'anon';
+      });
+      this.walletsZel = _.filter(this.wallets, (x: any) => {
+        return x.credentials.coin == 'zel';
+      });
+      this.walletsRvn = _.filter(this.wallets, (x: any) => {
+        return x.credentials.coin == 'rvn';
+      });
+      this.walletsLtc = _.filter(this.wallets, (x: any) => {
+        return x.credentials.coin == 'ltc';
       });
       this.walletsBch = _.filter(this.wallets, (x: any) => {
         return x.credentials.coin == 'bch';
@@ -380,7 +412,7 @@ export class HomePage {
     this.homeTip = false;
   }
 
-  private async checkAnnouncement() {
+/*  private async checkAnnouncement() {
     if (!this.amazonProvider.currency)
       await this.amazonProvider.setCurrencyByLocation();
     if (this.amazonProvider.currency == 'JPY') {
@@ -398,7 +430,7 @@ export class HomePage {
   public openAnnouncement(): void {
     this.navCtrl.push(AmazonPage);
   }
-
+*/
   private checkFeedbackInfo() {
     this.persistenceProvider.getFeedbackInfo().then(info => {
       if (!info) {
@@ -427,21 +459,17 @@ export class HomePage {
   public checkClipboard() {
     return this.clipboardProvider
       .getData()
-      .then(async data => {
+      .then(data => {
         this.validDataFromClipboard = this.incomingDataProvider.parseData(data);
         if (!this.validDataFromClipboard) {
           return;
         }
-        const dataToIgnore = [
-          'BitcoinAddress',
-          'BitcoinCashAddress',
-          'PlainUrl'
-        ];
+        const dataToIgnore = ['BitcoinAddress', 'SafecoinAddress', 'BitcoinzAddress', 'ZclassicAddress', 'AnonymousAddress', 'ZelcashAddress', 'RavencoinAddress', 'LitecoinAddress', 'BitcoinCashAddress'];
         if (dataToIgnore.indexOf(this.validDataFromClipboard.type) > -1) {
           this.validDataFromClipboard = null;
           return;
         }
-        if (this.validDataFromClipboard.type === 'PayPro') {
+        /* if (this.validDataFromClipboard.type === 'PayPro') {
           this.incomingDataProvider
             .getPayProDetails(data)
             .then(payProDetails => {
@@ -453,27 +481,21 @@ export class HomePage {
               this.paymentTimeControl(this.payProDetailsData.expires);
             })
             .catch(err => {
-              this.payProDetailsData = {};
-              this.payProDetailsData.error = err;
+              this.validDataFromClipboard = null;
               this.logger.warn('Error in Payment Protocol', err);
               this.logger.warn(err);
             });
-        }
-        await Observable.timer(50).toPromise();
-        this.slideDown = true;
+        } */
       })
       .catch(() => {
         this.logger.warn('Paste from clipboard err');
       });
   }
 
-  public hideClipboardCard() {
-    this.validDataFromClipboard = null;
-    this.clipboardProvider.clear();
-    this.slideDown = false;
-  }
-
   public processClipboardData(data): void {
+    this.validDataFromClipboard = null;
+    this.payProDetailsData = null;
+    this.clipboardProvider.clear();
     this.clearCountDownInterval();
     this.incomingDataProvider.redir(data, { fromHomeCard: true });
   }
@@ -482,7 +504,7 @@ export class HomePage {
     if (this.countDown) clearInterval(this.countDown);
   }
 
-  private paymentTimeControl(expirationTime): void {
+/*  private paymentTimeControl(expirationTime): void {
     let setExpirationTime = (): void => {
       let now = Math.floor(Date.now() / 1000);
       if (now > expirationTime) {
@@ -501,7 +523,7 @@ export class HomePage {
     this.countDown = setInterval(() => {
       setExpirationTime();
     }, 1000);
-  }
+  } */
 
   private initFeedBackInfo() {
     this.persistenceProvider.setFeedbackInfo({
@@ -630,7 +652,6 @@ export class HomePage {
       .getLatestAppVersion()
       .toPromise()
       .then(version => {
-        this.latestVersion = version;
         this.logger.debug('Current app version:', version);
         var result = this.releaseProvider.checkForUpdates(version);
         this.logger.debug('Update available:', result.updateAvailable);
@@ -659,7 +680,9 @@ export class HomePage {
   }
 
   public goToWalletDetails(wallet): void {
-    if (this.showReorderBtc || this.showReorderBch) return;
+    if (this.showReorderAll || this.showReorderBtc || this.showReorderSafe || this.showReorderBtcz || 
+        this.showReorderZcl || this.showReorderAnon || this.showReorderZel || this.showReorderRvn || 
+        this.showReorderLtc || this.showReorderBch) return;
     this.events.unsubscribe('finishIncomingDataMenuEvent');
     this.events.unsubscribe('bwsEvent');
     this.events.publish('OpenWallet', wallet);
@@ -696,19 +719,109 @@ export class HomePage {
     }
   }
 
+  public reorderAll(): void {
+    this.showReorderAll = !this.showReorderAll;
+  }
+
   public reorderBtc(): void {
     this.showReorderBtc = !this.showReorderBtc;
+  }
+
+  public reorderSafe(): void {
+    this.showReorderSafe = !this.showReorderSafe;
+  }
+  public reorderBtcz(): void {
+    this.showReorderBtcz = !this.showReorderBtcz;
+  }
+  public reorderZcl(): void {
+    this.showReorderZcl = !this.showReorderZcl;
+  }
+  public reorderAnon(): void {
+    this.showReorderAnon = !this.showReorderAnon;
+  }
+  public reorderZel(): void {
+    this.showReorderZel = !this.showReorderZel;
+  }
+  public reorderRvn(): void {
+    this.showReorderRvn = !this.showReorderRvn;
+  }
+  public reorderLtc(): void {
+    this.showReorderLtc = !this.showReorderLtc;
   }
 
   public reorderBch(): void {
     this.showReorderBch = !this.showReorderBch;
   }
 
+  public reorderWalletsAll(indexes): void {
+    let element = this.walletsAll[indexes.from];
+    this.walletsAll.splice(indexes.from, 1);
+    this.walletsAll.splice(indexes.to, 0, element);
+    _.each(this.walletsAll, (wallet, index: number) => {
+      this.profileProvider.setWalletOrder(wallet.id, index);
+    });
+  }
   public reorderWalletsBtc(indexes): void {
     let element = this.walletsBtc[indexes.from];
     this.walletsBtc.splice(indexes.from, 1);
     this.walletsBtc.splice(indexes.to, 0, element);
     _.each(this.walletsBtc, (wallet, index: number) => {
+      this.profileProvider.setWalletOrder(wallet.id, index);
+    });
+  }
+  public reorderWalletsSafe(indexes): void {
+    let element = this.walletsSafe[indexes.from];
+    this.walletsSafe.splice(indexes.from, 1);
+    this.walletsSafe.splice(indexes.to, 0, element);
+    _.each(this.walletsSafe, (wallet, index: number) => {
+      this.profileProvider.setWalletOrder(wallet.id, index);
+    });
+  }
+  public reorderWalletsBtcz(indexes): void {
+    let element = this.walletsBtcz[indexes.from];
+    this.walletsBtcz.splice(indexes.from, 1);
+    this.walletsBtcz.splice(indexes.to, 0, element);
+    _.each(this.walletsBtcz, (wallet, index: number) => {
+      this.profileProvider.setWalletOrder(wallet.id, index);
+    });
+  }
+  public reorderWalletsZcl(indexes): void {
+    let element = this.walletsZcl[indexes.from];
+    this.walletsZcl.splice(indexes.from, 1);
+    this.walletsZcl.splice(indexes.to, 0, element);
+    _.each(this.walletsZcl, (wallet, index: number) => {
+      this.profileProvider.setWalletOrder(wallet.id, index);
+    });
+  }
+  public reorderWalletsAnon(indexes): void {
+    let element = this.walletsAnon[indexes.from];
+    this.walletsAnon.splice(indexes.from, 1);
+    this.walletsAnon.splice(indexes.to, 0, element);
+    _.each(this.walletsAnon, (wallet, index: number) => {
+      this.profileProvider.setWalletOrder(wallet.id, index);
+    });
+  }
+  public reorderWalletsZel(indexes): void {
+    let element = this.walletsZel[indexes.from];
+    this.walletsZel.splice(indexes.from, 1);
+    this.walletsZel.splice(indexes.to, 0, element);
+    _.each(this.walletsZel, (wallet, index: number) => {
+      this.profileProvider.setWalletOrder(wallet.id, index);
+    });
+  }
+  public reorderWalletsRvn(indexes): void {
+    let element = this.walletsRvn[indexes.from];
+    this.walletsRvn.splice(indexes.from, 1);
+    this.walletsRvn.splice(indexes.to, 0, element);
+    _.each(this.walletsRvn, (wallet, index: number) => {
+      this.profileProvider.setWalletOrder(wallet.id, index);
+    });
+  }
+  public reorderWalletsLtc(indexes): void {
+    let element = this.walletsLtc[indexes.from];
+    this.walletsLtc.splice(indexes.from, 1);
+    this.walletsLtc.splice(indexes.to, 0, element);
+    _.each(this.walletsLtc, (wallet, index: number) => {
       this.profileProvider.setWalletOrder(wallet.id, index);
     });
   }
@@ -723,29 +836,13 @@ export class HomePage {
   }
 
   public goToDownload(): void {
-    let url: string;
-    let okText: string;
-    let appName = this.appProvider.info.nameCase;
-    let OS = this.platformProvider.getOS();
-
-    if (OS.extension !== '') {
-      okText = this.translate.instant('Download');
-      url =
-        'https://github.com/bitpay/copay/releases/download/' +
-        this.latestVersion +
-        '/' +
-        appName +
-        OS.extension;
-    } else {
-      okText = this.translate.instant('View Update');
-      url = 'https://github.com/bitpay/copay/releases/latest';
-    }
-
+    let url = 'https://github.com/fair-exchange/copay-safecoin/releases/latest';
     let optIn = true;
     let title = this.translate.instant('Update Available');
     let message = this.translate.instant(
       'An update to this app is available. For your security, please update to the latest version.'
     );
+    let okText = this.translate.instant('View Update');
     let cancelText = this.translate.instant('Go Back');
     this.externalLinkProvider.open(
       url,
@@ -774,7 +871,7 @@ export class HomePage {
     this.navCtrl.push(ActivityPage);
   }
 
-  public goTo(page: string): void {
+/*  public goTo(page: string): void {
     const pageMap = {
       AmazonPage,
       BitPayCardIntroPage,
@@ -790,8 +887,9 @@ export class HomePage {
   public goToCard(cardId): void {
     this.navCtrl.push(BitPayCardPage, { id: cardId });
   }
-
+  */
   public doRefresh(refresher) {
+    refresher.pullMin = 90;
     this.updateAllWallets();
     this.getNotifications();
     setTimeout(() => {

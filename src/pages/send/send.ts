@@ -41,13 +41,35 @@ export class SendPage extends WalletTabsChild {
   public search: string = '';
   public walletsBtc;
   public walletsBch;
+  public walletsSafe;
+  public walletsBtcz;
+  public walletsZcl;
+  public walletsAnon;
+  public walletsZel;
+  public walletsRvn;
+  public walletsLtc;
   public walletBchList: FlatWallet[];
   public walletBtcList: FlatWallet[];
+  public walletSafeList: FlatWallet[];
+  public walletBtczList: FlatWallet[];
+  public walletZclList: FlatWallet[];
+  public walletAnonList: FlatWallet[];
+  public walletZelList: FlatWallet[];
+  public walletRvnList: FlatWallet[];
+  public walletLtcList: FlatWallet[];
   public contactsList = [];
   public filteredContactsList = [];
   public filteredWallets = [];
   public hasBtcWallets: boolean;
   public hasBchWallets: boolean;
+  public hasSafeWallets: boolean;
+  public hasBtczWallets: boolean;
+  public hasZclWallets: boolean;
+  public hasAnonWallets: boolean;
+  public hasZelWallets: boolean;
+  public hasRvnWallets: boolean;
+  public hasLtcWallets: boolean;
+  public hasWallets: boolean;
   public hasContacts: boolean;
   public contactsShowMore: boolean;
   private CONTACTS_SHOW_LIMIT: number = 10;
@@ -90,10 +112,31 @@ export class SendPage extends WalletTabsChild {
   ionViewWillEnter() {
     this.walletsBtc = this.profileProvider.getWallets({ coin: 'btc' });
     this.walletsBch = this.profileProvider.getWallets({ coin: 'bch' });
+    this.walletsSafe = this.profileProvider.getWallets({ coin: 'safe' });
+    this.walletsBtcz = this.profileProvider.getWallets({ coin: 'btcz' });
+    this.walletsZcl = this.profileProvider.getWallets({ coin: 'zcl' });
+    this.walletsAnon = this.profileProvider.getWallets({ coin: 'anon' });
+    this.walletsZel = this.profileProvider.getWallets({ coin: 'zel' });
+    this.walletsRvn = this.profileProvider.getWallets({ coin: 'rvn' });
+    this.walletsLtc = this.profileProvider.getWallets({ coin: 'ltc' });
     this.hasBtcWallets = !_.isEmpty(this.walletsBtc);
     this.hasBchWallets = !_.isEmpty(this.walletsBch);
+    this.hasSafeWallets = !_.isEmpty(this.walletsSafe);
+    this.hasBtczWallets = !_.isEmpty(this.walletsBtcz);
+    this.hasZclWallets = !_.isEmpty(this.walletsZcl);
+    this.hasAnonWallets = !_.isEmpty(this.walletsAnon);
+    this.hasZelWallets = !_.isEmpty(this.walletsZel);
+    this.hasRvnWallets = !_.isEmpty(this.walletsRvn);
+    this.hasLtcWallets = !_.isEmpty(this.walletsLtc);
     this.walletBchList = this.getBchWalletsList();
     this.walletBtcList = this.getBtcWalletsList();
+    this.walletSafeList = this.getSafeWalletsList();
+    this.walletBtczList = this.getBtczWalletsList();
+    this.walletZclList = this.getZclWalletsList();
+    this.walletAnonList = this.getAnonWalletsList();
+    this.walletZelList = this.getZelWalletsList();
+    this.walletRvnList = this.getRvnWalletsList();
+    this.walletLtcList = this.getLtcWalletsList();
     this.updateContactsList();
   }
 
@@ -107,6 +150,34 @@ export class SendPage extends WalletTabsChild {
 
   private getBtcWalletsList(): FlatWallet[] {
     return this.hasBtcWallets ? this.getRelevantWallets(this.walletsBtc) : [];
+  }
+
+  private getSafeWalletsList(): FlatWallet[] {
+    return this.hasSafeWallets ? this.getRelevantWallets(this.walletsSafe) : [];
+  }
+
+  private getBtczWalletsList(): FlatWallet[] {
+    return this.hasBtczWallets ? this.getRelevantWallets(this.walletsBtcz) : [];
+  }
+
+  private getZclWalletsList(): FlatWallet[] {
+    return this.hasZclWallets ? this.getRelevantWallets(this.walletsZcl) : [];
+  }
+
+  private getAnonWalletsList(): FlatWallet[] {
+    return this.hasAnonWallets ? this.getRelevantWallets(this.walletsAnon) : [];
+  }
+
+  private getZelWalletsList(): FlatWallet[] {
+    return this.hasZelWallets ? this.getRelevantWallets(this.walletsZel) : [];
+  }
+
+  private getRvnWalletsList(): FlatWallet[] {
+    return this.hasRvnWallets ? this.getRelevantWallets(this.walletsRvn) : [];
+  }
+
+  private getLtcWalletsList(): FlatWallet[] {
+    return this.hasLtcWallets ? this.getRelevantWallets(this.walletsLtc) : [];
   }
 
   private getRelevantWallets(rawWallets): FlatWallet[] {
@@ -125,10 +196,10 @@ export class SendPage extends WalletTabsChild {
         contactsList.push({
           name: _.isObject(v) ? v.name : v,
           address: k,
-          network: this.addressProvider.validateAddress(k).network,
+          network: this.addressProvider.validateAddress(k, v.coin).network,
           email: _.isObject(v) ? v.email : null,
           recipientType: 'contact',
-          coin: this.addressProvider.validateAddress(k).coin,
+          coin: this.addressProvider.validateAddress(k, v.coin).coin,
           getAddress: () => Promise.resolve(k)
         });
       });
@@ -180,7 +251,24 @@ export class SendPage extends WalletTabsChild {
 
   public async goToReceive() {
     await this.walletTabsProvider.goToTabIndex(0);
-    const coinName = this.wallet.coin === Coin.BTC ? 'bitcoin' : 'bitcoin cash';
+    const coinName = 
+     this.wallet.coin === Coin.BTC 
+      ? 'bitcoin' 
+       : this.wallet.coin === Coin.SAFE 
+        ? 'safecoin' 
+         : this.wallet.coin === Coin.BTCZ 
+          ? 'bitcoinz' 
+           : this.wallet.coin === Coin.ZCL 
+            ? 'zclassic' 
+           : this.wallet.coin === Coin.ANON 
+            ? 'anonymous' 
+           : this.wallet.coin === Coin.ZEL 
+            ? 'zelcash' 
+             : this.wallet.coin === Coin.RVN 
+              ? 'ravencoin' 
+               : this.wallet.coin === Coin.LTC 
+                ? 'litecoin' 
+                 : 'bitcoin cash';
     const infoSheet = this.actionSheetProvider.createInfoSheet(
       'receiving-bitcoin',
       { coinName }
@@ -270,8 +358,7 @@ export class SendPage extends WalletTabsChild {
       infoSheet.present();
       infoSheet.onDidDismiss(option => {
         if (option) {
-          let url =
-            'https://bitpay.github.io/address-translator?addr=' + this.search;
+          let url = 'https://bitpay.github.io/address-translator/';
           this.externalLinkProvider.open(url);
         }
         this.search = '';
@@ -287,6 +374,41 @@ export class SendPage extends WalletTabsChild {
     }
     if (this.hasBtcWallets && this.wallet.coin === 'btc') {
       this.filteredWallets = this.walletBtcList.filter(wallet => {
+        return _.includes(wallet.name.toLowerCase(), this.search.toLowerCase());
+      });
+    }
+    if (this.hasSafeWallets && this.wallet.coin === 'safe') {
+      this.filteredWallets = this.walletSafeList.filter(wallet => {
+        return _.includes(wallet.name.toLowerCase(), this.search.toLowerCase());
+      });
+    }
+    if (this.hasBtczWallets && this.wallet.coin === 'btcz') {
+      this.filteredWallets = this.walletBtczList.filter(wallet => {
+        return _.includes(wallet.name.toLowerCase(), this.search.toLowerCase());
+      });
+    }
+    if (this.hasZclWallets && this.wallet.coin === 'zcl') {
+      this.filteredWallets = this.walletZclList.filter(wallet => {
+        return _.includes(wallet.name.toLowerCase(), this.search.toLowerCase());
+      });
+    }
+    if (this.hasAnonWallets && this.wallet.coin === 'anon') {
+      this.filteredWallets = this.walletAnonList.filter(wallet => {
+        return _.includes(wallet.name.toLowerCase(), this.search.toLowerCase());
+      });
+    }
+    if (this.hasZelWallets && this.wallet.coin === 'zel') {
+      this.filteredWallets = this.walletZelList.filter(wallet => {
+        return _.includes(wallet.name.toLowerCase(), this.search.toLowerCase());
+      });
+    }
+    if (this.hasRvnWallets && this.wallet.coin === 'rvn') {
+      this.filteredWallets = this.walletRvnList.filter(wallet => {
+        return _.includes(wallet.name.toLowerCase(), this.search.toLowerCase());
+      });
+    }
+    if (this.hasLtcWallets && this.wallet.coin === 'ltc') {
+      this.filteredWallets = this.walletLtcList.filter(wallet => {
         return _.includes(wallet.name.toLowerCase(), this.search.toLowerCase());
       });
     }

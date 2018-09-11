@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Events, NavController, Platform } from 'ionic-angular';
-import { Observable, Subscription } from 'rxjs';
+import { Events, NavController } from 'ionic-angular';
 import { Logger } from '../../providers/logger/logger';
 
 // Native
@@ -21,6 +20,7 @@ import { ProfileProvider } from '../../providers/profile/profile';
 import { WalletProvider } from '../../providers/wallet/wallet';
 
 import * as _ from 'lodash';
+import { Observable } from 'rxjs';
 import { WalletTabsChild } from '../wallet-tabs/wallet-tabs-child';
 import { WalletTabsProvider } from '../wallet-tabs/wallet-tabs.provider';
 
@@ -38,8 +38,6 @@ export class ReceivePage extends WalletTabsChild {
   public loading: boolean;
   public playAnimation: boolean;
 
-  private onResumeSubscription: Subscription;
-
   constructor(
     private actionSheetProvider: ActionSheetProvider,
     navCtrl: NavController,
@@ -53,30 +51,16 @@ export class ReceivePage extends WalletTabsChild {
     private translate: TranslateService,
     private externalLinkProvider: ExternalLinkProvider,
     private addressProvider: AddressProvider,
-    walletTabsProvider: WalletTabsProvider,
-    private platform: Platform
+    walletTabsProvider: WalletTabsProvider
   ) {
     super(navCtrl, profileProvider, walletTabsProvider);
     this.showShareButton = this.platformProvider.isCordova;
   }
 
-  ionViewWillEnter() {
-    this.onResumeSubscription = this.platform.resume.subscribe(() => {
-      this.setAddress();
-      this.events.subscribe('Wallet/setAddress', (newAddr?: boolean) => {
-        this.setAddress(newAddr);
-      });
-    });
-  }
-
-  ionViewWillLeave() {
-    this.onResumeSubscription.unsubscribe();
-  }
-
   ionViewDidLoad() {
     this.setAddress();
-    this.events.subscribe('Wallet/setAddress', (newAddr?: boolean) => {
-      this.setAddress(newAddr);
+    this.events.subscribe('Wallet/setAddress', () => {
+      this.setAddress(true);
     });
   }
 
@@ -89,12 +73,16 @@ export class ReceivePage extends WalletTabsChild {
       color: this.wallet.color,
       coin: this.wallet.coin,
       nextPage: 'CustomAmountPage',
-      network: this.addressProvider.validateAddress(this.address).network
+      network: this.addressProvider.validateAddress(this.address, this.wallet.coin).network
     });
   }
 
-  private async setAddress(newAddr?: boolean): Promise<void> {
-    this.loading = newAddr || _.isEmpty(this.address) ? true : false;
+  private async setAddress(
+    newAddr?: boolean,
+    changingWallet?: boolean
+  ): Promise<void> {
+    this.loading =
+      newAddr || _.isEmpty(this.address) || changingWallet ? true : false;
 
     let addr: string = (await this.walletProvider
       .getAddress(this.wallet, newAddr)

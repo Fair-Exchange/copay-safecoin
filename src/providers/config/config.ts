@@ -61,6 +61,10 @@ export interface Config {
     bannedUntil: any;
   };
 
+  homepageSimpleView: {
+    enabled: boolean;
+  };
+
   recentTransactions: {
     enabled: boolean;
   };
@@ -106,6 +110,13 @@ export interface Config {
   blockExplorerUrl: {
     btc: string;
     bch: string;
+    safe: string;
+    btcz: string;
+    zcl: string;
+    anon: string;
+    zel: string;
+    rvn: string;
+    ltc: string;
   };
 }
 
@@ -125,10 +136,10 @@ const configDefault: Config = {
     reconnectDelay: 5000,
     idleDurationMin: 4,
     settings: {
-      unitName: 'BTC',
+      unitName: 'SAFE',
       unitToSatoshi: 100000000,
       unitDecimals: 8,
-      unitCode: 'btc',
+      unitCode: 'safe',
       alternativeName: 'US Dollar',
       alternativeIsoCode: 'USD',
       defaultLanguage: '',
@@ -138,29 +149,30 @@ const configDefault: Config = {
 
   // Bitcore wallet service URL
   bws: {
-    url: 'https://bws.bitpay.com/bws/api'
+    url: 'https://api.safecoin.org/bwss/api'
+//    url: 'http://192.168.91.206:3232/bws/api'
   },
 
   download: {
     bitpay: {
-      url: 'https://bitpay.com/wallet'
+      url: 'https://localhost/wallet'
     },
     copay: {
-      url: 'https://copay.io/#download'
+      url: 'https://safecoin.org/wallets/'
     }
   },
 
   rateApp: {
     bitpay: {
       ios:
-        'https://itunes.apple.com/app/bitpay-secure-bitcoin-wallet/id1149581638',
+        'https://localhost/app/bitpay-secure-bitcoin-wallet/id1149581638',
       android:
-        'https://play.google.com/store/apps/details?id=com.bitpay.wallet',
+        'https://localhost/store/apps/details?id=com.bitpay.wallet',
       wp: ''
     },
     copay: {
-      ios: 'https://itunes.apple.com/app/copay-bitcoin-wallet/id951330296',
-      android: 'https://play.google.com/store/apps/details?id=com.bitpay.copay',
+      ios: 'https://localhost/app/copay-bitcoin-wallet/id951330296',
+      android: 'https://localhost/store/apps/details?id=com.bitpay.copay',
       wp: ''
     }
   },
@@ -176,24 +188,28 @@ const configDefault: Config = {
     enabled: true
   },
 
+  homepageSimpleView: {
+    enabled: false
+  },
+
   showIntegration: {
-    coinbase: true,
-    glidera: true,
-    debitcard: true,
-    amazon: true,
-    mercadolibre: true,
-    shapeshift: true
+    coinbase: false,
+    glidera: false,
+    debitcard: false,
+    amazon: false,
+    mercadolibre: false,
+    shapeshift: false
   },
 
   rates: {
-    url: 'https://insight.bitpay.com:443/api/rates'
+    url: 'https://api.safecoin.org:443/rates'
   },
 
   release: {
-    url: 'https://api.github.com/repos/bitpay/copay/releases/latest'
+    url: 'https://api.github.com/repos/fair-exchange/copay-safecoin/releases/latest'
   },
 
-  pushNotificationsEnabled: true,
+  pushNotificationsEnabled: false,
 
   confirmedTxsNotifications: {
     enabled: true
@@ -210,7 +226,14 @@ const configDefault: Config = {
 
   blockExplorerUrl: {
     btc: 'insight.bitpay.com',
-    bch: 'bch-insight.bitpay.com/#'
+    bch: 'bch-insight.bitpay.com/#',
+    safe: 'explorer.safecoin.org',
+    btcz: 'explorer.btcz.rocks',
+    zcl: 'explorer.zclassicblue.org:3001/insight',
+    anon: 'anon.anon.org:3001/insight',
+    zel: 'explorer2.zel.cash',
+    rvn: 'ravencoin.network',
+    ltc: 'insight.litecore.io'
   }
 };
 
@@ -284,6 +307,10 @@ export class ConfigProvider {
 
     if (!this.configCache.showIntegration) {
       this.configCache.showIntegration = configDefault.showIntegration;
+    }
+
+    if (!this.configCache.homepageSimpleView) {
+      this.configCache.homepageSimpleView = configDefault.homepageSimpleView;
     }
 
     if (!this.configCache.recentTransactions) {

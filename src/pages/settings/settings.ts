@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 
 // providers
 import { AppProvider } from '../../providers/app/app';
-import { BitPayCardProvider } from '../../providers/bitpay-card/bitpay-card';
+// import { BitPayCardProvider } from '../../providers/bitpay-card/bitpay-card';
 import { ConfigProvider } from '../../providers/config/config';
 import { ExternalLinkProvider } from '../../providers/external-link/external-link';
 import { HomeIntegrationsProvider } from '../../providers/home-integrations/home-integrations';
@@ -18,12 +18,12 @@ import { TouchIdProvider } from '../../providers/touchid/touchid';
 
 // pages
 import { SendFeedbackPage } from '../feedback/send-feedback/send-feedback';
-import { AmazonSettingsPage } from '../integrations/amazon/amazon-settings/amazon-settings';
-import { BitPaySettingsPage } from '../integrations/bitpay-card/bitpay-settings/bitpay-settings';
-import { CoinbaseSettingsPage } from '../integrations/coinbase/coinbase-settings/coinbase-settings';
-import { GlideraSettingsPage } from '../integrations/glidera/glidera-settings/glidera-settings';
-import { MercadoLibreSettingsPage } from '../integrations/mercado-libre/mercado-libre-settings/mercado-libre-settings';
-import { ShapeshiftSettingsPage } from '../integrations/shapeshift/shapeshift-settings/shapeshift-settings';
+// import { AmazonSettingsPage } from '../integrations/amazon/amazon-settings/amazon-settings';
+// import { BitPaySettingsPage } from '../integrations/bitpay-card/bitpay-settings/bitpay-settings';
+// import { CoinbaseSettingsPage } from '../integrations/coinbase/coinbase-settings/coinbase-settings';
+// import { GlideraSettingsPage } from '../integrations/glidera/glidera-settings/glidera-settings';
+// import { MercadoLibreSettingsPage } from '../integrations/mercado-libre/mercado-libre-settings/mercado-libre-settings';
+// import { ShapeshiftSettingsPage } from '../integrations/shapeshift/shapeshift-settings/shapeshift-settings';
 import { PinModalPage } from '../pin/pin-modal/pin-modal';
 import { AboutPage } from './about/about';
 import { AddressbookPage } from './addressbook/addressbook';
@@ -44,8 +44,16 @@ export class SettingsPage {
   public appName: string;
   public currentLanguageName: string;
   public languages;
+  public walletsAll;
   public walletsBtc;
   public walletsBch;
+  public walletsSafe;
+  public walletsBtcz;
+  public walletsZcl;
+  public walletsAnon;
+  public walletsZel;
+  public walletsRvn;
+  public walletsLtc;
   public config;
   public selectedAlternative;
   public isCordova: boolean;
@@ -63,15 +71,23 @@ export class SettingsPage {
     private configProvider: ConfigProvider,
     private logger: Logger,
     private homeIntegrationsProvider: HomeIntegrationsProvider,
-    private bitPayCardProvider: BitPayCardProvider,
+//    private bitPayCardProvider: BitPayCardProvider,
     private platformProvider: PlatformProvider,
     private translate: TranslateService,
     private modalCtrl: ModalController,
     private touchid: TouchIdProvider
   ) {
     this.appName = this.app.info.nameCase;
+    this.walletsAll = [];
     this.walletsBch = [];
     this.walletsBtc = [];
+    this.walletsSafe = [];
+    this.walletsBtcz = [];
+    this.walletsZcl = [];
+    this.walletsAnon = [];
+    this.walletsZel = [];
+    this.walletsRvn = [];
+    this.walletsLtc = [];
     this.isCordova = this.platformProvider.isCordova;
   }
 
@@ -83,8 +99,30 @@ export class SettingsPage {
     this.currentLanguageName = this.language.getName(
       this.language.getCurrent()
     );
+    this.walletsAll = this.profileProvider.getWallets();
     this.walletsBtc = this.profileProvider.getWallets({
       coin: 'btc'
+    });
+    this.walletsSafe = this.profileProvider.getWallets({
+      coin: 'safe'
+    });
+    this.walletsBtcz = this.profileProvider.getWallets({
+      coin: 'btcz'
+    });
+    this.walletsZcl = this.profileProvider.getWallets({
+      coin: 'zcl'
+    });
+    this.walletsAnon = this.profileProvider.getWallets({
+      coin: 'anon'
+    });
+    this.walletsZel = this.profileProvider.getWallets({
+      coin: 'zel'
+    });
+    this.walletsRvn = this.profileProvider.getWallets({
+      coin: 'rvn'
+    });
+    this.walletsLtc = this.profileProvider.getWallets({
+      coin: 'ltc'
     });
     this.walletsBch = this.profileProvider.getWallets({
       coin: 'bch'
@@ -113,12 +151,12 @@ export class SettingsPage {
     }, 200);
 
     // Only BitPay Wallet
-    this.bitPayCardProvider.get({}, (_, cards) => {
+/*    this.bitPayCardProvider.get({}, (_, cards) => {
       this.showBitPayCard = this.app.info._enabledExtensions.debitcard
         ? true
         : false;
       this.bitpayCardItems = cards;
-    });
+    }); */
   }
 
   public openAltCurrencyPage(): void {
@@ -172,7 +210,7 @@ export class SettingsPage {
     this.navCtrl.push(SharePage);
   }
 
-  public openSettingIntegration(name: string): void {
+/*  public openSettingIntegration(name: string): void {
     switch (name) {
       case 'amazon':
         this.navCtrl.push(AmazonSettingsPage);
@@ -200,15 +238,58 @@ export class SettingsPage {
   }
 
   public openHelpExternalLink(): void {
-    let url =
+    let url = 'https://discord.gg/vKdaEBq';
       this.appName == 'Copay'
         ? 'https://github.com/bitpay/copay/issues'
         : 'https://help.bitpay.com/bitpay-app';
     let optIn = true;
     let title = null;
     let message = this.translate.instant(
-      'Help and support information is available at the website.'
+      'Help and support information is available in discord.'
     );
+    let okText = this.translate.instant('Open');
+    let cancelText = this.translate.instant('Go Back');
+    this.externalLinkProvider.open(
+      url,
+      optIn,
+      title,
+      message,
+      okText,
+      cancelText
+    );
+  } */
+
+  public openExternalLink(sorce: string): void {
+    let url = '';
+    let message = '';
+    switch (sorce) {
+      case 'help':
+        url = 'https://discord.gg/vKdaEBq';
+        message = this.translate.instant(
+          'Help and support information is available in discord.'
+        );
+        break;
+      case 'safecoin':
+        url = 'https://safecoin.org';
+        message = this.translate.instant(
+          'More about the Safecoin project.'
+        );
+        break;
+      case 'safetrade':
+        url = 'https://safe.trade';
+        message = this.translate.instant(
+          'Trade safely with SafeTrade.'
+        );
+        break;
+      case 'discord':
+        url = 'https://discord.gg/vKdaEBq';
+        message = this.translate.instant(
+          'Join our Discord community.'
+        );
+        break;
+    }
+    let optIn = true;
+    let title = null;
     let okText = this.translate.instant('Open');
     let cancelText = this.translate.instant('Go Back');
     this.externalLinkProvider.open(

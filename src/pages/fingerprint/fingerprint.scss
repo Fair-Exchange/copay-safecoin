@@ -46,12 +46,8 @@ page-fingerprint {
     align-items: center;
     justify-content: center;
     .button-standard {
-      .button-inner {
-        display: flex;
-        align-items: normal;
-        ion-icon {
-          margin-left: 1rem;
-        }
+      ion-icon {
+        margin-left: 1rem;
       }
     }
   }

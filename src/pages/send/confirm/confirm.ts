@@ -44,6 +44,13 @@ export class ConfirmPage extends WalletTabsChild {
 
   private bitcore;
   private bitcoreCash;
+  private bitcoreSafe;
+  private bitcoreBtcz;
+  private bitcoreZcl;
+  private bitcoreAnon;
+  private bitcoreZel;
+  private bitcoreRvn;
+  private bitcoreLtc;
 
   public countDown = null;
   public CONFIRM_LIMIT_USD: number;
@@ -103,6 +110,13 @@ export class ConfirmPage extends WalletTabsChild {
     super(navCtrl, profileProvider, walletTabsProvider);
     this.bitcore = this.bwcProvider.getBitcore();
     this.bitcoreCash = this.bwcProvider.getBitcoreCash();
+    this.bitcoreSafe = this.bwcProvider.getBitcoreSafe();
+    this.bitcoreBtcz = this.bwcProvider.getBitcoreBtcz();
+    this.bitcoreZcl = this.bwcProvider.getBitcoreZcl();
+    this.bitcoreAnon = this.bwcProvider.getBitcoreAnon();
+    this.bitcoreZel = this.bwcProvider.getBitcoreZel();
+    this.bitcoreRvn = this.bwcProvider.getBitcoreRvn();
+    this.bitcoreLtc = this.bwcProvider.getBitcoreLtc();
     this.CONFIRM_LIMIT_USD = 20;
     this.FEE_TOO_HIGH_LIMIT_PER = 15;
     this.config = this.configProvider.get();
@@ -124,7 +138,23 @@ export class ConfirmPage extends WalletTabsChild {
   ionViewWillEnter() {
     this.navCtrl.swipeBackEnabled = false;
     this.isOpenSelector = false;
-    let B = this.navParams.data.coin == 'bch' ? this.bitcoreCash : this.bitcore;
+    let B = this.navParams.data.coin == 'bch' 
+             ? this.bitcoreCash 
+              : this.navParams.data.coin == 'safe' 
+               ? this.bitcoreSafe 
+                : this.navParams.data.coin == 'btcz' 
+                 ? this.bitcoreBtcz 
+                  : this.navParams.data.coin == 'zcl' 
+                   ? this.bitcoreZcl 
+                  : this.navParams.data.coin == 'anon' 
+                   ? this.bitcoreAnon 
+                  : this.navParams.data.coin == 'zel' 
+                   ? this.bitcoreZel 
+                    : this.navParams.data.coin == 'rvn' 
+                     ? this.bitcoreRvn 
+                      : this.navParams.data.coin == 'ltc' 
+                       ? this.bitcoreLtc 
+                        : this.bitcore;
     let networkName;
     try {
       networkName = new B.Address(this.navParams.data.toAddress).network.name;
@@ -173,12 +203,62 @@ export class ConfirmPage extends WalletTabsChild {
       this.tx.feeRate = +this.navParams.data.requiredFeeRate;
     } else {
       this.tx.feeLevel =
-        this.tx.coin && this.tx.coin == 'bch' ? 'normal ' : this.configFeeLevel;
-    }
+        this.tx.coin && (this.tx.coin == 'bch' || this.tx.coin == 'safe' ||
+                         this.tx.coin == 'btcz' || this.tx.coin == 'zcl' ||
+                         this.tx.coin == 'anon' ||
+                          this.tx.coin == 'zel' || this.tx.coin == 'rvn' ||
+                          this.tx.coin == 'ltc') ? 'normal ' : this.configFeeLevel;
+    }                                   
 
     if (this.tx.coin && this.tx.coin == 'bch') {
       // Use legacy address
       this.tx.toAddress = this.bitcoreCash
+        .Address(this.tx.toAddress)
+        .toString();
+    }
+    if (this.tx.coin && this.tx.coin == 'safe') {
+      // Use legacy address
+      this.tx.toAddress = this.bitcoreSafe
+        .Address(this.tx.toAddress)
+        .toString();
+    }
+
+    if (this.tx.coin && this.tx.coin == 'btcz') {
+      // Use legacy address
+      this.tx.toAddress = this.bitcoreBtcz
+        .Address(this.tx.toAddress)
+        .toString();
+    }
+
+    if (this.tx.coin && this.tx.coin == 'zcl') {
+      // Use legacy address
+      this.tx.toAddress = this.bitcoreZcl
+        .Address(this.tx.toAddress)
+        .toString();
+    }
+    if (this.tx.coin && this.tx.coin == 'anon') {
+      // Use legacy address
+      this.tx.toAddress = this.bitcoreAnon
+        .Address(this.tx.toAddress)
+        .toString();
+    }
+    if (this.tx.coin && this.tx.coin == 'zel') {
+      // Use legacy address
+      this.tx.toAddress = this.bitcoreZel
+        .Address(this.tx.toAddress)
+        .toString();
+    }
+
+    if (this.tx.coin && this.tx.coin == 'rvn') {
+      // Use legacy address
+      this.tx.toAddress = this.bitcoreRvn
+        .Address(this.tx.toAddress)
+        .toString();
+    }
+
+    if (this.tx.coin && this.tx.coin == 'ltc') {
+      // Use legacy address
+      this.tx.toAddress = this.bitcoreLtc
         .Address(this.tx.toAddress)
         .toString();
     }
@@ -303,7 +383,9 @@ export class ConfirmPage extends WalletTabsChild {
     this.tx.coin = this.wallet.coin;
 
     if (!this.usingCustomFee && !this.usingMerchantFee) {
-      this.tx.feeLevel = wallet.coin == 'bch' ? 'normal' : this.configFeeLevel;
+      this.tx.feeLevel = (wallet.coin == 'bch' || wallet.coin == 'safe' || wallet.coin == 'btcz' || 
+                          wallet.coin == 'zcl' || wallet.coin == 'anon' ||
+            wallet.coin == 'zel' || wallet.coin == 'rvn' || wallet.coin == 'ltc') ? 'normal' : this.configFeeLevel;
     }
 
     this.setButtonText(this.wallet.credentials.m > 1, !!this.tx.paypro);
@@ -398,7 +480,14 @@ export class ConfirmPage extends WalletTabsChild {
 
       let maxAllowedMerchantFee = {
         btc: 'urgent',
-        bch: 'normal'
+        bch: 'normal',
+        btcz: 'normal',
+        zcl: 'normal',
+        anon: 'normal',
+        zel: 'normal',
+        rvn: 'normal',
+        ltc: 'normal',
+        safe: 'normal'
       };
 
       this.onGoingProcessProvider.set('calculatingFee');
@@ -523,7 +612,23 @@ export class ConfirmPage extends WalletTabsChild {
 
           if (txp.feeTooHigh) {
             const coinName =
-              this.wallet.coin === Coin.BTC ? 'Bitcoin' : 'Bitcoin Cash';
+              this.wallet.coin === Coin.BTC 
+               ? 'Bitcoin' 
+                : this.wallet.coin === Coin.SAFE 
+                 ? 'Safecoin' 
+                  : this.wallet.coin === Coin.BTCZ 
+                   ? 'Bitcoinz' 
+                    : this.wallet.coin === Coin.ZCL 
+                     ? 'Zclassic' 
+                    : this.wallet.coin === Coin.ANON 
+                     ? 'Anonymous' 
+                    : this.wallet.coin === Coin.ZEL 
+                     ? 'Zelcash' 
+                      : this.wallet.coin === Coin.RVN 
+                       ? 'Ravencoin' 
+                        : this.wallet.coin === Coin.LTC 
+                         ? 'Litecoin' 
+                          : 'Bitcoin Cash';
             const minerFeeInfoSheet = this.actionSheetProvider.createInfoSheet(
               'miner-fee',
               { coinName }
@@ -578,7 +683,23 @@ export class ConfirmPage extends WalletTabsChild {
     let warningMsg = this.verifyExcludedUtxos(wallet, sendMaxInfo);
 
     const coinName =
-      this.wallet.coin === Coin.BTC ? 'Bitcoin (BTC)' : 'Bitcoin Cash (BCH)';
+      this.wallet.coin === Coin.BTC 
+       ? 'Bitcoin (BTC)' 
+        : this.wallet.coin === Coin.SAFE 
+         ? 'Safecoin (SAFE)'
+          : this.wallet.coin === Coin.BTCZ 
+           ? 'BitcoinZ (BTCZ)'
+            : this.wallet.coin === Coin.ZCL 
+             ? 'Zclassic (ZCL)'
+            : this.wallet.coin === Coin.ANON 
+             ? 'Anonymous (ANON)'
+            : this.wallet.coin === Coin.ZEL 
+             ? 'Zelcash (ZEL)'
+              : this.wallet.coin === Coin.RVN 
+               ? 'Ravencoin (RVN)'
+                : this.wallet.coin === Coin.LTC 
+                 ? 'Litecoin (LTC)'
+                  : 'Bitcoin Cash (BCH)';
 
     const minerFeeNoticeInfoSheet = this.actionSheetProvider.createInfoSheet(
       'miner-fee-notice',
@@ -879,6 +1000,13 @@ export class ConfirmPage extends WalletTabsChild {
 
   public chooseFeeLevel(): void {
     if (this.tx.coin == 'bch') return;
+    if (this.tx.coin == 'safe') return;
+    if (this.tx.coin == 'btcz') return;
+    if (this.tx.coin == 'zcl') return;
+    if (this.tx.coin == 'anon') return;
+    if (this.tx.coin == 'zel') return;
+    if (this.tx.coin == 'rvn') return;
+    if (this.tx.coin == 'ltc') return;
     if (this.usingMerchantFee) return; // TODO: should we allow override?
 
     let txObject = {

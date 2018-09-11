@@ -41,7 +41,6 @@ describe('WalletDetailsPage', () => {
     });
     describe('ionViewWillLeave', () => {
       it('should unsubscribe from events', () => {
-        instance.ionViewWillEnter();
         const spy = spyOn(instance.events, 'unsubscribe');
         instance.ionViewWillLeave();
         expect(spy).toHaveBeenCalledWith('Wallet/updateAll');

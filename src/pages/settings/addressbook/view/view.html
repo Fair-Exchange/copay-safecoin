@@ -21,18 +21,30 @@
         {{ email }}
       </ion-note>
     </ion-item>
+    <ion-item>
+      {{'Coin' | translate}}
+      <ion-note item-end>
+        {{ coinname }}
+      </ion-note>
+    </ion-item>
     <ion-item copy-to-clipboard="{{ address }}">
       {{'Address' | translate}}
       <div class="comment ellipsis">
         {{ address }}
       </div>
     </ion-item>
+    <ion-item *ngIf="note">
+      {{'Note' | translate}}
+      <ion-note item-end>
+        {{ note }}
+      </ion-note>
+    </ion-item>
     <ion-item-divider></ion-item-divider>
     <button ion-item class="btn-send" (click)="sendTo()">
       {{'Send Money' | translate}}
     </button>
     <ion-item-divider></ion-item-divider>
-    <button ion-item class="btn-remove" (click)="remove(address)">
+    <button ion-item class="btn-remove" (click)="remove(address, network)">
       {{'Remove' | translate}}
     </button>
     <ion-item-divider></ion-item-divider>

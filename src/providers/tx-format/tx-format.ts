@@ -98,6 +98,13 @@ export class TxFormatProvider {
 
     if (
       (!this.rate.isBtcAvailable() && coin == 'btc') ||
+      (!this.rate.isSafeAvailable() && coin == 'safe') ||
+      (!this.rate.isSafeAvailable() && coin == 'btcz') ||
+      (!this.rate.isSafeAvailable() && coin == 'zcl') ||
+      (!this.rate.isSafeAvailable() && coin == 'anon') ||
+      (!this.rate.isSafeAvailable() && coin == 'zel') ||
+      (!this.rate.isSafeAvailable() && coin == 'rvn') ||
+      (!this.rate.isSafeAvailable() && coin == 'ltc') ||
       (!this.rate.isBchAvailable() && coin == 'bch')
     )
       return null;
@@ -183,7 +190,7 @@ export class TxFormatProvider {
       // TODO: implement profileService.getWallet(tx.walletId)
       // TODO tx.wallet = profileService.getWallet(tx.walletId);
       tx.wallet = {
-        coin: 'btc',
+        coin: 'safe',
         copayerId: 'asdasdasdasd'
       };
       // hardcoded tx.wallet ^
@@ -231,7 +238,9 @@ export class TxFormatProvider {
     let alternativeIsoCode = settings.alternativeIsoCode;
 
     // If fiat currency
-    if (currency != 'BCH' && currency != 'BTC' && currency != 'sat') {
+    if (currency != 'BCH' && currency != 'BTC' && currency != 'SAFE' && currency != 'BTCZ' &&
+        currency != 'ZCL' && currency != 'ANON' && currency != 'ZEL' && currency != 'RVN' && 
+        currency != 'LTC' && currency != 'sat') {
       let formattedAmount = onlyIntegers
         ? this.filter.formatFiatAmount(amount.toFixed(0))
         : this.filter.formatFiatAmount(amount);

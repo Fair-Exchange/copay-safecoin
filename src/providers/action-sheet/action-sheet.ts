@@ -10,7 +10,6 @@ export type InfoSheetType =
   | 'address-copied'
   | 'appreciate-review'
   | 'backup-failed'
-  | 'backup-needed-with-activity'
   | 'backup-ready'
   | 'backup-warning'
   | 'copayers'
@@ -21,7 +20,7 @@ export type InfoSheetType =
   | 'legacy-address-info'
   | 'miner-fee'
   | 'miner-fee-notice'
-  | 'payment-request'
+  | 'paper-key-unverified-with-activity'
   | 'receiving-bitcoin'
   | 'sensitive-info';
 

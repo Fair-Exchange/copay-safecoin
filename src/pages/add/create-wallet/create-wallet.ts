@@ -39,10 +39,15 @@ export class CreateWalletPage implements OnInit {
     12: 1
   };
 
+  private createForm: FormGroup;
   private defaults;
   private tc: number;
   private derivationPathByDefault: string;
   private derivationPathForTestnet: string;
+  private derivationPathForLtc: string;
+  private derivationPathForZcl: string;
+  private derivationPathForRvn: string;
+  private derivationPathForSafe: string;
 
   public copayers: number[];
   public signatures: number[];
@@ -52,7 +57,8 @@ export class CreateWalletPage implements OnInit {
   public title: string;
   public okText: string;
   public cancelText: string;
-  public createForm: FormGroup;
+  public coinsname: string[];
+  public coins: string[];
 
   constructor(
     private navCtrl: NavController,
@@ -71,6 +77,18 @@ export class CreateWalletPage implements OnInit {
   ) {
     this.okText = this.translate.instant('Ok');
     this.cancelText = this.translate.instant('Cancel');
+		    this.coins = ['safe', 'btcz', 'zel', 'zcl', 'anon', 'rvn', 'ltc', 'btc', 'bch' ];
+    this.coinsname = [
+     'Safecoin (SAFE)',
+     'BitcoinZ (BTCZ)',
+     'Anonymous (ANON)',
+     'Zelcash (ZEL)',
+     'Zclassic (ZCL)',
+     'Ravencoin (RVN)',
+     'Litecoin (LTC)',
+     'Bitcoin (BTC)',
+     'Bitcoin Cash (BCH)' ];
+
     this.isShared = this.navParams.get('isShared');
     this.title = this.isShared
       ? this.translate.instant('Create shared wallet')
@@ -81,6 +99,10 @@ export class CreateWalletPage implements OnInit {
     this.copayers = _.range(2, this.defaults.limits.totalCopayers + 1);
     this.derivationPathByDefault = this.derivationPathHelperProvider.default;
     this.derivationPathForTestnet = this.derivationPathHelperProvider.defaultTestnet;
+    this.derivationPathForLtc = this.derivationPathHelperProvider.defaultLtc;
+    this.derivationPathForZcl = this.derivationPathHelperProvider.defaultZcl;
+    this.derivationPathForRvn = this.derivationPathHelperProvider.defaultRvn;
+    this.derivationPathForSafe = this.derivationPathHelperProvider.defaultSafe;
     this.showAdvOpts = false;
 
     this.createForm = this.fb.group({
@@ -97,6 +119,8 @@ export class CreateWalletPage implements OnInit {
       coin: [null, Validators.required]
     });
 
+    this.createForm.controls['coin'].setValue(this.coins[0]);
+    this.createForm.controls['derivationPath'].setValue(this.derivationPathForSafe);
     this.setTotalCopayers(this.tc);
     this.updateRCSelect(this.tc);
   }
@@ -146,19 +170,35 @@ export class CreateWalletPage implements OnInit {
     } else {
       this.createForm.get('recoveryPhrase').setValidators(null);
     }
+
+/*    let path: string = this.createForm.value.coin == 'ltc'
+        ? this.derivationPathForLtc
+         : this.createForm.value.coin == 'zcl'
+          ? this.derivationPathForZcl
+           : this.createForm.value.coin == 'rvn'
+            ? this.derivationPathForRvn
+             : this.createForm.value.coin == 'safe'
+              ? this.derivationPathForSafe
+               : this.derivationPathByDefault; */
     this.createForm.controls['selectedSeed'].setValue(seed); // new or set
     if (this.createForm.controls['testnet'])
       this.createForm.controls['testnet'].setValue(false);
-    this.createForm.controls['derivationPath'].setValue(
-      this.derivationPathByDefault
-    );
+    this.createForm.controls['derivationPath'].setValue(this.createForm.value.derivationPath);
     this.createForm.controls['recoveryPhrase'].setValue(null);
   }
 
   public setDerivationPath(): void {
     let path: string = this.createForm.value.testnet
       ? this.derivationPathForTestnet
-      : this.derivationPathByDefault;
+       : this.createForm.value.coin == 'ltc'
+        ? this.derivationPathForLtc
+         : this.createForm.value.coin == 'zcl'
+          ? this.derivationPathForZcl
+           : this.createForm.value.coin == 'rvn'
+            ? this.derivationPathForRvn
+             : this.createForm.value.coin == 'safe'
+              ? this.derivationPathForSafe
+               : this.derivationPathByDefault;
     this.createForm.controls['derivationPath'].setValue(path);
   }
 
@@ -190,9 +230,18 @@ export class CreateWalletPage implements OnInit {
         opts.mnemonic = words;
       }
 
-      let pathData = this.derivationPathHelperProvider.parse(
-        this.createForm.value.derivationPath
-      );
+/*      let pathData =this.derivationPathHelperProvider.parse(this.createForm.value.derivationPath);
+      if (this.createForm.value.coin == 'ltc') {
+        pathData = this.derivationPathHelperProvider.parse(this.derivationPathForLtc);
+      } else if (this.createForm.value.coin == 'zcl') {
+        pathData = this.derivationPathHelperProvider.parse(this.derivationPathForZcl);
+      } else if (this.createForm.value.coin == 'rvn') {
+        pathData = this.derivationPathHelperProvider.parse(this.derivationPathForRvn);
+      } else if (this.createForm.value.coin == 'safe') {
+        pathData = this.derivationPathHelperProvider.parse(this.derivationPathForSafe);
+      }
+  */
+      let pathData = this.derivationPathHelperProvider.parse(this.createForm.value.derivationPath);
       if (!pathData) {
         let title = this.translate.instant('Error');
         let subtitle = this.translate.instant('Invalid derivation path');

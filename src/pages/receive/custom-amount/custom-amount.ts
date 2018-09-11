@@ -56,7 +56,8 @@ export class CustomAmountPage {
       let _currency = parsedAmount.currency;
       this.amountUnitStr = parsedAmount.amountUnitStr;
 
-      if (_currency != 'BTC' && _currency != 'BCH') {
+      if (_currency != 'BTC' && _currency != 'BCH' && _currency != 'SAFE' && _currency != 'BTCZ' && 
+          _currency != 'ZCL' && _currency != 'ANON' && _currency != 'ZEL' && _currency != 'RVN' && _currency != 'LTC') {
         // Convert to BTC or BCH
         let amountUnit = this.txFormatProvider.satToUnit(
           parsedAmount.amountSat
@@ -100,18 +101,8 @@ export class CustomAmountPage {
     const infoSheet = this.actionSheetProvider.createInfoSheet(
       'custom-amount',
       {
-        qrAddress: this.qrAddress
-      }
-    );
-    infoSheet.present();
-  }
-
-  public showPaymentRequestInfo(): void {
-    const infoSheet = this.actionSheetProvider.createInfoSheet(
-      'payment-request',
-      {
-        amount: this.amountUnitStr,
-        name: this.wallet.name
+        address: this.address,
+        amount: this.amountUnitStr
       }
     );
     infoSheet.present();

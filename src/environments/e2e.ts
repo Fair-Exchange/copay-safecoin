@@ -14,8 +14,15 @@ const env: EnvironmentSchema = {
   name: 'e2e',
   enableAnimations: false,
   ratesAPI: {
-    btc: `${host}/bitpay.com/api/rates`,
-    bch: `${host}/bitpay.com/api/rates/bch`
+    btc: `${host}/api.coingecko.com/api/v3/coins/bitcoin`,
+    bch: `${host}/api.coingecko.com/api/v3/coins/bitcoin-cash`,
+    safe: `${host}/api.coingecko.com/api/v3/coins/safe-coin-2`,
+    btcz: `${host}/api.coingecko.com/api/v3/coins/bitcoinz`,
+    zcl: `${host}/api.coingecko.com/api/v3/coins/zclassic`,
+    anon: `${host}/api.coingecko.com/api/v3/coins/zclassic`,
+    zel: `${host}/api.coingecko.com/api/v3/coins/zelcash`,
+    rvn: `${host}/api.coingecko.com/api/v3/coins/ravencoin`,
+    ltc: `${host}/api.coingecko.com/api/v3/coins/litecoin`
   },
   activateScanner: false
 };

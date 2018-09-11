@@ -22,7 +22,14 @@
 
     <ion-item>
       <ion-label stacked>{{'Coin' | translate}}</ion-label>
-      <ion-select okText="{{okText}}" cancelText="{{cancelText}}" placeholder="{{'Select a coin' | translate}}" formControlName="coin">
+      <ion-select okText="{{okText}}" cancelText="{{cancelText}}" placeholder="{{'Select a coin' | translate}}" formControlName="coin" (ionChange)="setDerivationPath()">
+        <ion-option value="safe">Safecoin (SAFE)</ion-option>
+        <ion-option value="btcz">BitcoinZ (BTCZ)</ion-option>
+        <ion-option value="anon" disabled>Anonymous (ANON)</ion-option>
+        <ion-option value="zel">Zelcash (ZEL)</ion-option>
+        <ion-option value="zcl">Zclassic (ZCL)</ion-option>
+        <ion-option value="rvn">Ravencoin (RVN)</ion-option>
+        <ion-option value="ltc">Litecoin (LTC)</ion-option>
         <ion-option value="btc">Bitcoin (BTC)</ion-option>
         <ion-option value="bch">Bitcoin Cash (BCH)</ion-option>
       </ion-select>
@@ -59,7 +66,7 @@
 
       <ion-item *ngIf="joinForm.value.selectedSeed == 'set'">
         <ion-label stacked>{{'Derivation path' | translate}}</ion-label>
-        <ion-input type="text" formControlName="derivationPath"></ion-input>
+        <ion-input type="text" formControlName="derivationPath" disabled></ion-input>
       </ion-item>
     </div>
   </form>

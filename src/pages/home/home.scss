@@ -29,30 +29,11 @@ page-home {
       margin: 10px auto;
     }
   }
-  .card,
-  ion-card {
-    .wallets-list-title {
-      display: flex;
-      align-items: center;
-      max-width: 70%;
-      > img {
-        margin-right: 7px;
-      }
-      > span {
-        line-height: 18px;
-      }
-    }
-    .title-buttons {
-      display: flex;
-      button:first-child {
-        margin-right: 5px;
-      }
-    }
-  }
   .title {
     font-weight: 500;
     > img {
-      margin-right: 7px;
+      vertical-align: sub;
+      margin-right: 5px;
     }
   }
   .error {
@@ -101,24 +82,6 @@ page-home {
     z-index: 1;
     position: relative;
   }
-  .clipboard-card {
-    z-index: 0;
-  }
-  .initial-margin {
-    margin-top: -140px;
-  }
-  .content-animation {
-    z-index: 5;
-    margin-top: 0px;
-    -webkit-transition: margin-top 0.7s cubic-bezier(1, 0, 0.93, 0.19) 0.2s;
-    -moz-transition: margin-top 0.7s cubic-bezier(1, 0, 0.93, 0.19) 0.2s;
-    -o-transition: margin-top 0.7s cubic-bezier(1, 0, 0.93, 0.19) 0.2s;
-    transition: margin-top 0.7s cubic-bezier(1, 0, 0.93, 0.19) 0.2s;
-    animation-name: bounce-card;
-    animation-duration: 0.7s;
-    animation-delay: 0.8s;
-  }
-
   ion-refresher {
     height: 120px;
     background: $toolbar-background;
@@ -157,16 +120,6 @@ page-home {
       }
     }
   }
-  .zero-state {
-    .wrapper {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .prompt-user {
-      margin-bottom: 2rem;
-    }
-  }
 
   @include fix-ios-bg-scroll();
 
@@ -176,30 +129,6 @@ page-home {
     }
     ion-fab[bottom] {
       bottom: env(safe-area-inset-bottom);
-    }
-  }
-
-  @keyframes bounce-card {
-    0% {
-      transform: translateY(0);
-    }
-    10% {
-      transform: translateY(0);
-    }
-    30% {
-      transform: translateY(40px);
-    }
-    50% {
-      transform: translateY(0);
-    }
-    57% {
-      transform: translateY(5px);
-    }
-    64% {
-      transform: translateY(0);
-    }
-    100% {
-      transform: translateY(0);
     }
   }
 }

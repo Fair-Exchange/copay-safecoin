@@ -4,10 +4,28 @@ import { Injectable } from '@angular/core';
 export class DerivationPathHelperProvider {
   public default: string;
   public defaultTestnet: string;
+  public defaultBtc: string;
+  public defaultBch: string;
+  public defaultBtcz: string;
+  public defaultLtc: string;
+  public defaultZel: string;
+  public defaultZcl: string;
+  public defaultAnon: string;
+  public defaultRvn: string;
+  public defaultSafe: string;
 
   public constructor() {
     this.default = "m/44'/0'/0'";
     this.defaultTestnet = "m/44'/1'/0'";
+    this.defaultBtc = "m/44'/0'/0'";
+    this.defaultBch = "m/44'/0'/0'";
+    this.defaultBtcz = "m/44'/0'/0'";
+    this.defaultZel = "m/44'/0'/0'";
+    this.defaultLtc = "m/44'/2'/0'";
+    this.defaultZcl = "m/44'/147'/0'";
+    this.defaultAnon = "m/44'/0'/0'";
+    this.defaultRvn = "m/44'/175'/0'";
+    this.defaultSafe = "m/44'/19165'/0'";
   }
 
   parse(str: string) {
@@ -15,6 +33,7 @@ export class DerivationPathHelperProvider {
     var ret = {
       derivationStrategy: '',
       networkName: '',
+      coin: '',
       account: 0
     };
 
@@ -43,6 +62,22 @@ export class DerivationPathHelperProvider {
         break;
       case "1'":
         ret.networkName = 'testnet';
+        break;
+      case "2'":
+        ret.networkName = 'livenet';
+        ret.coin = 'ltc';
+        break;
+      case "147'":
+        ret.networkName = 'livenet';
+        ret.coin = 'zcl';
+        break;
+      case "175'":
+        ret.networkName = 'livenet';
+        ret.coin = 'rvn';
+        break;
+      case "19165'":
+        ret.networkName = 'livenet';
+        ret.coin = 'safe';
         break;
       default:
         return false;

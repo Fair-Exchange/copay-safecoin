@@ -31,9 +31,16 @@ export class JoinWalletPage {
   public seedOptions;
   public okText: string;
   public cancelText: string;
+  public coins: string[];
 
   private joinForm: FormGroup;
   private regex: RegExp;
+  private derivationPathByDefault: string;
+  private derivationPathForTestnet: string;
+  private derivationPathForLtc: string;
+  private derivationPathForZcl: string;
+  private derivationPathForRvn: string;
+  private derivationPathForSafe: string;
 
   constructor(
     private app: App,
@@ -55,10 +62,17 @@ export class JoinWalletPage {
     this.okText = this.translate.instant('Ok');
     this.cancelText = this.translate.instant('Cancel');
     this.defaults = this.configProvider.getDefaults();
+    this.derivationPathByDefault = this.derivationPathHelperProvider.default;
+    this.derivationPathForTestnet = this.derivationPathHelperProvider.defaultTestnet;
+    this.derivationPathForLtc = this.derivationPathHelperProvider.defaultLtc;
+    this.derivationPathForZcl = this.derivationPathHelperProvider.defaultZcl;
+    this.derivationPathForRvn = this.derivationPathHelperProvider.defaultRvn;
+    this.derivationPathForSafe = this.derivationPathHelperProvider.defaultSafe;
+    this.coins = ['safe', 'btcz', 'zel', 'zcl', 'anon', 'rvn', 'ltc', 'btc', 'bch' ];
 
     this.showAdvOpts = false;
 
-    this.regex = /^[0-9A-HJ-NP-Za-km-z]{70,80}$/; // For invitationCode
+    this.regex = /^[0-9A-HJ-NP-Za-z]{70,80}$/; // For invitationCode
     this.joinForm = this.form.group({
       myName: [null, Validators.required],
       invitationCode: [
@@ -68,8 +82,11 @@ export class JoinWalletPage {
       bwsURL: [this.defaults.bws.url],
       selectedSeed: ['new'],
       recoveryPhrase: [null],
+      derivationPath: [this.derivationPathByDefault],
       coin: [null, Validators.required]
     });
+    this.joinForm.controls['coin'].setValue(this.coins[0]);
+    this.joinForm.controls['derivationPath'].setValue(this.derivationPathForSafe);
 
     this.seedOptions = [
       {
@@ -87,6 +104,20 @@ export class JoinWalletPage {
       let invitationCode = data.value.replace('copay:', '');
       this.onQrCodeScannedJoin(invitationCode);
     });
+  }
+  public setDerivationPath(): void {
+    let path: string = this.joinForm.value.testnet
+      ? this.derivationPathForTestnet
+       : this.joinForm.value.coin == 'ltc'
+        ? this.derivationPathForLtc
+         : this.joinForm.value.coin == 'zcl'
+          ? this.derivationPathForZcl
+           : this.joinForm.value.coin == 'rvn'
+            ? this.derivationPathForRvn
+             : this.joinForm.value.coin == 'safe'
+              ? this.derivationPathForSafe
+               : this.derivationPathByDefault;
+    this.joinForm.controls['derivationPath'].setValue(path);
   }
 
   ionViewDidLoad() {

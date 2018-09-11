@@ -38,12 +38,12 @@ describe('AddressProvider', () => {
   describe('validateAddress', () => {
     it('should validate if address is correct', () => {
       BTCAddresses.forEach(BTCAddress => {
-        expect(addressProvider.validateAddress(BTCAddress).isValid).toEqual(
+        expect(addressProvider.validateAddress(BTCAddress, 'btc').isValid).toEqual(
           true
         );
       });
       BTCAddresses.forEach(BTCAddress => {
-        expect(addressProvider.validateAddress(BTCAddress).isValid).toEqual(
+        expect(addressProvider.validateAddress(BTCAddress, 'bch').isValid).toEqual(
           true
         );
       });

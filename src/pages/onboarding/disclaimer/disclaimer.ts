@@ -46,7 +46,7 @@ export class DisclaimerPage {
   }
 
   openDisclaimer() {
-    let url = 'https://bitpay.com/about/terms#wallet';
+    let url = 'https://safecoin.org/copay_about';
     let optIn = true;
     let title = null;
     let message = this.translate.instant('View Wallet Terms of Use');
@@ -63,7 +63,7 @@ export class DisclaimerPage {
   }
 
   openPrivacyPolicy() {
-    let url = 'https://bitpay.com/about/privacy';
+    let url = 'https://safecoin.org/copay_privacy';
     let optIn = true;
     let title = null;
     let message = this.translate.instant('View Privacy Policy');
@@ -80,7 +80,7 @@ export class DisclaimerPage {
   }
 
   confirm() {
-    this.persistenceProvider.setEmailLawCompliance('accepted');
+  //  this.persistenceProvider.setEmailLawCompliance('accepted');
     this.persistenceProvider.setDisclaimerAccepted();
     this.navCtrl.setRoot(TabsPage);
     this.navCtrl.popToRoot({ animate: false });

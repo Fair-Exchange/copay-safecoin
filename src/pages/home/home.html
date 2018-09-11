@@ -11,311 +11,694 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content class="fullscreen-tab" [ngClass]="{'zero-state': !wallets || !wallets[0]}">
-  <ion-refresher (ionRefresh)="doRefresh($event)" *ngIf="!showReorderBtc && !showReorderBch" pullMin="90" pullMax="180">
+<ion-content class="fullscreen-tab">
+  <ion-refresher (ionRefresh)="doRefresh($event)" *ngIf="!showReorderAll && !showReorderBtc && !showReorderBch &&
+                 !showReorderSafe && !showReorderBtcz && !showReorderZcl && !showReorderAnon && !showReorderZel &&
+                 !showReorderRvn && !showReorderLtc">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <div class="wrapper">
-    <div class="header-extend" *ngIf="wallets && wallets[0]"></div>
+    <div class="header-extend">
+      <div *ngIf="!wallets || !wallets[0]" class="no-wallets">
+        <button ion-button clear (click)="goToAddView()">
+          <span translate>Create a new wallet</span>
+        </button>
+      </div>
+    </div>
 
-    <div class="card clipboard-card" *ngIf="validDataFromClipboard">
+    <ion-card *ngIf="serverMessage">
+      <ion-item>
+        <div>{{serverMessage.title}}</div>
+        <div>{{serverMessage.body}}</div>
+        <div (click)="openServerMessageLink()">
+          <span translate>Learn more</span>
+        </div>
+      </ion-item>
+    </ion-card>
+
+    <ion-card class="new-release" *ngIf="newRelease">
+      <div class="new-release-icon">
+        <img src="assets/img/icon-update.svg" />
+      </div>
+      <ion-card-header class="new-release-text">
+        {{updateText}}
+      </ion-card-header>
+      <ion-card-content class="new-release-button">
+        <div (click)="goToDownload()">
+          <span translate>Download</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <page-feedback-card #showCard></page-feedback-card>
+
+    <ion-card *ngIf="homeTip && wallets && wallets[0]">
+      <ion-card-header class="wallet-ready">
+        <ion-row>
+          <button ion-button clear icon-only item-end color="grey" (click)="hideHomeTip()">
+            <ion-icon name="close"></ion-icon>
+          </button>
+        </ion-row>
+      </ion-card-header>
+      <ion-card-content class="check">
+        <ion-icon class="big-icon-svg check-icon">
+          <img src="assets/img/check-white.svg" class="bg green" />
+        </ion-icon>
+        <div class="title" translate>
+          Your wallet is ready!
+        </div>
+        <div class="subtitle" translate>
+          On this screen you can see all your wallets.
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="card" *ngIf="validDataFromClipboard">
       <ion-item-divider>
         <div class="title" item-start>
           <img src="assets/img/paste-clipboard.svg" alt="Clipboard" width="20" />
-          <span>{{'Copied' | translate }} {{validDataFromClipboard?.title}}</span>
-        </div>
-        <div item-end>
-          <button ion-button clear icon-only color="grey" (click)="hideClipboardCard()">
-            <ion-icon name="close"></ion-icon>
-          </button>
+          <span>{{'Copied' | translate }} {{validDataFromClipboard.title}}</span>
         </div>
       </ion-item-divider>
       <page-clipboard-card [remainingTimeStr]="remainingTimeStr" [payProDetailsData]="payProDetailsData" [validDataFromClipboard]="validDataFromClipboard"
         (click)="processClipboardData(validDataFromClipboard.data)"></page-clipboard-card>
     </div>
 
-    <div [ngClass]="{'content-animation': slideDown, 'initial-margin': validDataFromClipboard}">
-
-      <div class="prompt-user-fullscreen-container" *ngIf="!wallets || !wallets[0]">
-        <div class="prompt-user">
-          <div class="title-icon larger-icon">
-            <img src="assets/img/ghost-straight-face.svg" />
-          </div>
-          <div class="title-info">
-            <span translate>No wallets available</span>
-          </div>
-          <div class="subtitle-info">
-            <span translate>Create a new wallet to start using this app.</span>
-          </div>
-          <button ion-button class="button-standard" (click)="goToAddView()">
-            {{'Create a new wallet' | translate}}
+    <div class="card" *ngIf="txps && txps[0]">
+      <ion-item-divider (click)="openProposalsPage()">
+        <div class="title" item-start>
+          <span translate>Payment Proposals</span>
+        </div>
+        <div item-end>
+          <button ion-button clear icon-only color="grey">
+            <ion-badge *ngIf="txpsN>3" color="danger">{{txpsN}}</ion-badge>
+            <ion-icon ios="ios-arrow-dropright"></ion-icon>
           </button>
         </div>
-      </div>
+      </ion-item-divider>
+      <ion-list>
+        <page-txp *ngFor="let txp of txps" [tx]="txp" [addressbook]="addressbook"></page-txp>
+      </ion-list>
+    </div>
 
-      <ion-card *ngIf="serverMessage">
-        <ion-item>
-          <div>{{serverMessage.title}}</div>
-          <div>{{serverMessage.body}}</div>
-          <div (click)="openServerMessageLink()">
-            <span translate>Learn more</span>
-          </div>
-        </ion-item>
-      </ion-card>
+    <div class="card" *ngIf="recentTransactionsEnabled && notifications && notifications[0]">
+      <ion-item-divider (click)="openActivityPage()">
+        <div class="title" item-start>
+          <span translate>Recent Transactions</span>
+        </div>
+        <div item-end>
+          <button ion-button clear icon-only color="grey">
+            <ion-badge *ngIf="notificationsN>3" color="danger">{{notificationsN}}</ion-badge>
+            <ion-icon ios="ios-arrow-dropright"></ion-icon>
+          </button>
+        </div>
+      </ion-item-divider>
+      <ion-list>
+        <page-wallet-activity *ngFor="let notification of notifications" (click)="openNotificationModal(notification)" [notification]="notification"></page-wallet-activity>
+      </ion-list>
+    </div>
+    <div class="card" *ngIf="homepageSimpleViewEnabled && walletsAll && walletsAll[0]">
+      <ion-item-divider>
+        <div class="title" item-start>
+          <img src="assets/img/copaysafe.png" alt="Wallets" width="77" />
+          <span translate> Your wallets</span>
+        </div>
+        <div item-end *ngIf="!showReorderAll">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+            <ion-icon name="add"></ion-icon>
+          </button>
+          <button ion-button clear icon-only color="grey" (click)="reorderAll()" *ngIf="walletsAll.length > 1">
+            <ion-icon name="reorder"></ion-icon>
+          </button>
+        </div>
+        <div item-end *ngIf="showReorderAll">
+          <button ion-button clear color="secondary" (click)="reorderAll()">
+            {{'Done' | translate}}
+          </button>
+        </div>
+      </ion-item-divider>
 
-      <ion-card *ngIf="showAnnouncement">
-        <ion-card-header class="wallet-ready">
-          <ion-row>
-            <button ion-button clear icon-only item-end color="grey" (click)="hideAnnouncement()">
-              <ion-icon name="close"></ion-icon>
-            </button>
-          </ion-row>
-        </ion-card-header>
-        <ion-card-content class="check">
-          <img class="announcement-logo" src="assets/img/amazon/japan/GCs-logo-japan-cllb.jpg" alt="Amazon.co.jp Gift Card">
-          <div class="subtitle">
-            Amazonギフト券が利用可能になりました！
-            <br> ビットコインとビットコインキャッシュでAmazon.co.jpのギフト券（コードタイプ)を
-            <br> 購入できます。
-          </div>
-          <div margin-top (click)="openAnnouncement()">
-            <span ion-text color="primary">
-              始めましょう
+      <ion-list reorder="{{showReorderAll}}" (ionItemReorder)="reorderWalletsAll($event)">
+        <button ion-item *ngFor="let wallet of walletsAll" (click)="goToWalletDetails(wallet)">
+          <ion-icon class="item-img" item-start>
+            <img *ngIf="wallet.network == 'testnet'" [ngStyle]="{'background-color': wallet.color}" src="assets/img/icon-wallet-testnet.svg"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet' && wallet.coin == 'safe'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-safecoin.png"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet' && wallet.coin == 'btcz'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-bitcoinz.png"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet' && wallet.coin == 'zel'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-zelcash.png"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet' && wallet.coin == 'zcl'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-zclassic.png"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet' && wallet.coin == 'anon'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-anonymous.png"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet' && wallet.coin == 'rvn'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-ravencoin.png"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet' && wallet.coin == 'ltc'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-litecoin.png"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet' && wallet.coin == 'btc'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-bitcoin.svg"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet' && wallet.coin == 'bch'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/bitcoin-cash-logo.svg"
+              class="icon-wallet" />
+          </ion-icon>
+          <div class="item-title">{{wallet.name}}</div>
+          <div class="item-subtitle">
+            <span class="wallet-warning" *ngIf="!wallet.isComplete()" translate>
+              Incomplete
+            </span>
+            <span class="wallet-warning" *ngIf="wallet.isComplete() && wallet.needsBackup" translate>
+              Paper Key Unverified
+            </span>
+            <span *ngIf="wallet.isComplete() && !wallet.needsBackup">
+              <span *ngIf="!wallet.balanceHidden && !wallet.scanning">
+                {{wallet.status && wallet.status.totalBalanceStr ? (wallet.status.totalBalanceStr) : ( wallet.cachedBalance ? wallet.cachedBalance
+                + (wallet.cachedBalanceUpdatedOn ? ' &middot; ' + ( wallet.cachedBalanceUpdatedOn * 1000 | amTimeAgo) : '')
+                : '')}}
+              </span>
+              <span *ngIf="wallet.scanning" translate>Scanning funds</span>
+              <span *ngIf="wallet.balanceHidden && !wallet.scanning">[
+                <span translate>Balance Hidden</span>]</span>
+              <span class="text-gray" *ngIf="wallet.credentials.m > 1">{{wallet.credentials.m}}-of-{{wallet.credentials.n}}</span>
+              <ion-icon *ngIf="!wallet.balanceHidden && wallet.status && (wallet.status.totalBalanceSat != wallet.status.spendableAmount)"
+                ios="ios-timer-outline" md="md-timer"></ion-icon>
+              <span *ngIf="wallet.error" class="wallet-warning">{{wallet.error}}</span>
             </span>
           </div>
-        </ion-card-content>
-      </ion-card>
+        </button>
+      </ion-list>
+    </div>
 
-      <ion-card class="new-release" *ngIf="newRelease">
-        <div class="new-release-icon">
-          <img src="assets/img/icon-update.svg" />
+
+
+
+	
+	<div class="card" *ngIf="!homepageSimpleViewEnabled && walletsSafe && walletsSafe[0]">
+      <ion-item-divider>
+        <div class="title" item-start>
+          <img src="assets/img/icon-safecoin-logotext.png" alt="SafeCoin Wallets" width="77" />
+          <span translate> Wallets</span>
         </div>
-        <ion-card-header class="new-release-text">
-          {{updateText}}
-        </ion-card-header>
-        <ion-card-content class="new-release-button">
-          <div (click)="goToDownload()">
-            <span translate>Download</span>
-          </div>
-        </ion-card-content>
-      </ion-card>
+        <div item-end *ngIf="!showReorderSafe">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+            <ion-icon name="add"></ion-icon>
+          </button>
+          <button ion-button clear icon-only color="grey" (click)="reorderSafe()" *ngIf="walletsSafe.length > 1">
+            <ion-icon name="reorder"></ion-icon>
+          </button>
+        </div>
+        <div item-end *ngIf="showReorderSafe">
+          <button ion-button clear color="secondary" (click)="reorderSafe()">
+            {{'Done' | translate}}
+          </button>
+        </div>
+      </ion-item-divider>
 
-      <page-feedback-card #showCard></page-feedback-card>
-
-      <ion-card *ngIf="homeTip && wallets && wallets[0]">
-        <ion-card-header class="wallet-ready">
-          <ion-row>
-            <button ion-button clear icon-only item-end color="grey" (click)="hideHomeTip()">
-              <ion-icon name="close"></ion-icon>
-            </button>
-          </ion-row>
-        </ion-card-header>
-        <ion-card-content class="check">
-          <ion-icon class="big-icon-svg check-icon">
-            <img src="assets/img/check-white.svg" class="bg green" />
+      <ion-list reorder="{{showReorderSafe}}" (ionItemReorder)="reorderWalletsSafe($event)">
+        <button ion-item *ngFor="let wallet of walletsSafe" (click)="goToWalletDetails(wallet)">
+          <ion-icon class="item-img" item-start>
+            <img *ngIf="wallet.network == 'testnet'" [ngStyle]="{'background-color': wallet.color}" src="assets/img/icon-wallet-testnet.svg"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-safecoin.png"
+              class="icon-wallet" />
           </ion-icon>
-          <div class="title" translate>
-            Your bitcoin wallet is ready!
-          </div>
-          <div class="subtitle" translate>
-            On this screen you can see all your wallets, accounts, and assets.
-          </div>
-        </ion-card-content>
-      </ion-card>
-
-
-      <div class="card" *ngIf="txps && txps[0]">
-        <ion-item-divider>
-          <div class="title" item-start>
-            <span translate>Payment Proposals</span>
-          </div>
-          <div item-end *ngIf="txpsN>3">
-            <button ion-button clear icon-only color="grey" (click)="openProposalsPage()">
-              <ion-badge color="danger">{{txpsN}}</ion-badge>
-            </button>
-          </div>
-        </ion-item-divider>
-        <ion-list>
-          <page-txp *ngFor="let txp of txps" [tx]="txp" [addressbook]="addressbook"></page-txp>
-        </ion-list>
-      </div>
-
-      <div class="card" *ngIf="recentTransactionsEnabled && notifications && notifications[0]">
-        <ion-item-divider>
-          <div class="title" item-start>
-            <span translate>Recent Transactions</span>
-          </div>
-          <div item-end *ngIf="notificationsN>3">
-            <button ion-button clear icon-only color="grey" (click)="openActivityPage()">
-              <ion-badge color="danger">{{notificationsN}}</ion-badge>
-            </button>
-          </div>
-        </ion-item-divider>
-        <ion-list>
-          <page-wallet-activity *ngFor="let notification of notifications" (click)="openNotificationModal(notification)" [notification]="notification"></page-wallet-activity>
-        </ion-list>
-      </div>
-
-      <div class="card" *ngIf="walletsBtc && walletsBtc[0]">
-        <ion-item-divider>
-          <div class="title wallets-list-title" item-start>
-            <img src="assets/img/icon-bitcoin.svg" alt="Bitcoin Wallets" width="18" />
-            <span translate>Bitcoin Wallets</span>
-          </div>
-          <div class="title-buttons" item-end *ngIf="!showReorderBtc">
-            <button ion-button clear icon-only color="grey" (click)="goToAddView()">
-              <ion-icon name="add"></ion-icon>
-            </button>
-            <button ion-button clear icon-only color="grey" (click)="reorderBtc()" *ngIf="walletsBtc.length > 1">
-              <ion-icon name="reorder"></ion-icon>
-            </button>
-          </div>
-          <div item-end *ngIf="showReorderBtc">
-            <button ion-button clear color="secondary" (click)="reorderBtc()">
-              {{'Done' | translate}}
-            </button>
-          </div>
-        </ion-item-divider>
-
-        <ion-list reorder="{{showReorderBtc}}" (ionItemReorder)="reorderWalletsBtc($event)">
-          <button ion-item *ngFor="let wallet of walletsBtc" (click)="goToWalletDetails(wallet)">
-            <ion-icon class="item-img" item-start>
-              <img *ngIf="wallet.network == 'testnet'" [ngStyle]="{'background-color': wallet.color}" src="assets/img/icon-wallet-testnet.svg"
-                class="icon-wallet" />
-              <img *ngIf="wallet.network != 'testnet'" [ngStyle]="{'background-color': wallet.color}" src="assets/img/icon-wallet.svg"
-                class="icon-wallet" />
-            </ion-icon>
-            <div class="item-title">{{wallet.name}}</div>
-            <div class="item-subtitle">
-              <span class="wallet-warning" *ngIf="!wallet.isComplete()" translate>
-                Incomplete
+          <div class="item-title">{{wallet.name}}</div>
+          <div class="item-subtitle">
+            <span class="wallet-warning" *ngIf="!wallet.isComplete()" translate>
+              Incomplete
+            </span>
+            <span class="wallet-warning" *ngIf="wallet.isComplete() && wallet.needsBackup" translate>
+              Paper Key Unverified
+            </span>
+            <span *ngIf="wallet.isComplete() && !wallet.needsBackup">
+              <span *ngIf="!wallet.balanceHidden && !wallet.scanning">
+                {{wallet.status && wallet.status.totalBalanceStr ? (wallet.status.totalBalanceStr) : ( wallet.cachedBalance ? wallet.cachedBalance
+                + (wallet.cachedBalanceUpdatedOn ? ' &middot; ' + ( wallet.cachedBalanceUpdatedOn * 1000 | amTimeAgo) : '')
+                : '')}}
               </span>
-              <span class="wallet-warning" *ngIf="wallet.isComplete() && wallet.needsBackup" translate>
-                Needs Backup
-              </span>
-              <span *ngIf="wallet.isComplete() && !wallet.needsBackup">
-                <span *ngIf="!wallet.balanceHidden && !wallet.scanning">
-                  {{wallet.status && wallet.status.totalBalanceStr ? (wallet.status.totalBalanceStr) : ( wallet.cachedBalance ? wallet.cachedBalance
-                  + (wallet.cachedBalanceUpdatedOn ? ' &middot; ' + ( wallet.cachedBalanceUpdatedOn * 1000 | amTimeAgo) :
-                  '') : '')}}
-                </span>
-                <span *ngIf="wallet.scanning" translate>Scanning funds</span>
-                <span *ngIf="wallet.balanceHidden && !wallet.scanning">[
-                  <span translate>Balance Hidden</span>]</span>
-                <span class="text-gray" *ngIf="wallet.credentials.m > 1">{{wallet.credentials.m}}-of-{{wallet.credentials.n}}</span>
-                <ion-icon *ngIf="!wallet.balanceHidden && wallet.status && (wallet.status.totalBalanceSat != wallet.status.spendableAmount)"
-                  ios="ios-timer-outline" md="md-timer"></ion-icon>
-                <div *ngIf="wallet.error" class="wallet-warning">{{wallet.error}}</div>
-              </span>
-            </div>
+              <span *ngIf="wallet.scanning" translate>Scanning funds</span>
+              <span *ngIf="wallet.balanceHidden && !wallet.scanning">[
+                <span translate>Balance Hidden</span>]</span>
+              <span class="text-gray" *ngIf="wallet.credentials.m > 1">{{wallet.credentials.m}}-of-{{wallet.credentials.n}}</span>
+              <ion-icon *ngIf="!wallet.balanceHidden && wallet.status && (wallet.status.totalBalanceSat != wallet.status.spendableAmount)"
+                ios="ios-timer-outline" md="md-timer"></ion-icon>
+              <span *ngIf="wallet.error" class="wallet-warning">{{wallet.error}}</span>
+            </span>
+          </div>
+        </button>
+      </ion-list>
+    </div>
+
+    <div class="card" *ngIf="!homepageSimpleViewEnabled && walletsBtcz && walletsBtcz[0]">
+      <ion-item-divider>
+        <div class="title" item-start>
+          <img src="assets/img/icon-bitcoinz.png" alt="BitcoinZ Wallets" width="16" />
+          <span translate>BitcoinZ Wallets</span>
+        </div>
+        <div item-end *ngIf="!showReorderBtcz">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+            <ion-icon name="add"></ion-icon>
           </button>
-        </ion-list>
-      </div>
-
-      <div class="card" *ngIf="walletsBch && walletsBch[0]">
-        <ion-item-divider>
-          <div class="title wallets-list-title" item-start>
-            <img src="assets/img/bitcoin-cash-logo.svg" alt="Bitcoin Cash Wallets" width="22" />
-            <span translate>Bitcoin Cash Wallets</span>
-          </div>
-          <div class="title-buttons" item-end *ngIf="!showReorderBch">
-            <button ion-button clear icon-only color="grey" (click)="goToAddView()">
-              <ion-icon name="add"></ion-icon>
-            </button>
-            <button ion-button clear icon-only color="grey" (click)="reorderBch()" *ngIf="walletsBch.length > 1">
-              <ion-icon name="reorder"></ion-icon>
-            </button>
-          </div>
-          <div item-end *ngIf="showReorderBch">
-            <button ion-button clear color="secondary" (click)="reorderBch()">
-              {{'Done' | translate}}
-            </button>
-          </div>
-        </ion-item-divider>
-
-        <ion-list reorder="{{showReorderBch}}" (ionItemReorder)="reorderWalletsBch($event)">
-          <button ion-item *ngFor="let wallet of walletsBch" (click)="goToWalletDetails(wallet)">
-            <ion-icon class="item-img" item-start>
-              <img *ngIf="wallet.network == 'testnet'" [ngStyle]="{'background-color': wallet.color}" src="assets/img/icon-wallet-testnet.svg"
-                class="icon-wallet" />
-              <img *ngIf="wallet.network != 'testnet'" [ngStyle]="{'background-color': wallet.color}" src="assets/img/icon-wallet.svg"
-                class="icon-wallet" />
-            </ion-icon>
-            <div class="item-title">{{wallet.name}}</div>
-            <div class="item-subtitle">
-              <span class="wallet-warning" *ngIf="!wallet.isComplete()" translate>
-                Incomplete
-              </span>
-              <span class="wallet-warning" *ngIf="wallet.isComplete() && wallet.needsBackup" translate>
-                Needs Backup
-              </span>
-              <span *ngIf="wallet.isComplete() && !wallet.needsBackup">
-                <span *ngIf="!wallet.balanceHidden && !wallet.scanning">
-                  {{wallet.status && wallet.status.totalBalanceStr ? (wallet.status.totalBalanceStr) : ( wallet.cachedBalance ? wallet.cachedBalance
-                  + (wallet.cachedBalanceUpdatedOn ? ' &middot; ' + ( wallet.cachedBalanceUpdatedOn * 1000 | amTimeAgo) :
-                  '') : '')}}
-                </span>
-                <span *ngIf="wallet.scanning" translate>Scanning funds</span>
-                <span *ngIf="wallet.balanceHidden && !wallet.scanning">[
-                  <span translate>Balance Hidden</span>]</span>
-                <span *ngIf="wallet.credentials.m > 1">{{wallet.credentials.m}}-of-{{wallet.credentials.n}}</span>
-                <ion-icon *ngIf="!wallet.balanceHidden && wallet.status && (wallet.status.totalBalanceSat != wallet.status.spendableAmount)"
-                  ios="ios-timer-outline" md="md-timer"></ion-icon>
-                <div *ngIf="wallet.error" class="wallet-warning">{{wallet.error}}</div>
-              </span>
-            </div>
+          <button ion-button clear icon-only color="grey" (click)="reorderBtcz()" *ngIf="walletsBtcz.length > 1">
+            <ion-icon name="reorder"></ion-icon>
           </button>
-        </ion-list>
-      </div>
-
-      <div class="card" *ngIf="showBitPayCard && bitpayCardItems && bitpayCardItems[0] && wallets &&wallets[0]">
-        <ion-item-divider>
-          <div class="title" item-start>
-            <span>BitPay Visa
-              <sup>&reg;</sup> Card</span>
-          </div>
-          <div item-end>
-            <button ion-button clear icon-only color="grey" (click)="goTo('BitPayCardIntroPage')">
-              <ion-icon name="add"></ion-icon>
-            </button>
-          </div>
-        </ion-item-divider>
-        <ion-list>
-          <button ion-item *ngFor="let card of bitpayCardItems" (click)="goToCard(card.id)">
-            <ion-icon class="item-img" item-start>
-              <img src="assets/img/icon-card.svg" class="icon-card" />
-            </ion-icon>
-            <div class="item-title">BitPay Visa&reg; Card ({{card.lastFourDigits}})</div>
-            <div class="item-subtitle">{{card.balance ? ((card.balance | number:'1.2-2') + ' ' + card.currency) : 'Add funds to get started'|translate}}
-              {{card.updatedOn ? (' &middot; ' + (card.updatedOn * 1000 | amTimeAgo)) : ''}}</div>
+        </div>
+        <div item-end *ngIf="showReorderBtcz">
+          <button ion-button clear color="secondary" (click)="reorderBtcz()">
+            {{'Done' | translate}}
           </button>
-        </ion-list>
-      </div>
+        </div>
+      </ion-item-divider>
 
-      <div class="card" *ngIf="homeIntegrations && homeIntegrations.length>0 && wallets &&wallets[0]">
-        <ion-item-divider (click)="hideHomeIntegrations = !hideHomeIntegrations">
-          <div class="title" item-start translate>Services</div>
-          <div item-end>
-            <button ion-button clear color="grey" icon-only>
-              <ion-icon *ngIf="hideHomeIntegrations" name="arrow-dropdown"></ion-icon>
-              <ion-icon *ngIf="!hideHomeIntegrations" name="arrow-dropup"></ion-icon>
-            </button>
+      <ion-list reorder="{{showReorderBtcz}}" (ionItemReorder)="reorderWalletsBtcz($event)">
+        <button ion-item *ngFor="let wallet of walletsBtcz" (click)="goToWalletDetails(wallet)">
+          <ion-icon class="item-img" item-start>
+            <img *ngIf="wallet.network == 'testnet'" [ngStyle]="{'background-color': wallet.color}" src="assets/img/icon-wallet-testnet.svg"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-bitcoinz.png"
+              class="icon-wallet" />
+          </ion-icon>
+          <div class="item-title">{{wallet.name}}</div>
+          <div class="item-subtitle">
+            <span class="wallet-warning" *ngIf="!wallet.isComplete()" translate>
+              Incomplete
+            </span>
+            <span class="wallet-warning" *ngIf="wallet.isComplete() && wallet.needsBackup" translate>
+              Paper Key Unverified
+            </span>
+            <span *ngIf="wallet.isComplete() && !wallet.needsBackup">
+              <span *ngIf="!wallet.balanceHidden && !wallet.scanning">
+                {{wallet.status && wallet.status.totalBalanceStr ? (wallet.status.totalBalanceStr) : ( wallet.cachedBalance ? wallet.cachedBalance
+                + (wallet.cachedBalanceUpdatedOn ? ' &middot; ' + ( wallet.cachedBalanceUpdatedOn * 1000 | amTimeAgo) : '')
+                : '')}}
+              </span>
+              <span *ngIf="wallet.scanning" translate>Scanning funds</span>
+              <span *ngIf="wallet.balanceHidden && !wallet.scanning">[
+                <span translate>Balance Hidden</span>]</span>
+              <span class="text-gray" *ngIf="wallet.credentials.m > 1">{{wallet.credentials.m}}-of-{{wallet.credentials.n}}</span>
+              <ion-icon *ngIf="!wallet.balanceHidden && wallet.status && (wallet.status.totalBalanceSat != wallet.status.spendableAmount)"
+                ios="ios-timer-outline" md="md-timer"></ion-icon>
+              <span *ngIf="wallet.error" class="wallet-warning">{{wallet.error}}</span>
+            </span>
           </div>
-        </ion-item-divider>
-        <ion-list *ngIf="!hideHomeIntegrations">
-          <button ion-item *ngFor="let service of homeIntegrations" (click)="goTo(service.page)">
-            <ion-icon class="item-img" item-start>
-              <img src="{{service.icon}}" class="icon-services" />
-            </ion-icon>
-            <span class="item-title">{{service.title || service.name}}</span>
-          </button>
-        </ion-list>
+        </button>
+      </ion-list>
+    </div>
 
-      </div>
+    <div class="card" *ngIf="!homepageSimpleViewEnabled && walletsAnon && walletsAnon[0]">
+      <ion-item-divider>
+        <div class="title" item-start>
+          <img src="assets/img/icon-anonymous.png" alt="Anonymous Wallets" width="16" />
+          <span translate>Anonymous Wallets</span>
+        </div>
+        <div item-end *ngIf="!showReorderAnon">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+            <ion-icon name="add"></ion-icon>
+          </button>
+          <button ion-button clear icon-only color="grey" (click)="reorderAnon()" *ngIf="walletsAnon.length > 1">
+            <ion-icon name="reorder"></ion-icon>
+          </button>
+        </div>
+        <div item-end *ngIf="showReorderAnon">
+          <button ion-button clear color="secondary" (click)="reorderAnon()">
+            {{'Done' | translate}}
+          </button>
+        </div>
+      </ion-item-divider>
+
+      <ion-list reorder="{{showReorderAnon}}" (ionItemReorder)="reorderWalletsAnon($event)">
+        <button ion-item *ngFor="let wallet of walletsAnon" (click)="goToWalletDetails(wallet)">
+          <ion-icon class="item-img" item-start>
+            <img *ngIf="wallet.network == 'testnet'" [ngStyle]="{'background-color': wallet.color}" src="assets/img/icon-wallet-testnet.svg"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-anonymous.png"
+              class="icon-wallet" />
+          </ion-icon>
+          <div class="item-title">{{wallet.name}}</div>
+          <div class="item-subtitle">
+            <span class="wallet-warning" *ngIf="!wallet.isComplete()" translate>
+              Incomplete
+            </span>
+            <span class="wallet-warning" *ngIf="wallet.isComplete() && wallet.needsBackup" translate>
+              Paper Key Unverified
+            </span>
+            <span *ngIf="wallet.isComplete() && !wallet.needsBackup">
+              <span *ngIf="!wallet.balanceHidden && !wallet.scanning">
+                {{wallet.status && wallet.status.totalBalanceStr ? (wallet.status.totalBalanceStr) : ( wallet.cachedBalance ? wallet.cachedBalance
+                + (wallet.cachedBalanceUpdatedOn ? ' &middot; ' + ( wallet.cachedBalanceUpdatedOn * 1000 | amTimeAgo) : '')
+                : '')}}
+              </span>
+              <span *ngIf="wallet.scanning" translate>Scanning funds</span>
+              <span *ngIf="wallet.balanceHidden && !wallet.scanning">[
+                <span translate>Balance Hidden</span>]</span>
+              <span class="text-gray" *ngIf="wallet.credentials.m > 1">{{wallet.credentials.m}}-of-{{wallet.credentials.n}}</span>
+              <ion-icon *ngIf="!wallet.balanceHidden && wallet.status && (wallet.status.totalBalanceSat != wallet.status.spendableAmount)"
+                ios="ios-timer-outline" md="md-timer"></ion-icon>
+              <span *ngIf="wallet.error" class="wallet-warning">{{wallet.error}}</span>
+            </span>
+          </div>
+        </button>
+      </ion-list>
+    </div>
+
+    <div class="card" *ngIf="!homepageSimpleViewEnabled && walletsZel && walletsZel[0]">
+      <ion-item-divider>
+        <div class="title" item-start>
+          <img src="assets/img/icon-zelcash.png" alt="Zelcash Wallets" width="16" />
+          <span translate>Zelcash Wallets</span>
+        </div>
+        <div item-end *ngIf="!showReorderZel">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+            <ion-icon name="add"></ion-icon>
+          </button>
+          <button ion-button clear icon-only color="grey" (click)="reorderZel()" *ngIf="walletsZel.length > 1">
+            <ion-icon name="reorder"></ion-icon>
+          </button>
+        </div>
+        <div item-end *ngIf="showReorderZel">
+          <button ion-button clear color="secondary" (click)="reorderZel()">
+            {{'Done' | translate}}
+          </button>
+        </div>
+      </ion-item-divider>
+
+      <ion-list reorder="{{showReorderZel}}" (ionItemReorder)="reorderWalletsZel($event)">
+        <button ion-item *ngFor="let wallet of walletsZel" (click)="goToWalletDetails(wallet)">
+          <ion-icon class="item-img" item-start>
+            <img *ngIf="wallet.network == 'testnet'" [ngStyle]="{'background-color': wallet.color}" src="assets/img/icon-wallet-testnet.svg"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-zelcash.png"
+              class="icon-wallet" />
+          </ion-icon>
+          <div class="item-title">{{wallet.name}}</div>
+          <div class="item-subtitle">
+            <span class="wallet-warning" *ngIf="!wallet.isComplete()" translate>
+              Incomplete
+            </span>
+            <span class="wallet-warning" *ngIf="wallet.isComplete() && wallet.needsBackup" translate>
+              Paper Key Unverified
+            </span>
+            <span *ngIf="wallet.isComplete() && !wallet.needsBackup">
+              <span *ngIf="!wallet.balanceHidden && !wallet.scanning">
+                {{wallet.status && wallet.status.totalBalanceStr ? (wallet.status.totalBalanceStr) : ( wallet.cachedBalance ? wallet.cachedBalance
+                + (wallet.cachedBalanceUpdatedOn ? ' &middot; ' + ( wallet.cachedBalanceUpdatedOn * 1000 | amTimeAgo) : '')
+                : '')}}
+              </span>
+              <span *ngIf="wallet.scanning" translate>Scanning funds</span>
+              <span *ngIf="wallet.balanceHidden && !wallet.scanning">[
+                <span translate>Balance Hidden</span>]</span>
+              <span class="text-gray" *ngIf="wallet.credentials.m > 1">{{wallet.credentials.m}}-of-{{wallet.credentials.n}}</span>
+              <ion-icon *ngIf="!wallet.balanceHidden && wallet.status && (wallet.status.totalBalanceSat != wallet.status.spendableAmount)"
+                ios="ios-timer-outline" md="md-timer"></ion-icon>
+              <span *ngIf="wallet.error" class="wallet-warning">{{wallet.error}}</span>
+            </span>
+          </div>
+        </button>
+      </ion-list>
+    </div>
+
+
+    <div class="card" *ngIf="!homepageSimpleViewEnabled && walletsZcl && walletsZcl[0]">
+      <ion-item-divider>
+        <div class="title" item-start>
+          <img src="assets/img/icon-zclassic-logotext.png" alt="Zclassic Wallets" width="77" />
+          <span translate> Wallets</span>
+        </div>
+        <div item-end *ngIf="!showReorderZcl">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+            <ion-icon name="add"></ion-icon>
+          </button>
+          <button ion-button clear icon-only color="grey" (click)="reorderZcl()" *ngIf="walletsZcl.length > 1">
+            <ion-icon name="reorder"></ion-icon>
+          </button>
+        </div>
+        <div item-end *ngIf="showReorderZcl">
+          <button ion-button clear color="secondary" (click)="reorderZcl()">
+            {{'Done' | translate}}
+          </button>
+        </div>
+      </ion-item-divider>
+
+      <ion-list reorder="{{showReorderZcl}}" (ionItemReorder)="reorderWalletsZcl($event)">
+        <button ion-item *ngFor="let wallet of walletsZcl" (click)="goToWalletDetails(wallet)">
+          <ion-icon class="item-img" item-start>
+            <img *ngIf="wallet.network == 'testnet'" [ngStyle]="{'background-color': wallet.color}" src="assets/img/icon-wallet-testnet.svg"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-zclassic.png"
+              class="icon-wallet" />
+          </ion-icon>
+          <div class="item-title">{{wallet.name}}</div>
+          <div class="item-subtitle">
+            <span class="wallet-warning" *ngIf="!wallet.isComplete()" translate>
+              Incomplete
+            </span>
+            <span class="wallet-warning" *ngIf="wallet.isComplete() && wallet.needsBackup" translate>
+              Paper Key Unverified
+            </span>
+            <span *ngIf="wallet.isComplete() && !wallet.needsBackup">
+              <span *ngIf="!wallet.balanceHidden && !wallet.scanning">
+                {{wallet.status && wallet.status.totalBalanceStr ? (wallet.status.totalBalanceStr) : ( wallet.cachedBalance ? wallet.cachedBalance
+                + (wallet.cachedBalanceUpdatedOn ? ' &middot; ' + ( wallet.cachedBalanceUpdatedOn * 1000 | amTimeAgo) : '')
+                : '')}}
+              </span>
+              <span *ngIf="wallet.scanning" translate>Scanning funds</span>
+              <span *ngIf="wallet.balanceHidden && !wallet.scanning">[
+                <span translate>Balance Hidden</span>]</span>
+              <span class="text-gray" *ngIf="wallet.credentials.m > 1">{{wallet.credentials.m}}-of-{{wallet.credentials.n}}</span>
+              <ion-icon *ngIf="!wallet.balanceHidden && wallet.status && (wallet.status.totalBalanceSat != wallet.status.spendableAmount)"
+                ios="ios-timer-outline" md="md-timer"></ion-icon>
+              <span *ngIf="wallet.error" class="wallet-warning">{{wallet.error}}</span>
+            </span>
+          </div>
+        </button>
+      </ion-list>
+    </div>
+
+    <div class="card" *ngIf="!homepageSimpleViewEnabled && walletsRvn && walletsRvn[0]">
+      <ion-item-divider>
+        <div class="title" item-start>
+          <img src="assets/img/icon-ravencoin.png" alt="Rravencoin Wallets" width="16" />
+          <span translate>Ravencoin Wallets</span>
+        </div>
+        <div item-end *ngIf="!showReorderRvn">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+            <ion-icon name="add"></ion-icon>
+          </button>
+          <button ion-button clear icon-only color="grey" (click)="reorderRvn()" *ngIf="walletsRvn.length > 1">
+            <ion-icon name="reorder"></ion-icon>
+          </button>
+        </div>
+        <div item-end *ngIf="showReorderRvn">
+          <button ion-button clear color="secondary" (click)="reorderRvn()">
+            {{'Done' | translate}}
+          </button>
+        </div>
+      </ion-item-divider>
+
+      <ion-list reorder="{{showReorderRvn}}" (ionItemReorder)="reorderWalletsRvn($event)">
+        <button ion-item *ngFor="let wallet of walletsRvn" (click)="goToWalletDetails(wallet)">
+          <ion-icon class="item-img" item-start>
+            <img *ngIf="wallet.network == 'testnet'" [ngStyle]="{'background-color': wallet.color}" src="assets/img/icon-wallet-testnet.svg"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-ravencoin.png"
+              class="icon-wallet" />
+          </ion-icon>
+          <div class="item-title">{{wallet.name}}</div>
+          <div class="item-subtitle">
+            <span class="wallet-warning" *ngIf="!wallet.isComplete()" translate>
+              Incomplete
+            </span>
+            <span class="wallet-warning" *ngIf="wallet.isComplete() && wallet.needsBackup" translate>
+              Paper Key Unverified
+            </span>
+            <span *ngIf="wallet.isComplete() && !wallet.needsBackup">
+              <span *ngIf="!wallet.balanceHidden && !wallet.scanning">
+                {{wallet.status && wallet.status.totalBalanceStr ? (wallet.status.totalBalanceStr) : ( wallet.cachedBalance ? wallet.cachedBalance
+                + (wallet.cachedBalanceUpdatedOn ? ' &middot; ' + ( wallet.cachedBalanceUpdatedOn * 1000 | amTimeAgo) : '')
+                : '')}}
+              </span>
+              <span *ngIf="wallet.scanning" translate>Scanning funds</span>
+              <span *ngIf="wallet.balanceHidden && !wallet.scanning">[
+                <span translate>Balance Hidden</span>]</span>
+              <span class="text-gray" *ngIf="wallet.credentials.m > 1">{{wallet.credentials.m}}-of-{{wallet.credentials.n}}</span>
+              <ion-icon *ngIf="!wallet.balanceHidden && wallet.status && (wallet.status.totalBalanceSat != wallet.status.spendableAmount)"
+                ios="ios-timer-outline" md="md-timer"></ion-icon>
+              <span *ngIf="wallet.error" class="wallet-warning">{{wallet.error}}</span>
+            </span>
+          </div>
+        </button>
+      </ion-list>
+    </div>
+
+    <div class="card" *ngIf="!homepageSimpleViewEnabled && walletsLtc && walletsLtc[0]">
+      <ion-item-divider>
+        <div class="title" item-start>
+          <img src="assets/img/icon-litecoin-logotext.png" alt="Litecoin Wallets" width="77" />
+          <span translate> Wallets</span>
+        </div>
+        <div item-end *ngIf="!showReorderLtc">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+            <ion-icon name="add"></ion-icon>
+          </button>
+          <button ion-button clear icon-only color="grey" (click)="reorderLtc()" *ngIf="walletsLtc.length > 1">
+            <ion-icon name="reorder"></ion-icon>
+          </button>
+        </div>
+        <div item-end *ngIf="showReorderLtc">
+          <button ion-button clear color="secondary" (click)="reorderLtc()">
+            {{'Done' | translate}}
+          </button>
+        </div>
+      </ion-item-divider>
+
+      <ion-list reorder="{{showReorderLtc}}" (ionItemReorder)="reorderWalletsLtc($event)">
+        <button ion-item *ngFor="let wallet of walletsLtc" (click)="goToWalletDetails(wallet)">
+          <ion-icon class="item-img" item-start>
+            <img *ngIf="wallet.network == 'testnet'" [ngStyle]="{'background-color': wallet.color}" src="assets/img/icon-wallet-testnet.svg"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-litecoin.png"
+              class="icon-wallet" />
+          </ion-icon>
+          <div class="item-title">{{wallet.name}}</div>
+          <div class="item-subtitle">
+            <span class="wallet-warning" *ngIf="!wallet.isComplete()" translate>
+              Incomplete
+            </span>
+            <span class="wallet-warning" *ngIf="wallet.isComplete() && wallet.needsBackup" translate>
+              Paper Key Unverified
+            </span>
+            <span *ngIf="wallet.isComplete() && !wallet.needsBackup">
+              <span *ngIf="!wallet.balanceHidden && !wallet.scanning">
+                {{wallet.status && wallet.status.totalBalanceStr ? (wallet.status.totalBalanceStr) : ( wallet.cachedBalance ? wallet.cachedBalance
+                + (wallet.cachedBalanceUpdatedOn ? ' &middot; ' + ( wallet.cachedBalanceUpdatedOn * 1000 | amTimeAgo) : '')
+                : '')}}
+              </span>
+              <span *ngIf="wallet.scanning" translate>Scanning funds</span>
+              <span *ngIf="wallet.balanceHidden && !wallet.scanning">[
+                <span translate>Balance Hidden</span>]</span>
+              <span class="text-gray" *ngIf="wallet.credentials.m > 1">{{wallet.credentials.m}}-of-{{wallet.credentials.n}}</span>
+              <ion-icon *ngIf="!wallet.balanceHidden && wallet.status && (wallet.status.totalBalanceSat != wallet.status.spendableAmount)"
+                ios="ios-timer-outline" md="md-timer"></ion-icon>
+              <span *ngIf="wallet.error" class="wallet-warning">{{wallet.error}}</span>
+            </span>
+          </div>
+        </button>
+      </ion-list>
+    </div>
+
+    <div class="card" *ngIf="!homepageSimpleViewEnabled && walletsBtc && walletsBtc[0]">
+      <ion-item-divider>
+        <div class="title" item-start>
+          <img src="assets/img/icon-bitcoin.svg" alt="Bitcoin Wallets" width="18" />
+          <span translate>Bitcoin Wallets</span>
+        </div>
+        <div item-end *ngIf="!showReorderBtc">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+            <ion-icon name="add"></ion-icon>
+          </button>
+          <button ion-button clear icon-only color="grey" (click)="reorderBtc()" *ngIf="walletsBtc.length > 1">
+            <ion-icon name="reorder"></ion-icon>
+          </button>
+        </div>
+        <div item-end *ngIf="showReorderBtc">
+          <button ion-button clear color="secondary" (click)="reorderBtc()">
+            {{'Done' | translate}}
+          </button>
+        </div>
+      </ion-item-divider>
+
+      <ion-list reorder="{{showReorderBtc}}" (ionItemReorder)="reorderWalletsBtc($event)">
+        <button ion-item *ngFor="let wallet of walletsBtc" (click)="goToWalletDetails(wallet)">
+          <ion-icon class="item-img" item-start>
+            <img *ngIf="wallet.network == 'testnet'" [ngStyle]="{'background-color': wallet.color}" src="assets/img/icon-wallet-testnet.svg"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-bitcoin.svg"
+              class="icon-wallet" />
+          </ion-icon>
+          <div class="item-title">{{wallet.name}}</div>
+          <div class="item-subtitle">
+            <span class="wallet-warning" *ngIf="!wallet.isComplete()" translate>
+              Incomplete
+            </span>
+            <span class="wallet-warning" *ngIf="wallet.isComplete() && wallet.needsBackup" translate>
+              Paper Key Unverified
+            </span>
+            <span *ngIf="wallet.isComplete() && !wallet.needsBackup">
+              <span *ngIf="!wallet.balanceHidden && !wallet.scanning">
+                {{wallet.status && wallet.status.totalBalanceStr ? (wallet.status.totalBalanceStr) : ( wallet.cachedBalance ? wallet.cachedBalance
+                + (wallet.cachedBalanceUpdatedOn ? ' &middot; ' + ( wallet.cachedBalanceUpdatedOn * 1000 | amTimeAgo) : '')
+                : '')}}
+              </span>
+              <span *ngIf="wallet.scanning" translate>Scanning funds</span>
+              <span *ngIf="wallet.balanceHidden && !wallet.scanning">[
+                <span translate>Balance Hidden</span>]</span>
+              <span class="text-gray" *ngIf="wallet.credentials.m > 1">{{wallet.credentials.m}}-of-{{wallet.credentials.n}}</span>
+              <ion-icon *ngIf="!wallet.balanceHidden && wallet.status && (wallet.status.totalBalanceSat != wallet.status.spendableAmount)"
+                ios="ios-timer-outline" md="md-timer"></ion-icon>
+              <span *ngIf="wallet.error" class="wallet-warning">{{wallet.error}}</span>
+            </span>
+          </div>
+        </button>
+      </ion-list>
+    </div>
+
+    <div class="card" *ngIf="!homepageSimpleViewEnabled && walletsBch && walletsBch[0]">
+      <ion-item-divider>
+        <div class="title" item-start>
+          <img src="assets/img/bitcoin-cash-logo.svg" alt="Bitcoin Cash Wallets" width="22" />
+          <span translate>Bitcoin Cash Wallets</span>
+        </div>
+        <div item-end *ngIf="!showReorderBch">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+            <ion-icon name="add"></ion-icon>
+          </button>
+          <button ion-button clear icon-only color="grey" (click)="reorderBch()" *ngIf="walletsBch.length > 1">
+            <ion-icon name="reorder"></ion-icon>
+          </button>
+        </div>
+        <div item-end *ngIf="showReorderBch">
+          <button ion-button clear color="secondary" (click)="reorderBch()">
+            {{'Done' | translate}}
+          </button>
+        </div>
+      </ion-item-divider>
+
+      <ion-list reorder="{{showReorderBch}}" (ionItemReorder)="reorderWalletsBch($event)">
+        <button ion-item *ngFor="let wallet of walletsBch" (click)="goToWalletDetails(wallet)">
+          <ion-icon class="item-img" item-start>
+            <img *ngIf="wallet.network == 'testnet'" [ngStyle]="{'background-color': wallet.color}" src="assets/img/icon-wallet-testnet.svg"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/bitcoin-cash-logo.svg"
+              class="icon-wallet" />
+          </ion-icon>
+          <div class="item-title">{{wallet.name}}</div>
+          <div class="item-subtitle">
+            <span class="wallet-warning" *ngIf="!wallet.isComplete()" translate>
+              Incomplete
+            </span>
+            <span class="wallet-warning" *ngIf="wallet.isComplete() && wallet.needsBackup" translate>
+              Paper Key Unverified
+            </span>
+            <span *ngIf="wallet.isComplete() && !wallet.needsBackup">
+              <span *ngIf="!wallet.balanceHidden && !wallet.scanning">
+                {{wallet.status && wallet.status.totalBalanceStr ? (wallet.status.totalBalanceStr) : ( wallet.cachedBalance ? wallet.cachedBalance
+                + (wallet.cachedBalanceUpdatedOn ? ' &middot; ' + ( wallet.cachedBalanceUpdatedOn * 1000 | amTimeAgo) : '')
+                : '')}}
+              </span>
+              <span *ngIf="wallet.scanning" translate>Scanning funds</span>
+              <span *ngIf="wallet.balanceHidden && !wallet.scanning">[
+                <span translate>Balance Hidden</span>]</span>
+              <span *ngIf="wallet.credentials.m > 1">{{wallet.credentials.m}}-of-{{wallet.credentials.n}}</span>
+              <ion-icon *ngIf="!wallet.balanceHidden && wallet.status && (wallet.status.totalBalanceSat != wallet.status.spendableAmount)"
+                ios="ios-timer-outline" md="md-timer"></ion-icon>
+              <span *ngIf="wallet.error" class="wallet-warning">{{wallet.error}}</span>
+            </span>
+          </div>
+        </button>
+      </ion-list>
     </div>
   </div>
-
-  <ion-fab *ngIf="wallets && wallets[0]" id="scan-button" right bottom>
+  <ion-fab id="scan-button" right bottom>
     <button ion-fab color="primary" (click)="scan()">
       <ion-icon name="tab-scan"></ion-icon>
     </button>

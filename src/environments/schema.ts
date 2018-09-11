@@ -8,6 +8,13 @@ export interface EnvironmentSchema {
   ratesAPI: {
     btc: string;
     bch: string;
+    safe: string;
+    btcz: string;
+    zcl: string;
+    anon: string;
+    zel: string;
+    rvn: string;
+    ltc: string;
   };
   activateScanner: boolean;
 }

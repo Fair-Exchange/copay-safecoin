@@ -21,7 +21,14 @@ import { TxFormatProvider } from '../tx-format/tx-format';
 
 export enum Coin {
   BTC = 'btc',
-  BCH = 'bch'
+  BCH = 'bch',
+  SAFE = 'safe',
+  BTCZ = 'btcz',
+  ZCL = 'zcl',
+  ANON = 'anon',
+  ZEL = 'zel',
+  RVN = 'rvn',
+  LTC = 'ltc'
 }
 
 export interface WalletOptions {
@@ -1534,6 +1541,7 @@ export class WalletProvider {
   }
 
   public getEncodedWalletInfo(wallet, password?: string): Promise<any> {
+   debugger;
     return new Promise((resolve, reject) => {
       let derivationPath = wallet.credentials.getBaseAddressDerivationPath();
       let encodingType = {
@@ -1642,12 +1650,27 @@ export class WalletProvider {
   public getProtocolHandler(coin: string, network?: string): string {
     if (coin == 'bch') {
       return network == 'testnet' ? 'bchtest' : 'bitcoincash';
+    } else if (coin == 'safe'){
+      return 'safecoin';
+    } else if (coin == 'btcz'){
+      return 'bitcoinz';
+    } else if (coin == 'zcl'){
+      return 'zclassic';
+    } else if (coin == 'anon'){
+      return 'bitcoinanon';
+    } else if (coin == 'zel'){
+      return 'zelcash';
+    } else if (coin == 'rvn'){
+      return 'ravencoin';
+    } else if (coin == 'ltc'){
+      return 'litecoin';
     } else {
       return 'bitcoin';
     }
   }
 
   public copyCopayers(wallet, newWallet): Promise<any> {
+    debugger;
     return new Promise((resolve, reject) => {
       let walletPrivKey = this.bwcProvider
         .getBitcore()

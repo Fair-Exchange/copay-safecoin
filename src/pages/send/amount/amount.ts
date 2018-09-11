@@ -19,14 +19,14 @@ import { TxFormatProvider } from '../../../providers/tx-format/tx-format';
 // Pages
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { Coin } from '../../../providers/wallet/wallet';
-import { BuyAmazonPage } from '../../integrations/amazon/buy-amazon/buy-amazon';
-import { BitPayCardTopUpPage } from '../../integrations/bitpay-card/bitpay-card-topup/bitpay-card-topup';
-import { BuyCoinbasePage } from '../../integrations/coinbase/buy-coinbase/buy-coinbase';
-import { SellCoinbasePage } from '../../integrations/coinbase/sell-coinbase/sell-coinbase';
-import { BuyGlideraPage } from '../../integrations/glidera/buy-glidera/buy-glidera';
-import { SellGlideraPage } from '../../integrations/glidera/sell-glidera/sell-glidera';
-import { BuyMercadoLibrePage } from '../../integrations/mercado-libre/buy-mercado-libre/buy-mercado-libre';
-import { ShapeshiftConfirmPage } from '../../integrations/shapeshift/shapeshift-confirm/shapeshift-confirm';
+// import { BuyAmazonPage } from '../../integrations/amazon/buy-amazon/buy-amazon';
+// import { BitPayCardTopUpPage } from '../../integrations/bitpay-card/bitpay-card-topup/bitpay-card-topup';
+// import { BuyCoinbasePage } from '../../integrations/coinbase/buy-coinbase/buy-coinbase';
+// import { SellCoinbasePage } from '../../integrations/coinbase/sell-coinbase/sell-coinbase';
+// import { BuyGlideraPage } from '../../integrations/glidera/buy-glidera/buy-glidera';
+// import { SellGlideraPage } from '../../integrations/glidera/sell-glidera/sell-glidera';
+// import { BuyMercadoLibrePage } from '../../integrations/mercado-libre/buy-mercado-libre/buy-mercado-libre';
+// import { ShapeshiftConfirmPage } from '../../integrations/shapeshift/shapeshift-confirm/shapeshift-confirm';
 import { CustomAmountPage } from '../../receive/custom-amount/custom-amount';
 import { WalletTabsChild } from '../../wallet-tabs/wallet-tabs-child';
 import { WalletTabsProvider } from '../../wallet-tabs/wallet-tabs.provider';
@@ -123,7 +123,7 @@ export class AmountPage extends WalletTabsChild {
     this.reOp = /^[\*\+\-\/]$/;
 
     this.requestingAmount =
-      this.navParams.get('nextPage') === 'CustomAmountPage';
+    this.navParams.get('nextPage') === 'CustomAmountPage';
     this.nextView = this.getNextView();
 
     this.unitToSatoshi = this.config.wallet.settings.unitToSatoshi;
@@ -190,6 +190,62 @@ export class AmountPage extends WalletTabsChild {
         name: 'Bitcoin',
         id: 'btc',
         shortName: 'BTC'
+      });
+    }
+
+    if (parentWalletCoin === 'safe' || !parentWalletCoin) {
+      this.availableUnits.push({
+        name: 'Safecoin',
+        id: 'safe',
+        shortName: 'SAFE'
+      });
+    }
+
+    if (parentWalletCoin === 'btcz' || !parentWalletCoin) {
+      this.availableUnits.push({
+        name: 'Bitcoinz',
+        id: 'btcz',
+        shortName: 'BTCZ'
+      });
+    }
+
+    if (parentWalletCoin === 'zcl' || !parentWalletCoin) {
+      this.availableUnits.push({
+        name: 'Zclassic',
+        id: 'zcl',
+        shortName: 'ZCL'
+      });
+    }
+
+    if (parentWalletCoin === 'anon' || !parentWalletCoin) {
+      this.availableUnits.push({
+        name: 'Anonymous',
+        id: 'anon',
+        shortName: 'ANON'
+      });
+    }
+
+    if (parentWalletCoin === 'zel' || !parentWalletCoin) {
+      this.availableUnits.push({
+        name: 'Zelcash',
+        id: 'zel',
+        shortName: 'ZEL'
+      });
+    }
+
+    if (parentWalletCoin === 'rvn' || !parentWalletCoin) {
+      this.availableUnits.push({
+        name: 'Ravencoin',
+        id: 'rvn',
+        shortName: 'RVN'
+      });
+    }
+
+    if (parentWalletCoin === 'ltc' || !parentWalletCoin) {
+      this.availableUnits.push({
+        name: 'Litecoin',
+        id: 'ltc',
+        shortName: 'LTC'
       });
     }
 
@@ -261,6 +317,14 @@ export class AmountPage extends WalletTabsChild {
   private getNextView() {
     let nextPage;
     switch (this.navParams.data.nextPage) {
+      case 'CustomAmountPage':
+        nextPage = CustomAmountPage;
+        break;
+      default:
+        this.showSendMax = true;
+        nextPage = ConfirmPage;
+    }
+/*    switch (this.navParams.data.nextPage) {
       case 'BitPayCardTopUpPage':
         this.showSendMax = true;
         nextPage = BitPayCardTopUpPage;
@@ -289,11 +353,11 @@ export class AmountPage extends WalletTabsChild {
       case 'ShapeshiftConfirmPage':
         this.showSendMax = true;
         nextPage = ShapeshiftConfirmPage;
-        break;
+        break; 
       default:
         this.showSendMax = true;
         nextPage = ConfirmPage;
-    }
+    }          */
     return nextPage;
   }
 
@@ -400,7 +464,6 @@ export class AmountPage extends WalletTabsChild {
             a * this.unitToSatoshi,
             true
           );
-          this.checkAmountForBitpaycard(result);
         } else {
           this.alternativeAmount = result ? 'N/A' : null;
           this.allowSend = false;
@@ -409,17 +472,7 @@ export class AmountPage extends WalletTabsChild {
         this.alternativeAmount = this.filterProvider.formatFiatAmount(
           this.toFiat(result)
         );
-        this.checkAmountForBitpaycard(this.toFiat(result));
       }
-    }
-  }
-
-  private checkAmountForBitpaycard(amount: number): void {
-    // Check if the top up amount is at least 1 usd
-    const isTopUp =
-      this.navParams.data.nextPage === 'BitPayCardTopUpPage' ? true : false;
-    if (isTopUp && amount < 1) {
-      this.allowSend = false;
     }
   }
 
@@ -534,12 +587,6 @@ export class AmountPage extends WalletTabsChild {
     );
   }
 
-  private resetValues(): void {
-    this.expression = '';
-    this.globalResult = '';
-    this.alternativeAmount = null;
-  }
-
   public changeUnit(): void {
     if (this.fixedUnit) return;
 
@@ -554,8 +601,6 @@ export class AmountPage extends WalletTabsChild {
         isFiat: true
       });
     }
-
-    this.resetValues();
 
     this.zone.run(() => {
       this.updateUnitUI();

@@ -107,7 +107,7 @@ export class FeeProvider {
 
   public getFeeLevels(coin: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      coin = coin || 'btc';
+      coin = coin || 'safe';
 
       if (
         this.cache.coin == coin &&
@@ -122,9 +122,21 @@ export class FeeProvider {
         coin,
         'livenet',
         (errLivenet, levelsLivenet) => {
-          if (errLivenet) {
+          if (errLivenet ) {
+            if (errLivenet.message == '{"message":"Too many request"}') return resolve({ levels: this.cache.data });
             return reject(this.translate.instant('Could not get dynamic fee'));
+          } else {
+              this.cache.updateTs = Date.now();
+              this.cache.coin = coin;
+              this.cache.data = {
+                livenet: levelsLivenet
+              };
+              return resolve({ levels: this.cache.data });
           }
+//          this.cache.data = {
+//            livenet: levelsLivenet
+//          };
+/*
           walletClient.getFeeLevels(
             'btc',
             'testnet',
@@ -142,7 +154,7 @@ export class FeeProvider {
               };
               return resolve({ levels: this.cache.data });
             }
-          );
+          );*/
         }
       );
     });

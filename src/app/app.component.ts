@@ -14,20 +14,20 @@ import {
 import { Observable, Subscription } from 'rxjs';
 
 // providers
-import { AmazonProvider } from '../providers/amazon/amazon';
+// import { AmazonProvider } from '../providers/amazon/amazon';
 import { AppProvider } from '../providers/app/app';
-import { BitPayCardProvider } from '../providers/bitpay-card/bitpay-card';
-import { CoinbaseProvider } from '../providers/coinbase/coinbase';
+// import { BitPayCardProvider } from '../providers/bitpay-card/bitpay-card';
+// import { CoinbaseProvider } from '../providers/coinbase/coinbase';
 import { ConfigProvider } from '../providers/config/config';
 import { EmailNotificationsProvider } from '../providers/email-notifications/email-notifications';
-import { GlideraProvider } from '../providers/glidera/glidera';
+// import { GlideraProvider } from '../providers/glidera/glidera';
 import { IncomingDataProvider } from '../providers/incoming-data/incoming-data';
 import { Logger } from '../providers/logger/logger';
-import { MercadoLibreProvider } from '../providers/mercado-libre/mercado-libre';
+// import { MercadoLibreProvider } from '../providers/mercado-libre/mercado-libre';
 import { PopupProvider } from '../providers/popup/popup';
 import { ProfileProvider } from '../providers/profile/profile';
 import { PushNotificationsProvider } from '../providers/push-notifications/push-notifications';
-import { ShapeshiftProvider } from '../providers/shapeshift/shapeshift';
+// import { ShapeshiftProvider } from '../providers/shapeshift/shapeshift';
 import { TouchIdProvider } from '../providers/touchid/touchid';
 
 // pages
@@ -35,9 +35,9 @@ import { CopayersPage } from '../pages/add/copayers/copayers';
 import { ImportWalletPage } from '../pages/add/import-wallet/import-wallet';
 import { JoinWalletPage } from '../pages/add/join-wallet/join-wallet';
 import { FingerprintModalPage } from '../pages/fingerprint/fingerprint';
-import { BitPayCardIntroPage } from '../pages/integrations/bitpay-card/bitpay-card-intro/bitpay-card-intro';
-import { CoinbasePage } from '../pages/integrations/coinbase/coinbase';
-import { GlideraPage } from '../pages/integrations/glidera/glidera';
+// import { BitPayCardIntroPage } from '../pages/integrations/bitpay-card/bitpay-card-intro/bitpay-card-intro';
+// import { CoinbasePage } from '../pages/integrations/coinbase/coinbase';
+// import { GlideraPage } from '../pages/integrations/glidera/glidera';
 import { DisclaimerPage } from '../pages/onboarding/disclaimer/disclaimer';
 import { OnboardingPage } from '../pages/onboarding/onboarding';
 import { PaperWalletPage } from '../pages/paper-wallet/paper-wallet';
@@ -78,11 +78,11 @@ export class CopayApp {
   private pageMap = {
     AddressbookAddPage,
     AmountPage,
-    BitPayCardIntroPage,
-    CoinbasePage,
+//    BitPayCardIntroPage,
+//    CoinbasePage,
     ConfirmPage,
     CopayersPage,
-    GlideraPage,
+//    GlideraPage,
     ImportWalletPage,
     JoinWalletPage,
     PaperWalletPage,
@@ -100,12 +100,12 @@ export class CopayApp {
     private profile: ProfileProvider,
     private configProvider: ConfigProvider,
     private modalCtrl: ModalController,
-    private glideraProvider: GlideraProvider,
-    private coinbaseProvider: CoinbaseProvider,
-    private amazonProvider: AmazonProvider,
-    private bitPayCardProvider: BitPayCardProvider,
-    private mercadoLibreProvider: MercadoLibreProvider,
-    private shapeshiftProvider: ShapeshiftProvider,
+//    private glideraProvider: GlideraProvider,
+//    private coinbaseProvider: CoinbaseProvider,
+//    private amazonProvider: AmazonProvider,
+//    private bitPayCardProvider: BitPayCardProvider,
+//    private mercadoLibreProvider: MercadoLibreProvider,
+//    private shapeshiftProvider: ShapeshiftProvider,
     private emailNotificationsProvider: EmailNotificationsProvider,
     private screenOrientation: ScreenOrientation,
     private popupProvider: PopupProvider,
@@ -196,7 +196,7 @@ export class CopayApp {
       this.openLockModal();
     }
 
-    this.registerIntegrations();
+//    this.registerIntegrations();
     this.incomingDataRedirEvent();
     this.scanFromWalletEvent();
     this.events.subscribe('OpenWallet', wallet => this.openWallet(wallet));
@@ -276,7 +276,7 @@ export class CopayApp {
     });
   }
 
-  private registerIntegrations(): void {
+/*  private registerIntegrations(): void {
     // Mercado Libre
     if (this.appProvider.info._enabledExtensions.mercadolibre)
       this.mercadoLibreProvider.register();
@@ -305,7 +305,7 @@ export class CopayApp {
     if (this.appProvider.info._enabledExtensions.debitcard)
       this.bitPayCardProvider.register();
   }
-
+   */
   private incomingDataRedirEvent(): void {
     this.events.subscribe('IncomingDataRedir', nextView => {
       this.closeScannerFromWithinWallet();
@@ -418,6 +418,27 @@ export class CopayApp {
     } else if (pathData.indexOf('bitcoin:/') != -1) {
       this.logger.debug('Bitcoin URL found');
       this.handleOpenUrl(pathData.substring(pathData.indexOf('bitcoin:/')));
+    } else if (pathData.indexOf('safecoin:/') != -1) {
+      this.logger.debug('Safecoin URL found');
+      this.handleOpenUrl(pathData.substring(pathData.indexOf('safecoin:/')));
+    } else if (pathData.indexOf('bitcoinz:/') != -1) {
+      this.logger.debug('Bitcoinz URL found');
+      this.handleOpenUrl(pathData.substring(pathData.indexOf('bitcoinz:/')));
+    } else if (pathData.indexOf('zclassic:/') != -1) {
+      this.logger.debug('Zclassic URL found');
+      this.handleOpenUrl(pathData.substring(pathData.indexOf('zclassic:/')));
+    } else if (pathData.indexOf('anonymous:/') != -1) {
+      this.logger.debug('Anonymous URL found');
+      this.handleOpenUrl(pathData.substring(pathData.indexOf('anonymous:/')));
+    } else if (pathData.indexOf('zelcash:/') != -1) {
+      this.logger.debug('Zelcash URL found');
+      this.handleOpenUrl(pathData.substring(pathData.indexOf('zelcash:/')));
+    } else if (pathData.indexOf('ravencoin:/') != -1) {
+      this.logger.debug('Ravencoin URL found');
+      this.handleOpenUrl(pathData.substring(pathData.indexOf('ravencoin:/')));
+    } else if (pathData.indexOf('litecoin:/') != -1) {
+      this.logger.debug('Litecoin URL found');
+      this.handleOpenUrl(pathData.substring(pathData.indexOf('litecoin:/')));
     } else if (pathData.indexOf(this.appProvider.info.name + '://') != -1) {
       this.logger.debug(this.appProvider.info.name + ' URL found');
       this.handleOpenUrl(

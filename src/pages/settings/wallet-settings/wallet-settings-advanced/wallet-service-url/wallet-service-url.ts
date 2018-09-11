@@ -80,15 +80,18 @@ export class WalletServiceUrlPage {
     switch (this.walletServiceForm.value.bwsurl) {
       case 'prod':
       case 'production':
-        bws = 'https://bws.bitpay.com/bws/api';
+//        bws = 'http://192.168.91.206:3232/bws/api';
+        bws = 'https://api.safecoin.org/bwss/api';
         break;
       case 'sta':
       case 'staging':
-        bws = 'https://bws-staging.b-pay.net/bws/api';
+//        bws = 'http://192.168.91.206:3232/bws/api';
+        bws = 'https://api.safecoin.org/bwss/api';
         break;
       case 'loc':
       case 'local':
-        bws = 'http://localhost:3232/bws/api';
+//        bws = 'http://192.168.91.206:3232/bws/api';
+        bws = 'https://api.safecoin.org/bwss/api';
         break;
     }
     if (bws) {

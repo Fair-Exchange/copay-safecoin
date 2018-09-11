@@ -31,12 +31,12 @@
 
     <ion-item [ngClass]="{'with-label': emailNotifications}">
       <ion-label>{{ 'Enable email notifications' | translate }}</ion-label>
-      <ion-toggle [(ngModel)]="emailNotifications" (ionChange)="emailNotificationsChange()"></ion-toggle>
+      <ion-toggle [(ngModel)]="emailNotifications" (ionChange)="emailNotificationsChange()" disabled></ion-toggle>
     </ion-item>
 
     <label-tip *ngIf="emailNotifications" type="info" header="no-header">
       <div label-tip-body translate>
-        By providing your email address, you give explicit consent to BitPay to use your email address to send you email notifications about payments.
+        By providing your email address, you give explicit consent to Safecoin to use your email address to send you email notifications about payments.
         <br>
         <a (click)="openPrivacyPolicy()" translate>View Privacy Policy</a>
       </div>

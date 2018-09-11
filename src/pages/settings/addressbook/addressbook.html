@@ -28,8 +28,27 @@
     <ion-searchbar placeholder="{{'Search a contact' | translate}}" (ionInput)="getItems($event)"></ion-searchbar>
     <ion-list>
       <button class="contact" ion-item *ngFor="let entry of filteredAddressbook" (click)="viewEntry(entry)">
-        <gravatar [name]="entry.name" [height]="30" [width]="30" [email]="entry.email"></gravatar>
-        <div class="contact-info">
+         <ion-icon class="item-img" item-start>
+         <img *ngIf="entry.coin == 'Safecoin (SAFE)'" src="assets/img/icon-safecoin.png"
+           class="icon-wallet" />
+         <img *ngIf="entry.coin == 'BitcoinZ (BTCZ)'" src="assets/img/icon-bitcoinz.png"
+           class="icon-wallet" />
+         <img *ngIf="entry.coin == 'Zelcash (ZEL)'" src="assets/img/icon-zelcash.png"
+           class="icon-wallet" />
+         <img *ngIf="entry.coin == 'Zclassic (ZCL)'" src="assets/img/icon-zclassic.png"
+           class="icon-wallet" />
+         <img *ngIf="entry.coin == 'Anonymous (ANON)'" src="assets/img/icon-anonymous.png"
+           class="icon-wallet" />
+         <img *ngIf="entry.coin == 'Ravencoin (RVN)'" src="assets/img/icon-ravencoin.png"
+           class="icon-wallet" />
+         <img *ngIf="entry.coin == 'Litecoin (LTC)'" src="assets/img/icon-litecoin.png"
+           class="icon-wallet" />
+         <img *ngIf="entry.coin == 'Bitcoin (BTC)'" src="assets/img/icon-bitcoin.svg"
+           class="icon-wallet" />
+         <img *ngIf="entry.coin == 'Bitcoin Cash (BCH)'" src="assets/img/bitcoin-cash-logo.svg"
+           class="icon-wallet" />
+        </ion-icon>
+        <div>
           <div clss="item-title">{{ entry.name }}</div>
           <div class="item-subtitle">{{ entry.address }}</div>
         </div>

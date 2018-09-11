@@ -5,14 +5,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 /* Modules */
 import { TranslatePoHttpLoader } from '@biesbjerg/ngx-translate-po-http-loader';
-import {
-  MissingTranslationHandler,
-  MissingTranslationHandlerParams,
-  TranslateDefaultParser,
-  TranslateLoader,
-  TranslateModule,
-  TranslateParser
-} from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { MomentModule } from 'angular2-moment';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
@@ -33,8 +26,7 @@ import { SatToUnitPipe } from '../pipes/satToUnit';
 /* Directives */
 import { Animate } from '../directives/animate/animate';
 import { CopyToClipboard } from '../directives/copy-to-clipboard/copy-to-clipboard';
-import { FixedScrollBgColor } from '../directives/fixed-scroll-bg-color/fixed-scroll-bg-color';
-import { IonContentBackgroundColor } from '../directives/ion-content-background-color/ion-content-background-color';
+import { IosScrollBgColor } from '../directives/ios-scroll-bg-color/ios-scroll-bg-color';
 import { LongPress } from '../directives/long-press/long-press';
 import { NavbarBg } from '../directives/navbar-bg/navbar-bg';
 import { NoLowFee } from '../directives/no-low-fee/no-low-fee';
@@ -47,23 +39,8 @@ import { COMPONENTS } from './../components/components';
 import { ProvidersModule } from './../providers/providers.module';
 
 /* Read translation files */
-export function translateLoaderFactory(http: HttpClient) {
+export function createTranslateLoader(http: HttpClient) {
   return new TranslatePoHttpLoader(http, 'assets/i18n/po', '.po');
-}
-
-export function translateParserFactory() {
-  return new InterpolatedTranslateParser();
-}
-
-export class InterpolatedTranslateParser extends TranslateDefaultParser {
-  public templateMatcher: RegExp = /{\s?([^{}\s]*)\s?}/g;
-}
-
-export class MyMissingTranslationHandler implements MissingTranslationHandler {
-  public parser: TranslateParser = translateParserFactory();
-  public handle(params: MissingTranslationHandlerParams) {
-    return this.parser.interpolate(params.key, params.interpolateParams);
-  }
 }
 
 @NgModule({
@@ -73,8 +50,7 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
     ...COMPONENTS,
     /* Directives */
     CopyToClipboard,
-    FixedScrollBgColor,
-    IonContentBackgroundColor,
+    IosScrollBgColor,
     LongPress,
     NavbarBg,
     NoLowFee,
@@ -101,14 +77,9 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
     NgxQRCodeModule,
     ProvidersModule,
     TranslateModule.forRoot({
-      parser: { provide: TranslateParser, useFactory: translateParserFactory },
-      missingTranslationHandler: {
-        provide: MissingTranslationHandler,
-        useClass: MyMissingTranslationHandler
-      },
       loader: {
         provide: TranslateLoader,
-        useFactory: translateLoaderFactory,
+        useFactory: createTranslateLoader,
         deps: [HttpClient]
       }
     }),

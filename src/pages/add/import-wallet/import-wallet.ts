@@ -31,6 +31,10 @@ import {
 export class ImportWalletPage {
   private derivationPathByDefault: string;
   private derivationPathForTestnet: string;
+  private derivationPathForLtc: string;
+  private derivationPathForZcl: string;
+  private derivationPathForRvn: string;
+  private derivationPathForSafe: string;
   private importForm: FormGroup;
   private reader: FileReader;
   private defaults;
@@ -49,6 +53,7 @@ export class ImportWalletPage {
   public code;
   public okText: string;
   public cancelText: string;
+  public coins: string[];
 
   constructor(
     private app: App,
@@ -71,6 +76,7 @@ export class ImportWalletPage {
   ) {
     this.okText = this.translate.instant('Ok');
     this.cancelText = this.translate.instant('Cancel');
+    this.coins = ['safe', 'btcz', 'zel', 'zcl', 'anon', 'rvn', 'ltc', 'btc', 'bch' ];
     this.reader = new FileReader();
     this.defaults = this.configProvider.getDefaults();
     this.errors = bwcProvider.getErrors();
@@ -84,6 +90,10 @@ export class ImportWalletPage {
     this.selectedTab = 'words';
     this.derivationPathByDefault = this.derivationPathHelperProvider.default;
     this.derivationPathForTestnet = this.derivationPathHelperProvider.defaultTestnet;
+    this.derivationPathForLtc = this.derivationPathHelperProvider.defaultLtc;
+    this.derivationPathForZcl = this.derivationPathHelperProvider.defaultZcl;
+    this.derivationPathForRvn = this.derivationPathHelperProvider.defaultRvn;
+    this.derivationPathForSafe = this.derivationPathHelperProvider.defaultSafe;
     this.showAdvOpts = false;
     this.formFile = null;
 
@@ -98,6 +108,8 @@ export class ImportWalletPage {
       bwsURL: [this.defaults.bws.url],
       coin: [null, Validators.required]
     });
+    this.importForm.controls['coin'].setValue(this.coins[0]);
+    this.importForm.controls['derivationPath'].setValue(this.derivationPathForSafe);
     this.events.subscribe('update:words', data => {
       this.processWalletInfo(data.value);
     });
@@ -153,6 +165,14 @@ export class ImportWalletPage {
     this.importForm.get('coin').updateValueAndValidity();
   }
 
+  normalizeMnemonic(words: string) {
+    if (!words || !words.indexOf) return words;
+    var isJA = words.indexOf('\u3000') > -1;
+    var wordList = words.split(/[\u3000\s]+/);
+
+    return wordList.join(isJA ? '\u3000' : ' ');
+  }
+
   private processWalletInfo(code: string): void {
     if (!code) return;
 
@@ -193,9 +213,18 @@ export class ImportWalletPage {
   }
 
   public setDerivationPath(): void {
+//  debugger;
     let path = this.importForm.value.testnetEnabled
       ? this.derivationPathForTestnet
-      : this.derivationPathByDefault;
+       : this.importForm.value.coin == 'ltc'
+        ? this.derivationPathForLtc
+         : this.importForm.value.coin == 'zcl'
+          ? this.derivationPathForZcl
+           : this.importForm.value.coin == 'rvn'
+            ? this.derivationPathForRvn
+             : this.importForm.value.coin == 'safe'
+              ? this.derivationPathForSafe
+               : this.derivationPathByDefault;
     this.importForm.controls['derivationPath'].setValue(path);
   }
 
@@ -307,7 +336,7 @@ export class ImportWalletPage {
     }, 100);
   }
 
-  public import(): void {
+  import() {
     if (this.selectedTab === 'file') {
       this.importFromFile();
     } else {
@@ -382,7 +411,7 @@ export class ImportWalletPage {
     } else if (words.indexOf('xprv') == 0 || words.indexOf('tprv') == 0) {
       return this.importExtendedPrivateKey(words, opts);
     } else {
-      let wordList = words.trim().split(/[\u3000\s]+/);
+      let wordList = words.split(/[\u3000\s]+/);
 
       if (wordList.length % 3 != 0) {
         let title = this.translate.instant('Error');

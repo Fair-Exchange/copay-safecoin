@@ -79,26 +79,18 @@ page-amount {
     .expression-container {
       display: flex;
       align-items: center;
-      position: relative;
       .expression {
         font-size: 50px;
         font-weight: 500;
-        line-height: 50px;
         @media (max-height: $short-screen) {
           font-size: 40px;
-          line-height: 40px;
         }
-      }
-      .unit {
-        position: absolute;
-        top: 2px;
-        right: -35px;
-        font-size: 16px;
-        color: #4a4a4a;
       }
     }
     .amount {
       color: #a5a4a4;
+      margin-left: 5px;
+      margin-top: 5px;
     }
     .result {
       margin-top: 20px;

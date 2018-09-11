@@ -58,10 +58,7 @@ export class SessionLogPage {
   }
 
   private filterLogs(weight: number): void {
-    this.filteredLogs = _.sortBy(
-      this.logger.get(weight),
-      'timestamp'
-    ).reverse();
+    this.filteredLogs = this.logger.get(weight);
   }
 
   public setOptionSelected(weight: number): void {

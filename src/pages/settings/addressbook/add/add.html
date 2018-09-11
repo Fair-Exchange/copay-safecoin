@@ -24,12 +24,27 @@
       <ion-label stacked>{{ 'Bitcoin Address' | translate }}</ion-label>
       <ion-input formControlName="address" type="text" [value]="addressBookAdd.value.address" address-validator></ion-input>
 
-      <ion-icon *ngIf="addressBookAdd.controls.address.status == 'VALID'" name="ios-checkmark-circle" class="check success" item-right></ion-icon>
-      <ion-icon *ngIf="addressBookAdd.value.address && addressBookAdd.controls.address.status == 'INVALID'" class="check fail"
+      <ion-icon *ngIf="addressBookAdd.controls.address.status == 'VALID' && coinSet(addressBookAdd.value.address)" name="ios-checkmark-circle" class="check success" item-right></ion-icon>
+      <ion-icon *ngIf="addressBookAdd.value.address && addressBookAdd.controls.address.status == 'INVALID' && coinSet('defaultlist')" class="check fail"
         name="ios-close-circle" item-right></ion-icon>
 
       <ion-icon class="scanner-icon" name="qr-scanner" item-right (click)="openScanner()"></ion-icon>
     </ion-item>
+
+    <ion-item>
+      <ion-label stacked>{{ 'Note' | translate }}</ion-label>
+      <ion-input formControlName="note" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>{{'Coin' | translate}}</ion-label>
+         <ion-select okText="{{okText}}" cancelText="{{cancelText}}" formControlName="coin" placeholder="{{'Select a coin' | translate}}" (ionChange)="coinSet('set')">
+          <ion-option *ngFor="let coinname of coinslist" [value]="coinname">{{coinname}}</ion-option>
+      </ion-select>                           
+    </ion-item>
+
+
+
   </form>
 
   <button ion-button class="button-standard" (click)="save()" [disabled]="addressBookAdd.invalid || submitAttempt">

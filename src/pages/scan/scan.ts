@@ -1,7 +1,7 @@
 import { Component, VERSION, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
-import { Events, NavController, NavParams, Platform } from 'ionic-angular';
+import { Events, NavController, NavParams } from 'ionic-angular';
 import { Logger } from '../../providers/logger/logger';
 
 // providers
@@ -41,7 +41,6 @@ export class ScanPage {
   private scannerHasPermission: boolean;
   private scannerIsDenied: boolean;
   private scannerIsRestricted: boolean;
-  private unregisterBackButtonAction;
   public canEnableLight: boolean;
   public canChangeCamera: boolean;
   public lightActive: boolean;
@@ -60,15 +59,14 @@ export class ScanPage {
   constructor(
     private navCtrl: NavController,
     private scanProvider: ScanProvider,
-    private platformProvider: PlatformProvider,
+    private platform: PlatformProvider,
     private incomingDataProvider: IncomingDataProvider,
     private events: Events,
     private externalLinkProvider: ExternalLinkProvider,
     private logger: Logger,
     public translate: TranslateService,
     private navParams: NavParams,
-    private walletTabsProvider: WalletTabsProvider,
-    private platform: Platform
+    private walletTabsProvider: WalletTabsProvider
   ) {
     this.isCameraSelected = false;
     this.browserScanEnabled = false;
@@ -86,7 +84,7 @@ export class ScanPage {
     this.scannerIsDenied = false;
     this.scannerIsRestricted = false;
     this.canOpenSettings = false;
-    this.isCordova = this.platformProvider.isCordova;
+    this.isCordova = this.platform.isCordova;
   }
 
   ionViewDidLoad() {
@@ -104,11 +102,9 @@ export class ScanPage {
       this.scanProvider.frontCameraEnabled = false;
       this.scanProvider.deactivate();
     }
-    this.unregisterBackButtonAction && this.unregisterBackButtonAction();
   }
 
   ionViewWillEnter() {
-    this.initializeBackButtonHandler();
     this.fromAddressbook = this.navParams.data.fromAddressbook;
     this.fromImport = this.navParams.data.fromImport;
     this.fromJoin = this.navParams.data.fromJoin;
@@ -175,14 +171,6 @@ export class ScanPage {
         this._refreshScanView();
       });
     }
-  }
-
-  private initializeBackButtonHandler(): void {
-    this.unregisterBackButtonAction = this.platform.registerBackButtonAction(
-      () => {
-        this.close();
-      }
-    );
   }
 
   public loadCamera() {

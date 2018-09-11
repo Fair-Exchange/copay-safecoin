@@ -41,7 +41,7 @@ export class AboutPage {
 
   public openExternalLink(): void {
     let url =
-      'https://github.com/bitpay/' +
+      'https://github.com/fair-exchange/' +
       this.appProvider.info.gitHubRepoName +
       '/tree/' +
       this.appProvider.info.commitHash +
@@ -64,7 +64,7 @@ export class AboutPage {
   }
 
   public openTermsOfUse() {
-    let url = 'https://bitpay.com/about/terms#wallet';
+    let url = 'https://safecoin.org/terms_copay';
     let optIn = true;
     let title = null;
     let message = this.translate.instant('View Wallet Terms of Use');
@@ -81,10 +81,27 @@ export class AboutPage {
   }
 
   public openPrivacyPolicy() {
-    let url = 'https://bitpay.com/about/privacy';
+    let url = 'https://safecoin.org/privacy_copay';
     let optIn = true;
     let title = null;
     let message = this.translate.instant('View Privacy Policy');
+    let okText = this.translate.instant('Open');
+    let cancelText = this.translate.instant('Go Back');
+    this.externalLinkProvider.open(
+      url,
+      optIn,
+      title,
+      message,
+      okText,
+      cancelText
+    );
+  }
+
+  public openBlog() {
+    let url = 'https://safecoin.org/copay-safecoin-wallet';
+    let optIn = true;
+    let title = null;
+    let message = this.translate.instant('Our note in the blog.');
     let okText = this.translate.instant('Open');
     let cancelText = this.translate.instant('Go Back');
     this.externalLinkProvider.open(

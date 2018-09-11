@@ -25,7 +25,7 @@ export class ProfileProvider {
   public wallet: any = {};
   public profile: Profile;
 
-  private UPDATE_PERIOD = 15;
+  private UPDATE_PERIOD = 5;
   private throttledBwsEvent;
   private validationLock: boolean = false;
   private errors = this.bwcProvider.getErrors();
@@ -53,8 +53,8 @@ export class ProfileProvider {
   private updateWalletSettings(wallet): void {
     let config = this.configProvider.get();
     let defaults = this.configProvider.getDefaults();
-    let defaultColor =
-      this.appProvider.info.nameCase == 'Copay' ? '#1abb9b' : '#647ce8';
+    let defaultColor = '#0b779c';// '#7a8c9e';
+//      this.appProvider.info.nameCase == 'Copay' ? '#1abb9b' : '#647ce8';
     // this.config.whenAvailable( (config) => { TODO
     wallet.usingCustomBWS =
       config.bwsFor &&
@@ -95,7 +95,8 @@ export class ProfileProvider {
     if (wallet.isPrivKeyExternal()) return false;
     if (!wallet.credentials.mnemonic && !wallet.credentials.mnemonicEncrypted)
       return false;
-    if (wallet.credentials.network == 'testnet') return false;
+//    if (wallet.credentials.network == 'testnet') return false; 
+    if (wallet.credentials.network == 'livenet') return false; // TODO eternity for test
 
     return true;
   }
@@ -606,15 +607,10 @@ export class ProfileProvider {
     });
   }
 
-  public normalizeMnemonic(words: string): string {
+  private normalizeMnemonic(words: string): string {
     if (!words || !words.indexOf) return words;
-
-    // \u3000: A space of non-variable width: used in Chinese, Japanese, Korean
     let isJA = words.indexOf('\u3000') > -1;
-    let wordList = words
-      .trim()
-      .toLowerCase()
-      .split(/[\u3000\s]+/);
+    let wordList = words.split(/[\u3000\s]+/);
 
     return wordList.join(isJA ? '\u3000' : ' ');
   }
@@ -1040,7 +1036,7 @@ export class ProfileProvider {
       this.logger.debug('Joining Wallet:', opts);
 
       try {
-        var walletData = this.bwcProvider.parseSecret(opts.secret);
+        var walletData = this.bwcProvider.parseSecret(opts.secret, opts.coin);
 
         // check if exist
         if (
@@ -1126,7 +1122,7 @@ export class ProfileProvider {
       opts.m = 1;
       opts.n = 1;
       opts.networkName = 'livenet';
-      opts.coin = Coin.BTC;
+      opts.coin = Coin.SAFE;
       this.createWallet(opts)
         .then(wallet => {
           return resolve(wallet);

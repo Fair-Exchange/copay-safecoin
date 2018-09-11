@@ -1,11 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { App, ModalController, NavController, NavParams } from 'ionic-angular';
+import { ModalController, NavController, NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
 
 // pages
 import { FinishModalPage } from '../finish/finish';
-import { TabsPage } from '../tabs/tabs';
 
 // providers
 import { ActionSheetProvider } from '../../providers/action-sheet/action-sheet';
@@ -45,12 +44,18 @@ export class PaperWalletPage {
   public error: boolean;
   public isOpenSelector: boolean;
   private bitcore;
+  private bitcoreSafe;
+  private bitcoreBtcz;
+  private bitcoreZcl;
+  private bitcoreAnon;
+  private bitcoreZel;
+  private bitcoreRvn;
+  private bitcoreLtc;
 
   // Platform info
   public isCordova: boolean;
 
   constructor(
-    private app: App,
     private actionSheetProvider: ActionSheetProvider,
     private navCtrl: NavController,
     private navParams: NavParams,
@@ -67,6 +72,13 @@ export class PaperWalletPage {
     private bwcErrorProvider: BwcErrorProvider
   ) {
     this.bitcore = this.bwcProvider.getBitcore();
+    this.bitcoreSafe = this.bwcProvider.getBitcoreSafe();
+    this.bitcoreBtcz = this.bwcProvider.getBitcoreBtcz();
+    this.bitcoreZcl = this.bwcProvider.getBitcoreZcl();
+    this.bitcoreAnon = this.bwcProvider.getBitcoreAnon();
+    this.bitcoreZel = this.bwcProvider.getBitcoreZel();
+    this.bitcoreRvn = this.bwcProvider.getBitcoreRvn();
+    this.bitcoreLtc = this.bwcProvider.getBitcoreLtc();
     this.isCordova = this.platformProvider.isCordova;
     this.isOpenSelector = false;
     this.scannedKey = this.navParams.data.privateKey;
@@ -142,10 +154,33 @@ export class PaperWalletPage {
     this.wallet.getBalanceFromPrivateKey(privateKey, coin, cb);
   }
 
-  private checkPrivateKey(privateKey: string): boolean {
-    try {
-      new this.bitcore.PrivateKey(privateKey, 'livenet');
-    } catch (err) {
+  private checkPrivateKey(privateKey: string, coin: string): boolean {
+    if ((coin == 'btc') || (coin == 'bch')) {
+      try {new this.bitcore.PrivateKey(privateKey, 'livenet');}
+      catch (err) {return false;}
+    } else if (coin == 'safe') {
+      try {new this.bitcoreSafe.PrivateKey(privateKey, 'livenet');}
+      catch (err) {return false;}
+    } else if (coin == 'btcz') {
+      try {new this.bitcoreBtcz.PrivateKey(privateKey, 'livenet');}
+      catch (err) {return false;}
+    } else if (coin == 'zcl') {
+      try {new this.bitcoreZcl.PrivateKey(privateKey, 'livenet');}
+      catch (err) {return false;}
+    } else if (coin == 'anon') {
+      try {new this.bitcoreAnon.PrivateKey(privateKey, 'livenet');}
+      catch (err) {return false;}
+    } else if (coin == 'zel') {
+      try {new this.bitcoreZel.PrivateKey(privateKey, 'livenet');}
+      catch (err) {return false;}
+    } else if (coin == 'rvn') {
+      try {new this.bitcoreRvn.PrivateKey(privateKey, 'livenet');}
+      catch (err) {return false;}
+    } else if (coin == 'ltc') {
+      try {new this.bitcoreLtc.PrivateKey(privateKey, 'livenet');}
+      catch (err) {return false;}
+    } else {
+      debugger;
       return false;
     }
     return true;
@@ -159,7 +194,8 @@ export class PaperWalletPage {
         this.passphrase,
         (err, privateKey: string) => {
           if (err) return reject(err);
-          if (!this.checkPrivateKey(privateKey))
+          debugger;
+          if (!this.checkPrivateKey(privateKey, coin))
             return reject(new Error('Invalid private key'));
 
           this.getBalance(privateKey, coin, (err, balance: number) => {
@@ -328,7 +364,7 @@ export class PaperWalletPage {
     );
     modal.present();
     modal.onDidDismiss(() => {
-      this.app.getRootNavs()[0].setRoot(TabsPage);
+      this.navCtrl.pop();
     });
   }
 }

@@ -55,6 +55,24 @@ describe('ImportWalletPage', () => {
     });
   });
 
+  describe('Function: normalizeMnemonic', () => {
+    describe('Function called without words', () => {
+      it('should return words', () => {
+        const words = '';
+        expect(instance.normalizeMnemonic(words)).toEqual('');
+      });
+    });
+    describe('Function called with words', () => {
+      it('should return words list normalized', () => {
+        const nonNormalizedWords =
+          'mom  mom mom           mom mom mom mom mom mom mom mom mom';
+        expect(instance.normalizeMnemonic(nonNormalizedWords)).toEqual(
+          'mom mom mom mom mom mom mom mom mom mom mom mom'
+        );
+      });
+    });
+  });
+
   describe('Function: setDerivationPath', () => {
     it('should set path value to importForm', () => {
       const derivationPath = "m/44'/0'/0'";
@@ -91,7 +109,7 @@ describe('ImportWalletPage', () => {
       testBed.createComponent(ImportWalletPage);
       let info = {
         derivationPath: "m/44'/0'/0'",
-        bwsURL: 'https://bws.bitpay.com/bws/api',
+        bwsURL: 'https://api.safecoin.org/bwss/api',
         coin: 'btc',
         words: 'mom mom mom mom mom mom mom mom mom mom mom mom',
         backupText: 'test'
@@ -111,14 +129,18 @@ describe('ImportWalletPage', () => {
   });
 
   describe('Function: importFromMnemonic', () => {
-    beforeEach(() => {
+    it('should return if importForm is not valid', () => {
       testBed.createComponent(ImportWalletPage);
-
+      instance.importFromMnemonic();
+      expect(instance.importFrom).toBeFalsy();
+    });
+    it('should set bwsurl if importForm has bwsURL value', () => {
+      testBed.createComponent(ImportWalletPage);
       let info = {
         derivationPath: "m/44'/0'/0'",
-        bwsURL: 'https://bws.bitpay.com/bws/api',
+        bwsURL: 'https://api.safecoin.org/bwss/api',
         coin: 'btc',
-        words: 'mom1 mom2 mom3 mom4 mom5 mom6 mom7 mom8 mom9 mom10 mom11 mom12',
+        words: 'mom mom mom mom mom mom mom mom mom mom mom mom',
         backupText: 'test'
       };
 
@@ -129,42 +151,27 @@ describe('ImportWalletPage', () => {
       instance.importForm.controls['coin'].setValue(info.coin);
       instance.importForm.controls['bwsURL'].setValue(info.bwsURL);
       instance.importForm.controls['backupText'].setValue(info.backupText);
-    });
-
-    it('should return if importForm is not valid', () => {
-      instance.importForm.controls['words'].setValue(null);
-
-      const importMnemonicSpy = spyOn(instance, 'importMnemonic');
-      instance.importFromMnemonic();
-      expect(importMnemonicSpy).not.toHaveBeenCalled();
-    });
-
-    it('should set bwsurl if importForm has bwsURL value', () => {
       instance.importFromMnemonic();
       expect(instance.importFromMnemonic()).toBeUndefined();
     });
+    it('should return if importForm has not words', () => {
+      testBed.createComponent(ImportWalletPage);
+      let info = {
+        derivationPath: "m/44'/0'/0'",
+        bwsURL: 'https://api.safecoin.org/bwss/api',
+        coin: 'btc',
+        words: 'mom mom',
+        backupText: 'test'
+      };
 
-    it('should return error when use 13 words', () => {
-      instance.importForm.controls['words'].setValue(
-        'mom1 mom2 mom3 mom4 mom5 mom6 mom7 mom8 mom9 mom10 mom11 mom12 mom13'
+      instance.importForm.controls['derivationPath'].setValue(
+        info.derivationPath
       );
-
-      const popupSpy = spyOn(instance.popupProvider, 'ionicAlert');
-      instance.importFromMnemonic();
-      expect(popupSpy).toHaveBeenCalledWith(
-        'Error',
-        'Wrong number of recovery words: 13'
-      );
-    });
-
-    it('should not return error when use 12 words with extra spaces', () => {
-      instance.importForm.controls['words'].setValue(
-        '  mom1 mom2 mom3 mom4 mom5  mom6 mom7 mom8 mom9 mom10 mom11 mom12   '
-      );
-
-      const importMnemonicSpy = spyOn(instance, 'importMnemonic');
-      instance.importFromMnemonic();
-      expect(importMnemonicSpy).toHaveBeenCalled();
+      instance.importForm.controls['words'].setValue(info.words);
+      instance.importForm.controls['coin'].setValue(info.coin);
+      instance.importForm.controls['bwsURL'].setValue(info.bwsURL);
+      instance.importForm.controls['backupText'].setValue(info.backupText);
+      expect(instance.importFromMnemonic()).toBeUndefined();
     });
   });
 
