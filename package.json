@@ -1,5 +1,5 @@
 {
-  "name": "copay",
+  "name": "copay-safecoin",
   "description": "A Secure Bitcoin Wallet",
   "author": "BitPay",
   "version": "4.6.0",
@@ -38,14 +38,14 @@
   },
   "dom_storage_quota": 200,
   "id": "jid1-x7bV5evAaI1P9Q",
-  "homepage": "https://copay.io",
+  "homepage": "https://copay.safecoin.org",
   "license": "MIT",
   "repository": {
-    "url": "git://github.com/bitpay/copay.git",
+    "url": "git://github.com/fair-exchange/copay-safecoin.git",
     "type": "git"
   },
   "bugs": {
-    "url": "https://github.com/bitpay/copay/issues"
+    "url": "https://github.com/fair-exchange/copay-safecoin/issues"
   },
   "scripts": {
     "postinstall": "sed -i  -e \"s/.*require(...\\/...);//g\" node_modules/asn1.js-rfc5280/index.js && run-s e2e:update env:dev prompt",
@@ -144,7 +144,7 @@
     "@zxing/ngx-scanner": "1.2.0",
     "angular2-moment": "1.7.1",
     "bitauth": "git+https://github.com/bitpay/bitauth.git#copay",
-    "bitcore-wallet-client": "6.7.5",
+    "bitcore-wallet-client-safecoin": "git+https://github.com/fair-exchange/bitcore-wallet-client-safecoin.git",
     "buffer-compare": "1.1.1",
     "cordova": "8.0.0",
     "cordova-android": "7.1.0",
