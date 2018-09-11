@@ -3,14 +3,14 @@ import { Injectable } from '@angular/core';
 import { Logger } from '../../providers/logger/logger';
 
 import * as COREBTC from 'bitcore-lib';
-import * as COREANON from 'bitcore-lib-anon';
-import * as COREBTCZ from 'bitcore-lib-btcz';
 import * as COREBCH from 'bitcore-lib-cash';
-import * as CORELTC from 'bitcore-lib-ltc';
-import * as CORERVN from 'bitcore-lib-rvn';
-import * as CORESAFE from 'bitcore-lib-safe';
-import * as COREZCL from 'bitcore-lib-zcl';
-import * as COREZEL from 'bitcore-lib-zel';
+import * as COREANON from 'bitcore-lib-anon-mini';
+import * as COREBTCZ from 'bitcore-lib-btcz-mini';
+import * as CORELTC from 'bitcore-lib-ltc-mini';
+import * as CORERVN from 'bitcore-lib-rvn-mini';
+import * as CORESAFE from 'bitcore-lib-safe-mini';
+import * as COREZCL from 'bitcore-lib-zcl-mini';
+import * as COREZEL from 'bitcore-lib-zel-mini';
 import * as BWC from 'bitcore-wallet-client';
 
 @Injectable()
