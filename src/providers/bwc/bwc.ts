@@ -11,7 +11,7 @@ import * as CORERVN from 'bitcore-lib-rvn-mini';
 import * as CORESAFE from 'bitcore-lib-safe-mini';
 import * as COREZCL from 'bitcore-lib-zcl-mini';
 import * as COREZEL from 'bitcore-lib-zel-mini';
-import * as BWC from 'bitcore-wallet-client';
+import * as BWC from 'bitcore-wallet-client-safecoin';
 
 @Injectable()
 export class BwcProvider {
