@@ -14,15 +14,15 @@ const env: EnvironmentSchema = {
   name: 'e2e',
   enableAnimations: false,
   ratesAPI: {
-    btc: `${host}/api.coingecko.com/api/v3/coins/bitcoin`,
-    bch: `${host}/api.coingecko.com/api/v3/coins/bitcoin-cash`,
-    safe: `${host}/api.coingecko.com/api/v3/coins/safe-coin-2`,
-    btcz: `${host}/api.coingecko.com/api/v3/coins/bitcoinz`,
-    zcl: `${host}/api.coingecko.com/api/v3/coins/zclassic`,
-    anon: `${host}/api.coingecko.com/api/v3/coins/zclassic`,
-    zel: `${host}/api.coingecko.com/api/v3/coins/zelcash`,
-    rvn: `${host}/api.coingecko.com/api/v3/coins/ravencoin`,
-    ltc: `${host}/api.coingecko.com/api/v3/coins/litecoin`
+    btc: `${host}/bitpay.com/api/rates`,
+    bch: `${host}/bitpay.com/api/rates/bch`,
+    safe: `${host}/api.safecoin.org/rates/safe`,
+    btcz: `${host}/api.safecoin.org/rates/btcz`,
+    zcl: `${host}/api.safecoin.org/rates/zcl`,
+    anon: `${host}/api.safecoin.org/rates/anon`,
+    zel: `${host}/api.safecoin.org/rates/zel`,
+    rvn: `${host}/api.safecoin.org/rates/rvn`,
+    ltc: `${host}/api.safecoin.org/rates/ltc`
   },
   activateScanner: false
 };

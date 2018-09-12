@@ -160,15 +160,15 @@ export class RateProvider {
     this.ratesSafeAvailable = false;
     this.ratesBtczAvailable = false;
     this.ratesLtcAvailable = false;
-//    this.updateRatesBtc();
-//    this.updateRatesBch();
-//    this.updateRatesSafe();
-//    this.updateRatesBtcz();
-//    this.updateRatesLtc();
-//    this.updateRatesZcl();
-//    this.updateRatesZcl();
-//    this.updateRatesAnon();
-//    this.updateRatesRvn();
+    this.updateRatesBtc();
+    this.updateRatesBch();
+    this.updateRatesSafe();
+    this.updateRatesBtcz();
+    this.updateRatesLtc();
+    this.updateRatesZel();
+    this.updateRatesZcl();
+    this.updateRatesAnon();
+    this.updateRatesRvn();
   }
 
   public updateRatesBtc(): Promise<any> {
@@ -503,7 +503,7 @@ export class RateProvider {
         (this.ratesBchAvailable && chain == 'bch')
       )
         resolve();
-   /*   else {
+      else {
         if (chain == 'btc') {
           this.updateRatesBtc().then(() => {
             resolve();
@@ -549,7 +549,7 @@ export class RateProvider {
             resolve();
           });
         }
-      } */
+      } 
     });
   }
 }
