@@ -189,7 +189,7 @@ const configDefault: Config = {
   },
 
   homepageSimpleView: {
-    enabled: false
+    enabled: true
   },
 
   showIntegration: {
