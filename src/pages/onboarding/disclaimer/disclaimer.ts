@@ -46,7 +46,7 @@ export class DisclaimerPage {
   }
 
   openDisclaimer() {
-    let url = 'https://safecoin.org/copay_about';
+    let url = 'https://safecoin.org/terms_copay';
     let optIn = true;
     let title = null;
     let message = this.translate.instant('View Wallet Terms of Use');

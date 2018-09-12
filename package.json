@@ -1,5 +1,5 @@
 {
-  "name": "copay-safecoin",
+  "name": "copay",
   "description": "A Secure Bitcoin Wallet",
   "author": "BitPay",
   "version": "4.6.0",
@@ -38,14 +38,14 @@
   },
   "dom_storage_quota": 200,
   "id": "jid1-x7bV5evAaI1P9Q",
-  "homepage": "https://copay.safecoin.org",
+  "homepage": "https://copay.io",
   "license": "MIT",
   "repository": {
-    "url": "git://github.com/fair-exchange/copay-safecoin.git",
+    "url": "git://github.com/bitpay/copay.git",
     "type": "git"
   },
   "bugs": {
-    "url": "https://github.com/fair-exchange/copay-safecoin/issues"
+    "url": "https://github.com/bitpay/copay/issues"
   },
   "scripts": {
     "postinstall": "sed -i  -e \"s/.*require(...\\/...);//g\" node_modules/asn1.js-rfc5280/index.js && run-s e2e:update env:dev prompt",
