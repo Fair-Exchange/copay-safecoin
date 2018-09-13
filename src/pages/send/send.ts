@@ -251,24 +251,29 @@ export class SendPage extends WalletTabsChild {
 
   public async goToReceive() {
     await this.walletTabsProvider.goToTabIndex(0);
-    const coinName = 
-     this.wallet.coin === Coin.BTC 
-      ? 'bitcoin' 
-       : this.wallet.coin === Coin.SAFE 
-        ? 'safecoin' 
-         : this.wallet.coin === Coin.BTCZ 
-          ? 'bitcoinz' 
-           : this.wallet.coin === Coin.ZCL 
-            ? 'zclassic' 
-           : this.wallet.coin === Coin.ANON 
-            ? 'anonymous' 
-           : this.wallet.coin === Coin.ZEL 
-            ? 'zelcash' 
-             : this.wallet.coin === Coin.RVN 
-              ? 'ravencoin' 
-               : this.wallet.coin === Coin.LTC 
-                ? 'litecoin' 
-                 : 'bitcoin cash';
+    let coinn ='';
+    if (this.wallet.coin){
+      if (this.wallet.coin === Coin.SAFE){
+        coinn = 'safecoin';
+      } else if (this.wallet.coin === Coin.BTCZ){
+        coinn = 'bitcoinz';
+      } else if (this.wallet.coin === Coin.ANON){
+        coinn = 'anonymous';
+      } else if (this.wallet.coin === Coin.ZEL){
+        coinn = 'zelcash';
+      } else if (this.wallet.coin === Coin.ZCL){
+        coinn = 'zclassic';
+      } else if (this.wallet.coin === Coin.RVN){
+        coinn = 'ravencoin';
+      } else if (this.wallet.coin === Coin.LTC){
+        coinn = 'litecoin'
+      } else if (this.wallet.coin === Coin.BTC){
+        coinn = 'bitcoin';
+      } else if (this.wallet.coin === Coin.BCH){
+        coinn = 'bitcoin cash'; 
+      }
+    }
+    const coinName = coinn; 
     const infoSheet = this.actionSheetProvider.createInfoSheet(
       'receiving-bitcoin',
       { coinName }

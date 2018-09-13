@@ -136,24 +136,16 @@ export class AddressProvider {
     if (coiN == 'Zclassic (ZCL)') coiN = 'zcl';
     if (coiN == 'ANONymous (ANON)') coiN = 'anon';
     if (coiN == 'Ravencoin (RVN)') coiN = 'rvn';
-    if (coiN == 'btc' || coiN == 'bch' ||  coiN == 'ltc' || coiN == 'safe') {
-      let Address = this.bitcore.Address;
-      let AddressCash = this.bitcoreCash.Address;
-      let isLivenet = Address.isValid(address, 'livenet');
-      let isTestnet = Address.isValid(address, 'testnet');
+
+    if (coiN == 'safe' ) {
       let AddressSafe = this.bitcoreSafe.Address;
-      let AddressLtc = this.bitcoreLtc.Address;
-      let isLivenetCash = AddressCash.isValid(address, 'livenet');
-      let isTestnetCash = AddressCash.isValid(address, 'testnet');
       let isLivenetSafe = AddressSafe.isValid(address, 'livenet');
-      let isLivenetLtc = AddressLtc.isValid(address, 'livenet');
-// debugger;
       return {
         address,
-        isValid: isLivenet || isTestnet || isLivenetCash || isTestnetCash || isLivenetSafe || isLivenetLtc,
-        network: isTestnet || isTestnetCash ? 'testnet' : 'livenet',
+        isValid: isLivenetSafe,
+        network: 'livenet',
         coin: coiN,
-        translation: (coiN == 'btc' || coiN == 'bch') ? this.translateAddress(address) : {}
+        translation: {}
       };
     } else if (coiN == 'btcz') {
       let AddressBtcz = this.bitcoreBtcz.Address;
@@ -161,6 +153,16 @@ export class AddressProvider {
       return {
         address,
         isValid: isLivenetBtcz,
+        network: 'livenet',
+        coin: coiN,
+        translation: {}
+      };
+    } else if (coiN == 'anon' ) {
+      let AddressAnon = this.bitcoreAnon.Address;
+      let isLivenetAnon = AddressAnon.isValid(address, 'livenet');
+      return {
+        address,
+        isValid: isLivenetAnon,
         network: 'livenet',
         coin: coiN,
         translation: {}
@@ -185,17 +187,17 @@ export class AddressProvider {
         coin: coiN,
         translation: {}
       };
-    } else if (coiN == 'anon' ) {
-      let AddressAnon = this.bitcoreAnon.Address;
-      let isLivenetAnon = AddressAnon.isValid(address, 'livenet');
+    } else if (coiN == 'ltc' ) {
+      let AddressLtc = this.bitcoreLtc.Address;
+      let isLivenetLtc = AddressLtc.isValid(address, 'livenet');
       return {
         address,
-        isValid: isLivenetAnon,
+        isValid: isLivenetLtc,
         network: 'livenet',
         coin: coiN,
         translation: {}
       };
-    } else {
+    } else if (coiN == 'rvn' ){
       let AddressRvn = this.bitcoreRvn.Address;
       let isLivenetRvn = AddressRvn.isValid(address, 'livenet');
       return {
@@ -204,6 +206,20 @@ export class AddressProvider {
         network: 'livenet',
         coin: coiN,
         translation: {}
+      };
+    } else {
+      let Address = this.bitcore.Address;
+      let AddressCash = this.bitcoreCash.Address;
+      let isLivenet = Address.isValid(address, 'livenet');
+      let isTestnet = Address.isValid(address, 'testnet');
+      let isLivenetCash = AddressCash.isValid(address, 'livenet');
+      let isTestnetCash = AddressCash.isValid(address, 'testnet');
+      return {
+        address,
+        isValid: isLivenet || isTestnet || isLivenetCash || isTestnetCash,
+        network: isTestnet || isTestnetCash ? 'testnet' : 'livenet',
+        coin: coiN,
+        translation: this.translateAddress(address)
       };
     }
   }
@@ -219,7 +235,9 @@ export class AddressProvider {
       addressData = this.validateAddress(extractedAddress, coin);
       return addressData.coin == coin
         ? addressData.network == network
-          ? true
+          ? addressData.isValid
+            ? true
+            : false
           : false
         : false;
     } else {
@@ -235,6 +253,10 @@ export class AddressProvider {
   }
 
   public isValid(address: string): boolean {
+
+
+
+
     let URI = this.bitcore.URI;
     let Address = this.bitcore.Address;
     let URICash = this.bitcoreCash.URI;
