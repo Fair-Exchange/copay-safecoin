@@ -95,8 +95,8 @@ export class ProfileProvider {
     if (wallet.isPrivKeyExternal()) return false;
     if (!wallet.credentials.mnemonic && !wallet.credentials.mnemonicEncrypted)
       return false;
-//    if (wallet.credentials.network == 'testnet') return false; 
-    if (wallet.credentials.network == 'livenet') return false; // TODO eternity for test
+    if (wallet.credentials.network == 'testnet') return false; 
+//    if (wallet.credentials.network == 'livenet') return false; // TODO eternity for test
 
     return true;
   }
