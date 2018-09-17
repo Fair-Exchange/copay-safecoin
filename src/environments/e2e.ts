@@ -16,13 +16,13 @@ const env: EnvironmentSchema = {
   ratesAPI: {
     btc: `${host}/bitpay.com/api/rates`,
     bch: `${host}/bitpay.com/api/rates/bch`,
-    safe: `${host}/api.safecoin.org/rates/safe`,
-    btcz: `${host}/api.safecoin.org/rates/btcz`,
-    zcl: `${host}/api.safecoin.org/rates/zcl`,
-    anon: `${host}/api.safecoin.org/rates/anon`,
-    zel: `${host}/api.safecoin.org/rates/zel`,
-    rvn: `${host}/api.safecoin.org/rates/rvn`,
-    ltc: `${host}/api.safecoin.org/rates/ltc`
+    safe: `${host}/api.safecoin.org/safe`,
+    btcz: `${host}/api.safecoin.org/btcz`,
+    zcl: `${host}/api.safecoin.org/zcl`,
+    anon: `${host}/api.safecoin.org/anon`,
+    zel: `${host}/api.safecoin.org/zel`,
+    rvn: `${host}/api.safecoin.org/rvn`,
+    ltc: `${host}/api.safecoin.org/ltc`
   },
   activateScanner: false
 };
