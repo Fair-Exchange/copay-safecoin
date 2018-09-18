@@ -76,7 +76,7 @@ export class BwcProvider {
 
     // note opts use `bwsurl` all lowercase;
     let bwc = new BWC({
-      baseUrl: opts.bwsurl || 'https://bwss.safecoin.org/api',
+      baseUrl: opts.bwsurl || 'https://bwss.safecoin.org/bwss/api',
       verbose: opts.verbose,
       timeout: 100000,
       transports: ['polling']
