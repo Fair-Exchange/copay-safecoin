@@ -149,7 +149,7 @@ const configDefault: Config = {
 
   // Bitcore wallet service URL
   bws: {
-    url: 'https://bwss.safecoin.org/api'
+    url: 'https://bwss.safecoin.org/bwss/api'
 //    url: 'http://192.168.91.206:3232/bws/api'
   },
 
