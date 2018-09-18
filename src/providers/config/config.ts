@@ -149,7 +149,7 @@ const configDefault: Config = {
 
   // Bitcore wallet service URL
   bws: {
-    url: 'https://api.safecoin.org/bwss/api'
+    url: 'https://bwss.safecoin.org/api'
 //    url: 'http://192.168.91.206:3232/bws/api'
   },
 
@@ -230,7 +230,7 @@ const configDefault: Config = {
     safe: 'explorer.safecoin.org',
     btcz: 'explorer.btcz.rocks',
     zcl: 'explorer.zclassicblue.org:3001/insight',
-    anon: 'anon.anon.org:3001/insight',
+    anon: 'explorer.anonfork.io/insight',
     zel: 'explorer2.zel.cash',
     rvn: 'ravencoin.network',
     ltc: 'insight.litecore.io'

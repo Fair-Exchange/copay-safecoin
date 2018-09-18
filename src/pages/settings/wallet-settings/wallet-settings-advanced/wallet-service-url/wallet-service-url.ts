@@ -61,7 +61,7 @@ export class WalletServiceUrlPage {
     let appName = this.app.info.nameCase;
     this.comment = this.replaceParametersProvider.replace(
       this.translate.instant(
-        "{{appName}} depends on Bitcore Wallet Service (BWS) for blockchain information, networking and Copayer synchronization. The default configuration points to https://bws.bitpay.com (BitPay's public BWS instance)."
+        "{{appName}} depends on Bitcore Wallet Service (BWS) for blockchain information, networking and Copayer synchronization. The default configuration points to https://bwss.safecoin.org (SafeCoin's public BWS instance)."
       ),
       { appName }
     );
@@ -81,17 +81,17 @@ export class WalletServiceUrlPage {
       case 'prod':
       case 'production':
 //        bws = 'http://192.168.91.206:3232/bws/api';
-        bws = 'https://api.safecoin.org/bwss/api';
+        bws = 'https://bwss.safecoin.org/api';
         break;
       case 'sta':
       case 'staging':
 //        bws = 'http://192.168.91.206:3232/bws/api';
-        bws = 'https://api.safecoin.org/bwss/api';
+        bws = 'https://bwss.safecoin.org/api';
         break;
       case 'loc':
       case 'local':
 //        bws = 'http://192.168.91.206:3232/bws/api';
-        bws = 'https://api.safecoin.org/bwss/api';
+        bws = 'https://bwss.safecoin.org/api';
         break;
     }
     if (bws) {
