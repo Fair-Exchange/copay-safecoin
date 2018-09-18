@@ -39,7 +39,7 @@ describe('CreateWalletPage', () => {
         n: 3,
         myName: 'test',
         networkName: 'livenet',
-        bwsurl: 'https://api.safecoin.org/bwss/api',
+        bwsurl: 'https://bwss.safecoin.org/bwss/api',
         singleAddress: false,
         coin: 'btc',
         mnemonic: 'mom mom mom mom mom mom mom mom mom mom mom mom',
@@ -51,7 +51,7 @@ describe('CreateWalletPage', () => {
       instance.createForm.value.requiredCopayers = 2;
       instance.createForm.value.totalCopayers = 3;
       instance.createForm.value.testnetEnabled = 'livenet';
-      instance.createForm.value.bwsURL = 'https://api.safecoin.org/bwss/api';
+      instance.createForm.value.bwsURL = 'https://bwss.safecoin.org/bwss/api';
       instance.createForm.value.singleAddress = false;
       instance.createForm.value.coin = 'btc';
       instance.createForm.value.selectedSeed = 'set';
