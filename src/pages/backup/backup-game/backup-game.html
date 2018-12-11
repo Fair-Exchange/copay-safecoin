@@ -56,7 +56,7 @@
           <div class="words">
             <button ion-button *ngFor="let shuffledWord of shuffledMnemonicWords; let i = index" (click)="addButton(i, shuffledWord)" [disabled]="shuffledWord.selected">{{shuffledWord.word}}
             </button>
-            <button ion-button outline *ngIf="!fromOnboarding" (click)="openWarningModal()">Copy</button>
+            <button ion-button outline *ngIf="!fromOnboarding && copying" (click)="openWarningModal()">Copy</button>
           </div>
         </div>
       </div>

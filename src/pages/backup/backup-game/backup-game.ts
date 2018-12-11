@@ -36,6 +36,7 @@ export class BackupGamePage {
 
   public currentIndex: number;
   public deleted: boolean;
+  public copying: boolean = false;
   public mnemonicWords: string[];
   public shuffledMnemonicWords;
   public password: string;
@@ -134,12 +135,14 @@ export class BackupGamePage {
           if (option) {
             var newWord;
 //            var tmp_lw;
+            this.customWords = [];
             for (var jjj = 0 ; jjj < tmp_m.length; jjj++) {
               for (iii = 0 ; iii < this.shuffledMnemonicWords.length; iii++) {
                 if ( this.mnemonicWords[jjj] == this.shuffledMnemonicWords[iii].word) {
                   newWord = {word: this.mnemonicWords[jjj], prevIndex: iii};
                   this.customWords.push(newWord);
                   this.shuffledMnemonicWords[iii].selected = true;
+                  this.copying = false;
                   iii = this.shuffledMnemonicWords.length;
                 }
               }
@@ -182,12 +185,17 @@ export class BackupGamePage {
     };
     this.customWords.push(newWord);
     this.shuffledMnemonicWords[index].selected = true;
+    if (this.customWords.length == 4) this.copying = true;
+    if (this.customWords.length != 4) this.copying = false;
+
     this.shouldContinue();
   }
 
   public removeButton(index: number, item): void {
     // if ($scope.loading) return;
     this.customWords.splice(index, 1);
+    if (this.customWords.length == 4) this.copying = true;
+    if (this.customWords.length != 4) this.copying = false;
     this.shuffledMnemonicWords[item.prevIndex].selected = false;
     this.shouldContinue();
   }
