@@ -51,7 +51,7 @@ export class ConfirmPage extends WalletTabsChild {
   private bitcoreZel;
   private bitcoreZen;
   private bitcoreRvn;
-//  private bitcoreLtc;
+  private bitcoreLtc;
 
   public countDown = null;
   public CONFIRM_LIMIT_USD: number;
@@ -118,7 +118,7 @@ export class ConfirmPage extends WalletTabsChild {
     this.bitcoreZel = this.bwcProvider.getBitcoreZel();
     this.bitcoreZen = this.bwcProvider.getBitcoreZen();
     this.bitcoreRvn = this.bwcProvider.getBitcoreRvn();
-//    this.bitcoreLtc = this.bwcProvider.getBitcoreLtc();
+    this.bitcoreLtc = this.bwcProvider.getBitcoreLtc();
     this.CONFIRM_LIMIT_USD = 20;
     this.FEE_TOO_HIGH_LIMIT_PER = 15;
     this.config = this.configProvider.get();
@@ -156,8 +156,8 @@ export class ConfirmPage extends WalletTabsChild {
                    ? this.bitcoreZen 
                     : this.navParams.data.coin == 'rvn' 
                      ? this.bitcoreRvn 
-//                      : this.navParams.data.coin == 'ltc' 
-//                       ? this.bitcoreLtc 
+                      : this.navParams.data.coin == 'ltc' 
+                       ? this.bitcoreLtc 
                         : this.bitcore;
     let networkName;
     try {
@@ -266,14 +266,14 @@ export class ConfirmPage extends WalletTabsChild {
         .Address(this.tx.toAddress)
         .toString();
     }
-/*
+
     if (this.tx.coin && this.tx.coin == 'ltc') {
       // Use legacy address
       this.tx.toAddress = this.bitcoreLtc
         .Address(this.tx.toAddress)
         .toString();
     }
-  */
+  
     this.getAmountDetails();
 
     const feeOpts = this.feeProvider.getFeeOpts();
@@ -640,8 +640,8 @@ export class ConfirmPage extends WalletTabsChild {
                      ? 'Horizen' 
                       : this.wallet.coin === Coin.RVN 
                        ? 'Ravencoin' 
-//                        : this.wallet.coin === Coin.LTC 
-//                         ? 'Litecoin' 
+                        : this.wallet.coin === Coin.LTC 
+                         ? 'Litecoin' 
                           : 'Bitcoin Cash';
             const minerFeeInfoSheet = this.actionSheetProvider.createInfoSheet(
               'miner-fee',
@@ -713,8 +713,8 @@ export class ConfirmPage extends WalletTabsChild {
              ? 'Horizen (ZEN)'
               : this.wallet.coin === Coin.RVN 
                ? 'Ravencoin (RVN)'
-//                : this.wallet.coin === Coin.LTC 
-//                 ? 'Litecoin (LTC)'
+                : this.wallet.coin === Coin.LTC 
+                 ? 'Litecoin (LTC)'
                   : 'Bitcoin Cash (BCH)';
 
     const minerFeeNoticeInfoSheet = this.actionSheetProvider.createInfoSheet(

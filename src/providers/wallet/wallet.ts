@@ -25,10 +25,10 @@ export enum Coin {
   ZEL = 'zel',
   RVN = 'rvn',
   BTC = 'btc',
+  LTC = 'ltc',
   ZEN = 'zen'
 /*  ANON = 'anon',
   ZCL = 'zcl',
-  LTC = 'ltc',
   BCH = 'bch'*/
 }
 
@@ -37,10 +37,10 @@ export const Coin_Spec: string[][] = [
     ["btcz","1","BitcoinZ (BTCZ)",   "177"  ],
     ["zel", "1","Zelcash (ZEL)",     "19167"],
     ["rvn", "1","Ravencoin (RVN)",   "175"  ],
+    ["ltc", "1","Litecoin (LTC)",    "2"    ],
     ["btc", "1","Bitcoin (BTC)",     "0"    ],
     ["zen", "0","Horizen (ZEN)",     "121"  ],
     ["zcl", "0","Zclassic (ZCL)",    "147"  ],
-    ["ltc", "0","Litecoin (LTC)",    "2"    ],
     ["anon","0","Anonymous (ANON)",  "0"    ],
     ["bch", "0","Bitcoin Cash (BCH)","0"    ]
 //  ["name","on/off", "descr.", "deriv.path"]

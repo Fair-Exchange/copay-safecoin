@@ -99,10 +99,10 @@ export class IncomingDataProvider {
     data = this.sanitizeUri(data);
     return !!this.bwcProvider.getBitcoreRvn().URI.isValid(data);
   }
-/*  private isValidLitecoinUri(data: string): boolean {
+  private isValidLitecoinUri(data: string): boolean {
     data = this.sanitizeUri(data);
     return !!this.bwcProvider.getBitcoreLtc().URI.isValid(data);
-  } */
+  } 
 
 /*  public isValidBitcoinCashUriWithLegacyAddress(data: string): boolean {
     data = this.sanitizeUri(data);
@@ -157,12 +157,12 @@ export class IncomingDataProvider {
       this.bwcProvider.getBitcoreZen().Address.isValid(data, 'livenet')
     );
   }
-/*  private isValidLitecoinAddress(data: string): boolean {
+  private isValidLitecoinAddress(data: string): boolean {
     return !!(
       this.bwcProvider.getBitcoreLtc().Address.isValid(data, 'livenet')
     );
   }
-  private isValidAnonymousAddress(data: string): boolean {
+/*  private isValidAnonymousAddress(data: string): boolean {
     return !!(
       this.bwcProvider.getBitcoreAnon().Address.isValid(data, 'livenet')
     );
@@ -251,8 +251,8 @@ export class IncomingDataProvider {
                      ? Coin.ZEN 
                       : data.indexOf('ravencoin') === 0
                        ? Coin.RVN 
-//                        : data.indexOf('litecoin') === 0
-//                         ? Coin.LTC 
+                        : data.indexOf('litecoin') === 0
+                         ? Coin.LTC 
                           : Coin.BTC;
 //    debugger;
     if ((coin == Coin.BTC) /* || (coin == Coin.BCH) */) { 
@@ -358,7 +358,7 @@ export class IncomingDataProvider {
     if (parsed.r) this.goToPayPro(data, coin);
     else this.goSend(address, amount, message, coin);
   }
-/*  private handleLitecoinUri(data: string, redirParams?: RedirParams): void {
+  private handleLitecoinUri(data: string, redirParams?: RedirParams): void {
     this.logger.debug('Incoming-data: Safecoin URI');
     let amountFromRedirParams =
       redirParams && redirParams.amount ? redirParams.amount : '';
@@ -370,7 +370,7 @@ export class IncomingDataProvider {
     if (parsed.r) this.goToPayPro(data, coin);
     else this.goSend(address, amount, message, coin);
   }
-  
+/*  
   private handleBitcoinCashUri(data: string, redirParams?: RedirParams): void {
     this.logger.debug('Incoming-data: Bitcoin Cash URI');
     let amountFromRedirParams =
@@ -572,7 +572,7 @@ export class IncomingDataProvider {
       this.goToAmountPage(data, coin);
     }
   }
-/*  private handlePlainLitecoinAddress(
+  private handlePlainLitecoinAddress(
     data: string,
     redirParams?: RedirParams
   ): void {
@@ -590,7 +590,7 @@ export class IncomingDataProvider {
       this.goToAmountPage(data, coin);
     }
   }
-
+/*
   private handlePlainBitcoinCashAddress(
     data: string,
     redirParams?: RedirParams
@@ -738,12 +738,12 @@ export class IncomingDataProvider {
     } else if (this.isValidZenUri(data)) {
       this.handleZenUri(data, redirParams);
       return true;
-/*
+
       // Litecoin  URI
     } else if (this.isValidLitecoinUri(data)) {
       this.handleLitecoinUri(data, redirParams);
       return true;
-
+/*
       // Bitcoin Cash URI
     } else if (this.isValidBitcoinCashUri(data)) {
       this.handleBitcoinCashUri(data, redirParams);
@@ -798,12 +798,12 @@ export class IncomingDataProvider {
     } else if (this.isValidRavencoinAddress(data)) {
       this.handlePlainRavencoinAddress(data, redirParams);
       return true;
-/*
+
       // Plain Address (Litecoin)
     } else if (this.isValidLitecoinAddress(data)) {
       this.handlePlainLitecoinAddress(data, redirParams);
       return true;
-  */
+  
 /*      // Plain Address (Bitcoin Cash)
     } else if (this.isValidBitcoinCashAddress(data)) {
       this.handlePlainBitcoinCashAddress(data, redirParams);
@@ -912,14 +912,14 @@ export class IncomingDataProvider {
         type: 'ZenUri',
         title: this.translate.instant('ZenUri URI')
       };
-/*      // Litecoin  URI
+      // Litecoin  URI
     } else if (this.isValidLitecoinUri(data)) {
       return {
         data,
         type: 'LitecoinUri',
         title: this.translate.instant('Litecoin URI')
       };
-      // Bitcoin Cash URI
+/*      // Bitcoin Cash URI
     } else if (this.isValidBitcoinCashUri(data)) {
       return {
         data,
@@ -1006,7 +1006,7 @@ export class IncomingDataProvider {
         type: 'ZenAddress',
         title: this.translate.instant('Zen Address')
       };
-/*
+
       // Plain Address (Litecoin)
     } else if (this.isValidLitecoinAddress(data)) {
       return {
@@ -1014,7 +1014,7 @@ export class IncomingDataProvider {
         type: 'LitecoinAddress',
         title: this.translate.instant('Litecoin Address')
       };
-
+/*
       // Plain Address (Bitcoin Cash)
     } else if (this.isValidBitcoinCashAddress(data)) {
       return {
@@ -1120,14 +1120,14 @@ export class IncomingDataProvider {
           try {
             this.bwcProvider.getBitcoreZen().PrivateKey(privateKey, 'livenet');
           } catch (err) {
-//          try {
-//            this.bwcProvider.getBitcoreLtc().PrivateKey(privateKey, 'livenet');
-//          } catch (err) {
             try {
-              this.bwcProvider.getBitcoreRvn().PrivateKey(privateKey, 'livenet');
+              this.bwcProvider.getBitcoreLtc().PrivateKey(privateKey, 'livenet');
             } catch (err) {
-              return false;
-  //          }
+              try {
+                this.bwcProvider.getBitcoreRvn().PrivateKey(privateKey, 'livenet');
+              } catch (err) {
+                return false;
+              }
             }
           }
         }
@@ -1230,15 +1230,15 @@ export class IncomingDataProvider {
                      ? Coin.ZEL 
                       : data.indexOf('ravencoin') === 0
                        ? Coin.RVN 
-                        : data.indexOf('zen') === 0
-                         ? Coin.ZEN 
-                         : Coin.BTC;
+                        : data.indexOf('litecoin') === 0
+                         ? Coin.LTC 
+                          : data.indexOf('zen') === 0
+                           ? Coin.ZEN 
+                           : Coin.BTC;
 //                    : data.indexOf('zclassic') === 0
 //                     ? Coin.ZCL 
 //                    : data.indexOf('anonymous') === 0
 //                     ? Coin.ANON 
-//                        : data.indexOf('litecoin') === 0
-//                         ? Coin.LTC 
 //    debugger;
 
       data = decodeURIComponent(data.replace(/bitcoin(cash)?:\?r=/, ''));

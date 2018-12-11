@@ -76,10 +76,9 @@
 
     <info-sheet-template *ngSwitchCase="'backup-warning2'" type="warning">
       <span sheet-title-text translate>Clipboard is not SAFE</span>
-      <span sheet-text translate>
+      <span sheet-text translate copy-to-clipboard="{{params?.msg}}">
         Clipboard may be viewed by other apps. But I don't care about this.
       </span>
-      <span sheet-text copy-to-clipboard="{{params?.msg}}">{{params?.msg}}</span>
       <span sheet-button-text translate>No Matter</span>
       <span sheet-second-button-text translate>Go Back</span>
     </info-sheet-template>

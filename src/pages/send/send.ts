@@ -277,8 +277,8 @@ export class SendPage extends WalletTabsChild {
 //        coinn = 'zclassic';
       } else if (this.wallet.coin === Coin.RVN){
         coinn = 'ravencoin';
-//      } else if (this.wallet.coin === Coin.LTC){
-//        coinn = 'litecoin'
+      } else if (this.wallet.coin === Coin.LTC){
+        coinn = 'litecoin'
       } else if (this.wallet.coin === Coin.BTC){
         coinn = 'bitcoin';
 //      } else if (this.wallet.coin === Coin.BCH){
