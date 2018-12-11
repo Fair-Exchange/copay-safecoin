@@ -9,6 +9,7 @@ export class DerivationPathHelperProvider {
   public defaultBtcz: string;
   public defaultLtc: string;
   public defaultZel: string;
+  public defaultZen: string;
   public defaultZcl: string;
   public defaultAnon: string;
   public defaultRvn: string;
@@ -19,11 +20,12 @@ export class DerivationPathHelperProvider {
     this.defaultTestnet = "m/44'/1'/0'";
     this.defaultBtc = "m/44'/0'/0'";
     this.defaultBch = "m/44'/0'/0'";
-    this.defaultBtcz = "m/44'/0'/0'";
-    this.defaultZel = "m/44'/0'/0'";
+    this.defaultBtcz = "m/44'/177'/0'";
+    this.defaultZel = "m/44'/19167'/0'";
+    this.defaultZen = "m/44'/121'/0'";
     this.defaultLtc = "m/44'/2'/0'";
     this.defaultZcl = "m/44'/147'/0'";
-    this.defaultAnon = "m/44'/0'/0'";
+    this.defaultAnon = "m/44'/19168'/0'";
     this.defaultRvn = "m/44'/175'/0'";
     this.defaultSafe = "m/44'/19165'/0'";
   }
@@ -33,7 +35,7 @@ export class DerivationPathHelperProvider {
     var ret = {
       derivationStrategy: '',
       networkName: '',
-      coin: '',
+      cointype: '',
       account: 0
     };
 
@@ -59,25 +61,39 @@ export class DerivationPathHelperProvider {
     switch (arr[2]) {
       case "0'":
         ret.networkName = 'livenet';
+        ret.cointype = '0';
         break;
       case "1'":
         ret.networkName = 'testnet';
+        ret.cointype = '1';
         break;
       case "2'":
         ret.networkName = 'livenet';
-        ret.coin = 'ltc';
+        ret.cointype = '2';
+        break;
+      case "121'":
+        ret.networkName = 'livenet';
+        ret.cointype = '121';
         break;
       case "147'":
         ret.networkName = 'livenet';
-        ret.coin = 'zcl';
+        ret.cointype = '147';
         break;
       case "175'":
         ret.networkName = 'livenet';
-        ret.coin = 'rvn';
+        ret.cointype = '175';
+        break;
+      case "177'":
+        ret.networkName = 'livenet';
+        ret.cointype = '177';
         break;
       case "19165'":
         ret.networkName = 'livenet';
-        ret.coin = 'safe';
+        ret.cointype = '19165';
+        break;
+      case "19167'":
+        ret.networkName = 'livenet';
+        ret.cointype = '19167';
         break;
       default:
         return false;

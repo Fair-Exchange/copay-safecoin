@@ -13,7 +13,7 @@
 
 <ion-content class="fullscreen-tab">
   <ion-refresher (ionRefresh)="doRefresh($event)" *ngIf="!showReorderAll && !showReorderBtc && !showReorderBch &&
-                 !showReorderSafe && !showReorderBtcz && !showReorderZcl && !showReorderAnon && !showReorderZel &&
+                 !showReorderSafe && !showReorderBtcz && !showReorderZcl && !showReorderAnon && !showReorderZel && !showReorderZen &&
                  !showReorderRvn && !showReorderLtc">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -124,7 +124,7 @@
           <span translate> Your wallets</span>
         </div>
         <div item-end *ngIf="!showReorderAll">
-          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView('')">
             <ion-icon name="add"></ion-icon>
           </button>
           <button ion-button clear icon-only color="grey" (click)="reorderAll()" *ngIf="walletsAll.length > 1">
@@ -148,6 +148,8 @@
             <img *ngIf="wallet.network != 'testnet' && wallet.coin == 'btcz'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-bitcoinz.png"
               class="icon-wallet" />
             <img *ngIf="wallet.network != 'testnet' && wallet.coin == 'zel'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-zelcash.png"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet' && wallet.coin == 'zen'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-zen.png"
               class="icon-wallet" />
             <img *ngIf="wallet.network != 'testnet' && wallet.coin == 'zcl'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-zclassic.png"
               class="icon-wallet" />
@@ -200,7 +202,7 @@
           <span translate> Wallets</span>
         </div>
         <div item-end *ngIf="!showReorderSafe">
-          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView('safe')">
             <ion-icon name="add"></ion-icon>
           </button>
           <button ion-button clear icon-only color="grey" (click)="reorderSafe()" *ngIf="walletsSafe.length > 1">
@@ -256,7 +258,7 @@
           <span translate>BitcoinZ Wallets</span>
         </div>
         <div item-end *ngIf="!showReorderBtcz">
-          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView('btcz')">
             <ion-icon name="add"></ion-icon>
           </button>
           <button ion-button clear icon-only color="grey" (click)="reorderBtcz()" *ngIf="walletsBtcz.length > 1">
@@ -312,7 +314,7 @@
           <span translate>Anonymous Wallets</span>
         </div>
         <div item-end *ngIf="!showReorderAnon">
-          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView('anon')">
             <ion-icon name="add"></ion-icon>
           </button>
           <button ion-button clear icon-only color="grey" (click)="reorderAnon()" *ngIf="walletsAnon.length > 1">
@@ -368,7 +370,7 @@
           <span translate>Zelcash Wallets</span>
         </div>
         <div item-end *ngIf="!showReorderZel">
-          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView('zel')">
             <ion-icon name="add"></ion-icon>
           </button>
           <button ion-button clear icon-only color="grey" (click)="reorderZel()" *ngIf="walletsZel.length > 1">
@@ -418,6 +420,63 @@
     </div>
 
 
+    <div class="card" *ngIf="!homepageSimpleViewEnabled && walletsZen && walletsZen[0]">
+      <ion-item-divider>
+        <div class="title" item-start>
+          <img src="assets/img/icon-zen.png" alt="Horizen Wallets" width="16" />
+          <span translate>Horizen Wallets</span>
+        </div>
+        <div item-end *ngIf="!showReorderZel">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView('zel')">
+            <ion-icon name="add"></ion-icon>
+          </button>
+          <button ion-button clear icon-only color="grey" (click)="reorderZen()" *ngIf="walletsZen.length > 1">
+            <ion-icon name="reorder"></ion-icon>
+          </button>
+        </div>
+        <div item-end *ngIf="showReorderZen">
+          <button ion-button clear color="secondary" (click)="reorderZen()">
+            {{'Done' | translate}}
+          </button>
+        </div>
+      </ion-item-divider>
+
+      <ion-list reorder="{{showReorderZen}}" (ionItemReorder)="reorderWalletsZen($event)">
+        <button ion-item *ngFor="let wallet of walletsZen" (click)="goToWalletDetails(wallet)">
+          <ion-icon class="item-img" item-start>
+            <img *ngIf="wallet.network == 'testnet'" [ngStyle]="{'background-color': wallet.color}" src="assets/img/icon-wallet-testnet.svg"
+              class="icon-wallet" />
+            <img *ngIf="wallet.network != 'testnet'" [ngStyle]="{'background-color': '#ffffff'}" src="assets/img/icon-zen.png"
+              class="icon-wallet" />
+          </ion-icon>
+          <div class="item-title">{{wallet.name}}</div>
+          <div class="item-subtitle">
+            <span class="wallet-warning" *ngIf="!wallet.isComplete()" translate>
+              Incomplete
+            </span>
+            <span class="wallet-warning" *ngIf="wallet.isComplete() && wallet.needsBackup" translate>
+              Paper Key Unverified
+            </span>
+            <span *ngIf="wallet.isComplete() && !wallet.needsBackup">
+              <span *ngIf="!wallet.balanceHidden && !wallet.scanning">
+                {{wallet.status && wallet.status.totalBalanceStr ? (wallet.status.totalBalanceStr) : ( wallet.cachedBalance ? wallet.cachedBalance
+                + (wallet.cachedBalanceUpdatedOn ? ' &middot; ' + ( wallet.cachedBalanceUpdatedOn * 1000 | amTimeAgo) : '')
+                : '')}}
+              </span>
+              <span *ngIf="wallet.scanning" translate>Scanning funds</span>
+              <span *ngIf="wallet.balanceHidden && !wallet.scanning">[
+                <span translate>Balance Hidden</span>]</span>
+              <span class="text-gray" *ngIf="wallet.credentials.m > 1">{{wallet.credentials.m}}-of-{{wallet.credentials.n}}</span>
+              <ion-icon *ngIf="!wallet.balanceHidden && wallet.status && (wallet.status.totalBalanceSat != wallet.status.spendableAmount)"
+                ios="ios-timer-outline" md="md-timer"></ion-icon>
+              <span *ngIf="wallet.error" class="wallet-warning">{{wallet.error}}</span>
+            </span>
+          </div>
+        </button>
+      </ion-list>
+    </div>
+
+
     <div class="card" *ngIf="!homepageSimpleViewEnabled && walletsZcl && walletsZcl[0]">
       <ion-item-divider>
         <div class="title" item-start>
@@ -425,7 +484,7 @@
           <span translate> Wallets</span>
         </div>
         <div item-end *ngIf="!showReorderZcl">
-          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView('zcl')">
             <ion-icon name="add"></ion-icon>
           </button>
           <button ion-button clear icon-only color="grey" (click)="reorderZcl()" *ngIf="walletsZcl.length > 1">
@@ -481,7 +540,7 @@
           <span translate>Ravencoin Wallets</span>
         </div>
         <div item-end *ngIf="!showReorderRvn">
-          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView('rvn')">
             <ion-icon name="add"></ion-icon>
           </button>
           <button ion-button clear icon-only color="grey" (click)="reorderRvn()" *ngIf="walletsRvn.length > 1">
@@ -537,7 +596,7 @@
           <span translate> Wallets</span>
         </div>
         <div item-end *ngIf="!showReorderLtc">
-          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView('ltc')">
             <ion-icon name="add"></ion-icon>
           </button>
           <button ion-button clear icon-only color="grey" (click)="reorderLtc()" *ngIf="walletsLtc.length > 1">
@@ -593,7 +652,7 @@
           <span translate>Bitcoin Wallets</span>
         </div>
         <div item-end *ngIf="!showReorderBtc">
-          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView('btc')">
             <ion-icon name="add"></ion-icon>
           </button>
           <button ion-button clear icon-only color="grey" (click)="reorderBtc()" *ngIf="walletsBtc.length > 1">
@@ -649,7 +708,7 @@
           <span translate>Bitcoin Cash Wallets</span>
         </div>
         <div item-end *ngIf="!showReorderBch">
-          <button ion-button clear icon-only color="grey" (click)="goToAddView()">
+          <button ion-button clear icon-only color="grey" (click)="goToAddView('bch')">
             <ion-icon name="add"></ion-icon>
           </button>
           <button ion-button clear icon-only color="grey" (click)="reorderBch()" *ngIf="walletsBch.length > 1">

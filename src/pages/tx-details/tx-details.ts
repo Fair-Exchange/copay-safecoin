@@ -68,18 +68,20 @@ export class TxDetailsPage {
 
     let defaults = this.configProvider.getDefaults();
     this.blockexplorerUrl =
-      this.wallet.coin === 'bch'
-       ? defaults.blockExplorerUrl.bch
+      this.wallet.coin === 'btc'
+       ? defaults.blockExplorerUrl.btc
         : this.wallet.coin === 'safe' 
          ? defaults.blockExplorerUrl.safe
           : this.wallet.coin === 'btcz' 
            ? defaults.blockExplorerUrl.btcz
-            : this.wallet.coin === 'zcl' 
-             ? defaults.blockExplorerUrl.zcl
-            : this.wallet.coin === 'anon' 
-             ? defaults.blockExplorerUrl.anon
+//            : this.wallet.coin === 'zcl' 
+//             ? defaults.blockExplorerUrl.zcl
+//            : this.wallet.coin === 'anon' 
+//             ? defaults.blockExplorerUrl.anon
             : this.wallet.coin === 'zel' 
              ? defaults.blockExplorerUrl.zel
+            : this.wallet.coin === 'zen' 
+             ? defaults.blockExplorerUrl.zen
               : this.wallet.coin === 'rvn' 
                ? defaults.blockExplorerUrl.rvn
                 : this.wallet.coin === 'ltc' 

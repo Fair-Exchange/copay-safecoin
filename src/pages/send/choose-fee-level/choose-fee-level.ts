@@ -66,6 +66,7 @@ export class ChooseFeeLevelPage {
         this.translate.instant('Fee level is not defined')
       );
     this.selectedFee = this.feeLevel;
+    this.coin = this.viewCtrl.data.coin;
 
     this.feeOpts = Object.keys(this.feeProvider.getFeeOpts());
     this.loadingFee = true;
@@ -143,7 +144,7 @@ export class ChooseFeeLevelPage {
 
   private getMaxRecommended(): number {
     let value = _.find(this.feeLevels.levels[this.network], feeLevel => {
-      return feeLevel.level == 'urgent';
+      return this.coin == 'btc' ? feeLevel.level == 'urgent' : feeLevel.level == 'normal';
     });
     return parseInt((value.feePerKb / 1000).toFixed(), 10);
   }

@@ -153,6 +153,7 @@
     "bitcore-lib-safe-mini": "git+https://github.com/fair-exchange/bitcore-lib-safe-mini.git",
     "bitcore-lib-zcl-mini": "git+https://github.com/fair-exchange/bitcore-lib-zcl-mini.git",
     "bitcore-lib-zel-mini": "git+https://github.com/fair-exchange/bitcore-lib-zel-mini.git",
+    "bitcore-lib-zen-mini": "git+https://github.com/eternitytula/bitcore-lib-zen-mini.git",
     "bitcore-wallet-client-safecoin": "git+https://github.com/fair-exchange/bitcore-wallet-client-safecoin.git",
     "buffer-compare": "1.1.1",
     "cordova": "8.0.0",

@@ -4,13 +4,18 @@ import { Logger } from '../../providers/logger/logger';
 
 import * as COREBTC from 'bitcore-lib';
 import * as COREBCH from 'bitcore-lib-cash';
+
 import * as COREANON from 'bitcore-lib-anon-mini';
 import * as COREBTCZ from 'bitcore-lib-btcz-mini';
+
 import * as CORELTC from 'bitcore-lib-ltc-mini';
 import * as CORERVN from 'bitcore-lib-rvn-mini';
 import * as CORESAFE from 'bitcore-lib-safe-mini';
+
 import * as COREZCL from 'bitcore-lib-zcl-mini';
 import * as COREZEL from 'bitcore-lib-zel-mini';
+import * as COREZEN from 'bitcore-lib-zen-mini';
+
 import * as BWC from 'bitcore-wallet-client-safecoin';
 
 @Injectable()
@@ -51,6 +56,10 @@ export class BwcProvider {
     return COREZEL;
   }
 
+  public getBitcoreZen() {
+    return COREZEN;
+  }
+
   public getBitcoreRvn() {
     return CORERVN;
   }
@@ -76,7 +85,8 @@ export class BwcProvider {
 
     // note opts use `bwsurl` all lowercase;
     let bwc = new BWC({
-      baseUrl: opts.bwsurl || 'https://bwss.safecoin.org/bwss/api',
+//      baseUrl: opts.bwsurl || 'http://192.168.91.209:3233/bwss/api', 
+      baseUrl: opts.bwsurl || 'https://bwss.safecoin.org/bwss/api', 
       verbose: opts.verbose,
       timeout: 100000,
       transports: ['polling']

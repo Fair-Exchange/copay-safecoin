@@ -1605,7 +1605,7 @@ msgid "Restore from backup"
 msgstr "Восстановить из резервной копии"
 
 msgid "Retrieving inputs information..."
-msgstr "Ошибка при получении информации SendMax"
+msgstr "Получение информации о входящих транзакциях...."
 
 msgid "Retry"
 msgstr "Повторить попытку"

@@ -3,9 +3,8 @@
     <ion-title>{{ name }}</ion-title>
   </ion-navbar>
 </ion-header>
-
 <ion-content>
-  <div class="contact-view-header">
+  <div class="contact-view-header" >
     <gravatar [name]="name" [height]="80" [width]="80" [email]="email"></gravatar>
   </div>
   <ion-list>
@@ -15,7 +14,7 @@
         {{ name }}
       </ion-note>
     </ion-item>
-    <ion-item *ngIf="email">
+    <ion-item *ngIf="email" copy-to-clipboard="{{ email }}">
       {{'Email' | translate}}
       <ion-note item-end>
         {{ email }}
@@ -41,12 +40,45 @@
     </ion-item>
     <ion-item-divider></ion-item-divider>
     <button ion-item class="btn-send" (click)="sendTo()">
-      {{'Send Money' | translate}}
+         <ion-icon class="item-img" item-start>
+         <img *ngIf="coinname == 'Safecoin (SAFE)'" src="assets/img/icon-safecoin.png"
+           class="icon-wallet" />
+         <img *ngIf="coinname == 'BitcoinZ (BTCZ)'" src="assets/img/icon-bitcoinz.png"
+           class="icon-wallet" />
+         <img *ngIf="coinname == 'Zelcash (ZEL)'" src="assets/img/icon-zelcash.png"
+           class="icon-wallet" />
+         <img *ngIf="coinname == 'Horizen (ZEN)'" src="assets/img/icon-zen.png"
+           class="icon-wallet" />
+         <img *ngIf="coinname == 'Ravencoin (RVN)'" src="assets/img/icon-ravencoin.png"
+           class="icon-wallet" />
+         <img *ngIf="coinname == 'Litecoin (LTC)'" src="assets/img/icon-litecoin.png"
+           class="icon-wallet" />
+         <img *ngIf="coinname == 'Bitcoin (BTC)'" src="assets/img/icon-bitcoin.svg"
+           class="icon-wallet" />
+        </ion-icon>
+      {{'Send' | translate}} {{ coinname }}
     </button>
     <ion-item-divider></ion-item-divider>
     <button ion-item class="btn-remove" (click)="remove(address, network)">
-      {{'Remove' | translate}}
+         <ion-icon class="item-img" item-start>
+         <img *ngIf="coinname == 'Safecoin (SAFE)'" src="assets/img/icon-safecoin.png"
+           class="icon-wallet" />
+         <img *ngIf="coinname == 'BitcoinZ (BTCZ)'" src="assets/img/icon-bitcoinz.png"
+           class="icon-wallet" />
+         <img *ngIf="coinname == 'Zelcash (ZEL)'" src="assets/img/icon-zelcash.png"
+           class="icon-wallet" />
+         <img *ngIf="coinname == 'Horizen (ZEN)'" src="assets/img/icon-zen.png"
+           class="icon-wallet" />
+         <img *ngIf="coinname == 'Ravencoin (RVN)'" src="assets/img/icon-ravencoin.png"
+           class="icon-wallet" />
+         <img *ngIf="coinname == 'Litecoin (LTC)'" src="assets/img/icon-litecoin.png"
+           class="icon-wallet" />
+         <img *ngIf="coinname == 'Bitcoin (BTC)'" src="assets/img/icon-bitcoin.svg"
+           class="icon-wallet" />
+        </ion-icon>
+       {{'Remove' | translate}} {{ name }}
     </button>
+
     <ion-item-divider></ion-item-divider>
   </ion-list>
 </ion-content>

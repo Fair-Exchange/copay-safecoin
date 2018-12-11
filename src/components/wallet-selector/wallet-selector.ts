@@ -15,6 +15,7 @@ export class WalletSelectorComponent extends ActionSheetParent {
   public walletsZcl;
   public walletsAnon;
   public walletsZel;
+  public walletsZen;
   public walletsRvn;
   public walletsLtc;
   public title: string;
@@ -40,6 +41,7 @@ export class WalletSelectorComponent extends ActionSheetParent {
     this.walletsZcl = this.wallets.filter(wallet => wallet.coin === 'zcl');
     this.walletsAnon = this.wallets.filter(wallet => wallet.coin === 'anon');
     this.walletsZel = this.wallets.filter(wallet => wallet.coin === 'zel');
+    this.walletsZen = this.wallets.filter(wallet => wallet.coin === 'zen');
     this.walletsRvn = this.wallets.filter(wallet => wallet.coin === 'rvn');
     this.walletsLtc = this.wallets.filter(wallet => wallet.coin === 'ltc');
   }

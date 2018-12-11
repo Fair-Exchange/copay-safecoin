@@ -13,6 +13,7 @@ export interface EnvironmentSchema {
     zcl: string;
     anon: string;
     zel: string;
+    zen: string;
     rvn: string;
     ltc: string;
   };

@@ -6,35 +6,37 @@ import { BwcProvider } from '../../providers/bwc/bwc';
 @Injectable()
 export class AddressProvider {
   private bitcore;
-  private bitcoreCash;
+//  private bitcoreCash;
   private bitcoreSafe;
   private bitcoreBtcz;
   private bitcoreZcl;
   private bitcoreAnon;
   private bitcoreZel;
+  private bitcoreZen;
   private bitcoreRvn;
   private bitcoreLtc;
   private Bitcore;
 
   constructor(private bwcProvider: BwcProvider) {
     this.bitcore = this.bwcProvider.getBitcore();
-    this.bitcoreCash = this.bwcProvider.getBitcoreCash();
+//    this.bitcoreCash = this.bwcProvider.getBitcoreCash();
     this.bitcoreSafe = this.bwcProvider.getBitcoreSafe();
     this.bitcoreBtcz = this.bwcProvider.getBitcoreBtcz();
     this.bitcoreZcl = this.bwcProvider.getBitcoreZcl();
     this.bitcoreAnon = this.bwcProvider.getBitcoreAnon();
     this.bitcoreZel = this.bwcProvider.getBitcoreZel();
+    this.bitcoreZen = this.bwcProvider.getBitcoreZen();
     this.bitcoreRvn = this.bwcProvider.getBitcoreRvn();
     this.bitcoreLtc = this.bwcProvider.getBitcoreLtc();
     this.Bitcore = {
       btc: {
         lib: this.bitcore,
-        translateTo: 'bch'
-      },
-      bch: {
-        lib: this.bitcoreCash,
         translateTo: 'btc'
       },
+/*      bch: {
+        lib: this.bitcoreCash,
+        translateTo: 'btc'
+      }, */
       btcz: {
         lib: this.bitcoreBtcz,
         translateTo: 'btcz'
@@ -50,6 +52,10 @@ export class AddressProvider {
       zel: {
         lib: this.bitcoreZel,
         translateTo: 'zel'
+      },
+      zen: {
+        lib: this.bitcoreZen,
+        translateTo: 'zen'
       },
       rvn: {
         lib: this.bitcoreRvn,
@@ -67,16 +73,16 @@ export class AddressProvider {
   }
 
   public getCoin(address: string) {
-  debugger;
+//  debugger;
     try {
       new this.Bitcore['btc'].lib.Address(address);
       return 'btc';
     } catch (e) {
       try {
-        new this.Bitcore['bch'].lib.Address(address);
-        return 'bch';
-      } catch (e) {
-        try {
+//        new this.Bitcore['bch'].lib.Address(address);
+//        return 'bch';
+//      } catch (e) {
+//        try {
           new this.Bitcore['safe'].lib.Address(address);
           return 'safe';
         } catch (e) {
@@ -89,25 +95,25 @@ export class AddressProvider {
               return 'rvn';
             } catch (e) {
               try {
-                new this.Bitcore['zcl'].lib.Address(address);
-                return 'zcl';
-              } catch (e) {
-                try {
+              //  new this.Bitcore['zcl'].lib.Address(address);
+              //  return 'zcl';
+             // } catch (e) {
+              //  try {
                   new this.Bitcore['ltc'].lib.Address(address);
                   return 'ltc';
                 } catch (e) {
                   return null;
-                }
+               // }
               }
             }
           }
-        }
+        // }
       }
     }
   }
 
   private translateAddress(address: string) {
-  debugger;
+//  debugger;
   var origCoin = this.getCoin(address);
     if (!origCoin) return undefined;
 
@@ -130,11 +136,12 @@ export class AddressProvider {
     if (coiN == 'Safecoin (SAFE)') coiN = 'safe';
     if (coiN == 'Litecoin (LTC)') coiN = 'ltc';
     if (coiN == 'Bitcoin (BTC)') coiN = 'btc';
-    if (coiN == 'Bitcoin Cash (BCH)') coiN = 'bch';
+//    if (coiN == 'Bitcoin Cash (BCH)') coiN = 'bch';
     if (coiN == 'BitcoinZ (BTCZ)') coiN = 'btcz';
     if (coiN == 'Zelcash (ZEL)') coiN = 'zel';
-    if (coiN == 'Zclassic (ZCL)') coiN = 'zcl';
-    if (coiN == 'ANONymous (ANON)') coiN = 'anon';
+    if (coiN == 'Horizen (ZEN)') coiN = 'zen';
+//    if (coiN == 'Zclassic (ZCL)') coiN = 'zcl';
+//    if (coiN == 'ANONymous (ANON)') coiN = 'anon';
     if (coiN == 'Ravencoin (RVN)') coiN = 'rvn';
 
     if (coiN == 'safe' ) {
@@ -177,6 +184,16 @@ export class AddressProvider {
         coin: coiN,
         translation: {}
       };
+    } else if (coiN == 'zen') {
+      let AddressZen = this.bitcoreZen.Address;
+      let isLivenetZen = AddressZen.isValid(address, 'livenet');
+      return {
+        address,
+        isValid: isLivenetZen,
+        network: 'livenet',
+        coin: coiN,
+        translation: {}
+      };
     } else if (coiN == 'zcl' ) {
       let AddressZcl = this.bitcoreZcl.Address;
       let isLivenetZcl = AddressZcl.isValid(address, 'livenet');
@@ -209,15 +226,15 @@ export class AddressProvider {
       };
     } else {
       let Address = this.bitcore.Address;
-      let AddressCash = this.bitcoreCash.Address;
+//      let AddressCash = this.bitcoreCash.Address;
       let isLivenet = Address.isValid(address, 'livenet');
       let isTestnet = Address.isValid(address, 'testnet');
-      let isLivenetCash = AddressCash.isValid(address, 'livenet');
-      let isTestnetCash = AddressCash.isValid(address, 'testnet');
+//      let isLivenetCash = AddressCash.isValid(address, 'livenet');
+//      let isTestnetCash = AddressCash.isValid(address, 'testnet');
       return {
         address,
-        isValid: isLivenet || isTestnet || isLivenetCash || isTestnetCash,
-        network: isTestnet || isTestnetCash ? 'testnet' : 'livenet',
+        isValid: isLivenet || isTestnet, // || isLivenetCash || isTestnetCash,
+        network: isTestnet /*|| isTestnetCash*/ ? 'testnet' : 'livenet',
         coin: coiN,
         translation: this.translateAddress(address)
       };
@@ -247,7 +264,8 @@ export class AddressProvider {
 
   public extractAddress(address: string): string {
     let extractedAddress = address
-      .replace(/^(bitcoincash:|bitcoin:|safecoin:|bitcoinz:|zclassic:|anonymous:|zelcash:|ravencoin:|litecoin:)/, '')
+//      .replace(/^(bitcoincash:|bitcoin:|safecoin:|bitcoinz:|zclassic:|anonymous:|zelcash:|zen:|ravencoin:|litecoin:)/, '')
+      .replace(/^(bitcoin:|safecoin:|bitcoinz:|zclassic:|anonymous:|zelcash:|zen:|ravencoin:|litecoin:)/, '')
       .replace(/\?.*/, '');
     return extractedAddress || address;
   }
@@ -259,8 +277,8 @@ export class AddressProvider {
 
     let URI = this.bitcore.URI;
     let Address = this.bitcore.Address;
-    let URICash = this.bitcoreCash.URI;
-    let AddressCash = this.bitcoreCash.Address;
+//    let URICash = this.bitcoreCash.URI;
+//    let AddressCash = this.bitcoreCash.Address;
     let URISafe = this.bitcoreSafe.URI;
     let AddressSafe = this.bitcoreSafe.Address;
     let URIBtcz = this.bitcoreBtcz.URI;
@@ -271,6 +289,8 @@ export class AddressProvider {
     let AddressAnon = this.bitcoreAnon.Address;
     let URIZel = this.bitcoreZel.URI;
     let AddressZel = this.bitcoreZel.Address;
+    let URIZen = this.bitcoreZen.URI;
+    let AddressZen = this.bitcoreZen.Address;
     let URIRvn = this.bitcoreRvn.URI;
     let AddressRvn = this.bitcoreRvn.Address;
     let URILtc = this.bitcoreLtc.URI;
@@ -294,7 +314,7 @@ export class AddressProvider {
       if (isUriValid && (isAddressValidLivenet || isAddressValidTestnet)) {
         return true;
       }
-    } else if (/^bitcoincash:/.test(address)) {
+/*    } else if (/^bitcoincash:/.test(address)) {
       let isUriValid = URICash.isValid(address);
       if (isUriValid) {
         uri = new URICash(address);
@@ -309,7 +329,7 @@ export class AddressProvider {
       }
       if (isUriValid && (isAddressValidLivenet || isAddressValidTestnet)) {
         return true;
-      }
+      }*/
     } else if (/^safecoin:/.test(address)) {
       let isUriValid = URISafe.isValid(address);
       if (isUriValid) {
@@ -370,6 +390,18 @@ export class AddressProvider {
       if (isUriValid && isAddressValidLivenet /* || isAddressValidTestnet) */) {
         return true;
       }
+    } else if (/^zen:/.test(address)) {
+      let isUriValid = URIZen.isValid(address);
+      if (isUriValid) {
+        uri = new URIZen(address);
+        isAddressValidLivenet = AddressZen.isValid(
+          uri.address.toString(),
+          'livenet'
+        );
+      }
+      if (isUriValid && isAddressValidLivenet /* || isAddressValidTestnet) */) {
+        return true;
+      }
     } else if (/^ravencoin:/.test(address)) {
       let isUriValid = URIRvn.isValid(address);
       if (isUriValid) {
@@ -398,28 +430,30 @@ export class AddressProvider {
 
     // Regular Address: try Bitcoin and Bitcoin Cash
     let regularAddressLivenet = Address.isValid(address, 'livenet');
-    let regularAddressTestnet = Address.isValid(address, 'testnet');
-    let regularAddressCashLivenet = AddressCash.isValid(address, 'livenet');
-    let regularAddressCashTestnet = AddressCash.isValid(address, 'testnet');
+//    let regularAddressTestnet = Address.isValid(address, 'testnet');
+//    let regularAddressCashLivenet = AddressCash.isValid(address, 'livenet');
+//    let regularAddressCashTestnet = AddressCash.isValid(address, 'testnet');
     let regularAddressSafeLivenet = AddressSafe.isValid(address, 'livenet');
     let regularAddressBtczLivenet = AddressBtcz.isValid(address, 'livenet');
     let regularAddressZelLivenet = AddressZel.isValid(address, 'livenet');
-    let regularAddressZclLivenet = AddressZcl.isValid(address, 'livenet');
-    let regularAddressAnonLivenet = AddressAnon.isValid(address, 'livenet');
+    let regularAddressZenLivenet = AddressZen.isValid(address, 'livenet');
+//    let regularAddressZclLivenet = AddressZcl.isValid(address, 'livenet');
+//    let regularAddressAnonLivenet = AddressAnon.isValid(address, 'livenet');
     let regularAddressRvnLivenet = AddressRvn.isValid(address, 'livenet');
     let regularAddressLtcLivenet = AddressLtc.isValid(address, 'livenet');
     if (
       regularAddressLivenet ||
-      regularAddressTestnet ||
+//      regularAddressTestnet ||
       regularAddressSafeLivenet ||
       regularAddressBtczLivenet ||
       regularAddressZelLivenet ||
-      regularAddressZclLivenet ||
-      regularAddressAnonLivenet ||
+      regularAddressZenLivenet ||
+//      regularAddressZclLivenet ||
+//      regularAddressAnonLivenet ||
       regularAddressRvnLivenet ||
-      regularAddressLtcLivenet ||
-      regularAddressCashLivenet ||
-      regularAddressCashTestnet
+      regularAddressLtcLivenet 
+//      regularAddressCashLivenet 
+//      regularAddressCashTestnet
     ) {
       return true;
     }

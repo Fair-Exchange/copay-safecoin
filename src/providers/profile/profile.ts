@@ -25,7 +25,7 @@ export class ProfileProvider {
   public wallet: any = {};
   public profile: Profile;
 
-  private UPDATE_PERIOD = 5;
+  private UPDATE_PERIOD = 120;
   private throttledBwsEvent;
   private validationLock: boolean = false;
   private errors = this.bwcProvider.getErrors();

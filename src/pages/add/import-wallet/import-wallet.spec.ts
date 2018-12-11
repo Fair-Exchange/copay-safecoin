@@ -109,6 +109,7 @@ describe('ImportWalletPage', () => {
       testBed.createComponent(ImportWalletPage);
       let info = {
         derivationPath: "m/44'/0'/0'",
+//        bwsURL: 'http://192.168.91.209:3233/bws/api',
         bwsURL: 'https://bwss.safecoin.org/bwss/api',
         coin: 'btc',
         words: 'mom mom mom mom mom mom mom mom mom mom mom mom',
@@ -138,6 +139,7 @@ describe('ImportWalletPage', () => {
       testBed.createComponent(ImportWalletPage);
       let info = {
         derivationPath: "m/44'/0'/0'",
+//        bwsURL: 'http://192.168.91.209:3233/bws/api',
         bwsURL: 'https://bwss.safecoin.org/bwss/api',
         coin: 'btc',
         words: 'mom mom mom mom mom mom mom mom mom mom mom mom',
@@ -158,6 +160,7 @@ describe('ImportWalletPage', () => {
       testBed.createComponent(ImportWalletPage);
       let info = {
         derivationPath: "m/44'/0'/0'",
+//        bwsURL: 'http://192.168.91.209:3233/bwss/api',
         bwsURL: 'https://bwss.safecoin.org/bwss/api',
         coin: 'btc',
         words: 'mom mom',

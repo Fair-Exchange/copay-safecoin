@@ -20,6 +20,7 @@ import { PopupProvider } from '../../../providers/popup/popup';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { PushNotificationsProvider } from '../../../providers/push-notifications/push-notifications';
 import {
+  Coin_Spec,
   WalletOptions,
   WalletProvider
 } from '../../../providers/wallet/wallet';
@@ -29,12 +30,19 @@ import {
   templateUrl: 'import-wallet.html'
 })
 export class ImportWalletPage {
-  private derivationPathByDefault: string;
+/*  private derivationPathByDefault: string;
   private derivationPathForTestnet: string;
   private derivationPathForLtc: string;
   private derivationPathForZcl: string;
+  private derivationPathForZel: string;
+  private derivationPathForZen: string;
+  private derivationPathForBtcz: string;
   private derivationPathForRvn: string;
-  private derivationPathForSafe: string;
+  private derivationPathForSafe: string;*/
+  private DerivationPath;
+  private Coins = Coin_Spec;
+
+
   private importForm: FormGroup;
   private reader: FileReader;
   private defaults;
@@ -53,7 +61,8 @@ export class ImportWalletPage {
   public code;
   public okText: string;
   public cancelText: string;
-  public coins: string[];
+//  public coins: string[];
+  public CoinsOptions: any = {};
 
   constructor(
     private app: App,
@@ -74,9 +83,40 @@ export class ImportWalletPage {
     private pushNotificationsProvider: PushNotificationsProvider,
     private actionSheetProvider: ActionSheetProvider
   ) {
+      this.DerivationPath = {
+      def: this.derivationPathHelperProvider.default,
+      safe: this.derivationPathHelperProvider.defaultSafe,
+      btcz: this.derivationPathHelperProvider.defaultBtcz,
+      zel:  this.derivationPathHelperProvider.defaultZel,
+      zen:  this.derivationPathHelperProvider.defaultZen,
+      anon: this.derivationPathHelperProvider.defaultAnon,
+      zcl:  this.derivationPathHelperProvider.defaultZcl,
+      rvn:  this.derivationPathHelperProvider.defaultRvn,
+      ltc:  this.derivationPathHelperProvider.defaultLtc,
+      btc:  this.derivationPathHelperProvider.default,
+//      bch:  this.derivationPathHelperProvider.defaultBch,
+      testnet: this.derivationPathHelperProvider.defaultTestnet
+    };
+    let tmp_i: number = -1;
+    for (var iii = 0; iii < this.Coins.length; iii++) {
+      if (this.Coins[iii][1] == "1") tmp_i++;
+    }
+    this.CoinsOptions.value = new Array(tmp_i + 1);
+    this.CoinsOptions.description = new Array(tmp_i + 1);
+    this.CoinsOptions.disabled = new Array(tmp_i + 1);
+    tmp_i = -1;
+
+    for (iii = 0; iii < this.Coins.length; iii++) {
+      if (this.Coins[iii][1] == "1") {
+         tmp_i++; 
+         this.CoinsOptions.value[tmp_i] = this.Coins[iii][0];
+         this.CoinsOptions.description[tmp_i] = this.Coins[iii][2];
+         this.CoinsOptions.disabled[tmp_i] = "false";
+      }
+    }
     this.okText = this.translate.instant('Ok');
     this.cancelText = this.translate.instant('Cancel');
-    this.coins = ['safe', 'btcz', 'zel', 'zcl', 'anon', 'rvn', 'ltc', 'btc', 'bch' ];
+//    this.coins = ['safe', 'btcz', 'zel', 'zen', 'zcl', 'anon', 'rvn', 'ltc', 'btc', 'bch' ];
     this.reader = new FileReader();
     this.defaults = this.configProvider.getDefaults();
     this.errors = bwcProvider.getErrors();
@@ -88,12 +128,15 @@ export class ImportWalletPage {
     this.fromOnboarding = this.navParams.data.fromOnboarding;
     this.code = this.navParams.data.code;
     this.selectedTab = 'words';
-    this.derivationPathByDefault = this.derivationPathHelperProvider.default;
+/*    this.derivationPathByDefault = this.derivationPathHelperProvider.default;
     this.derivationPathForTestnet = this.derivationPathHelperProvider.defaultTestnet;
     this.derivationPathForLtc = this.derivationPathHelperProvider.defaultLtc;
     this.derivationPathForZcl = this.derivationPathHelperProvider.defaultZcl;
+    this.derivationPathForBtcz = this.derivationPathHelperProvider.defaultBtcz;
+    this.derivationPathForZel = this.derivationPathHelperProvider.defaultZel;
+    this.derivationPathForZen = this.derivationPathHelperProvider.defaultZen;
     this.derivationPathForRvn = this.derivationPathHelperProvider.defaultRvn;
-    this.derivationPathForSafe = this.derivationPathHelperProvider.defaultSafe;
+    this.derivationPathForSafe = this.derivationPathHelperProvider.defaultSafe; */
     this.showAdvOpts = false;
     this.formFile = null;
 
@@ -103,13 +146,16 @@ export class ImportWalletPage {
       passphrase: [null],
       file: [null],
       filePassword: [null],
-      derivationPath: [this.derivationPathByDefault, Validators.required],
+//      derivationPath: [this.derivationPathByDefault, Validators.required],
+      derivationPath: [this.DerivationPath['def'], Validators.required],
       testnetEnabled: [false],
       bwsURL: [this.defaults.bws.url],
       coin: [null, Validators.required]
     });
-    this.importForm.controls['coin'].setValue(this.coins[0]);
-    this.importForm.controls['derivationPath'].setValue(this.derivationPathForSafe);
+//    this.importForm.controls['coin'].setValue(this.coins[0]);
+//    this.importForm.controls['derivationPath'].setValue(this.derivationPathForSafe);
+    this.importForm.controls['coin'].setValue(this.navParams.data.coin || '');
+    this.importForm.controls['derivationPath'].setValue(this.DerivationPath['def']);
     this.events.subscribe('update:words', data => {
       this.processWalletInfo(data.value);
     });
@@ -213,18 +259,11 @@ export class ImportWalletPage {
   }
 
   public setDerivationPath(): void {
-//  debugger;
     let path = this.importForm.value.testnetEnabled
-      ? this.derivationPathForTestnet
-       : this.importForm.value.coin == 'ltc'
-        ? this.derivationPathForLtc
-         : this.importForm.value.coin == 'zcl'
-          ? this.derivationPathForZcl
-           : this.importForm.value.coin == 'rvn'
-            ? this.derivationPathForRvn
-             : this.importForm.value.coin == 'safe'
-              ? this.derivationPathForSafe
-               : this.derivationPathByDefault;
+      ? this.DerivationPath['testnet']
+       : this.importForm.value.coin
+        ? this.DerivationPath[this.importForm.value.coin]
+         : this.DerivationPath['def'];
     this.importForm.controls['derivationPath'].setValue(path);
   }
 

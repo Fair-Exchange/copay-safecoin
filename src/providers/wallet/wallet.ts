@@ -20,16 +20,31 @@ import { TouchIdProvider } from '../touchid/touchid';
 import { TxFormatProvider } from '../tx-format/tx-format';
 
 export enum Coin {
-  BTC = 'btc',
-  BCH = 'bch',
   SAFE = 'safe',
   BTCZ = 'btcz',
-  ZCL = 'zcl',
-  ANON = 'anon',
   ZEL = 'zel',
   RVN = 'rvn',
-  LTC = 'ltc'
+  BTC = 'btc',
+  ZEN = 'zen'
+/*  ANON = 'anon',
+  ZCL = 'zcl',
+  LTC = 'ltc',
+  BCH = 'bch'*/
 }
+
+export const Coin_Spec: string[][] = [ 
+    ["safe","1","Safecoin (SAFE)",   "19165"],
+    ["btcz","1","BitcoinZ (BTCZ)",   "177"  ],
+    ["zel", "1","Zelcash (ZEL)",     "19167"],
+    ["rvn", "1","Ravencoin (RVN)",   "175"  ],
+    ["btc", "1","Bitcoin (BTC)",     "0"    ],
+    ["zen", "0","Horizen (ZEN)",     "121"  ],
+    ["zcl", "0","Zclassic (ZCL)",    "147"  ],
+    ["ltc", "0","Litecoin (LTC)",    "2"    ],
+    ["anon","0","Anonymous (ANON)",  "0"    ],
+    ["bch", "0","Bitcoin Cash (BCH)","0"    ]
+//  ["name","on/off", "descr.", "deriv.path"]
+];
 
 export interface WalletOptions {
   name: any;
@@ -1541,7 +1556,7 @@ export class WalletProvider {
   }
 
   public getEncodedWalletInfo(wallet, password?: string): Promise<any> {
-   debugger;
+//   debugger;
     return new Promise((resolve, reject) => {
       let derivationPath = wallet.credentials.getBaseAddressDerivationPath();
       let encodingType = {
@@ -1660,6 +1675,8 @@ export class WalletProvider {
       return 'bitcoinanon';
     } else if (coin == 'zel'){
       return 'zelcash';
+    } else if (coin == 'zen'){
+      return 'zen';
     } else if (coin == 'rvn'){
       return 'ravencoin';
     } else if (coin == 'ltc'){
@@ -1670,7 +1687,7 @@ export class WalletProvider {
   }
 
   public copyCopayers(wallet, newWallet): Promise<any> {
-    debugger;
+//    debugger;
     return new Promise((resolve, reject) => {
       let walletPrivKey = this.bwcProvider
         .getBitcore()

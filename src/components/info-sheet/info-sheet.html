@@ -74,6 +74,23 @@
       <span sheet-second-button-text translate>Go Back</span>
     </info-sheet-template>
 
+    <info-sheet-template *ngSwitchCase="'backup-warning2'" type="warning">
+      <span sheet-title-text translate>Clipboard is not SAFE</span>
+      <span sheet-text translate>
+        Clipboard may be viewed by other apps. But I don't care about this.
+      </span>
+      <span sheet-text copy-to-clipboard="{{params?.msg}}">{{params?.msg}}</span>
+      <span sheet-button-text translate>No Matter</span>
+      <span sheet-second-button-text translate>Go Back</span>
+    </info-sheet-template>
+
+    <info-sheet-template *ngSwitchCase="'backup-warning3'" type="warning">
+      <span sheet-title-text translate>NOT SAFE</span>
+      <span sheet-text><h3>I confirm security exception.</h3></span>
+      <span sheet-button-text copy-to-clipboard="{{params?.msg}}">Copy</span>
+      <span sheet-second-button-text translate>Go Back</span>
+    </info-sheet-template>
+
     <info-sheet-template *ngSwitchCase="'backup-ready'" type="success">
       <span sheet-title-text translate>Your {{params.walletType}} wallet is backed up!</span>
       <span sheet-text translate>

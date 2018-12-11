@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 
 @Injectable()
 export class AddressBookProvider {
+  private Bitcore;
   constructor(
     private bwcProvider: BwcProvider,
     private logger: Logger,
@@ -15,57 +16,35 @@ export class AddressBookProvider {
     private translate: TranslateService
   ) {
     this.logger.info('AddressBookProvider initialized.');
+    this.Bitcore = {
+      safe: this.bwcProvider.getBitcoreSafe(),
+      btcz: this.bwcProvider.getBitcoreBtcz(),
+      zel:  this.bwcProvider.getBitcoreZel(),
+      zen:  this.bwcProvider.getBitcoreZen(),
+//      anon: this.bwcProvider.getBitcoreAnon(),
+//      zcl:  this.bwcProvider.getBitcoreZcl(),
+      rvn:  this.bwcProvider.getBitcoreRvn(),
+      ltc:  this.bwcProvider.getBitcoreLtc(),
+      btc:  this.bwcProvider.getBitcore()
+//      bch:  this.bwcProvider.getBitcoreCash()
+    };
+
   }
 
-  private getNetwork(address: string): string {
-debugger;
+  private getNetwork(address: string, coin: string): string {
     let network;
-    try {
-      network = this.bwcProvider.getBitcore().Address(address).network.name;
-    } catch (e) {
+    if (coin){
       try {
-        this.logger.warn('No valid bitcoin address. Trying bitcoin cash...');
-        network = this.bwcProvider.getBitcoreCash().Address(address).network.name;
+        network = this.Bitcore[coin].Address(address).network.name;
       } catch (e) {
-        try {
-          this.logger.warn('No valid bitcoin cash address. Trying safecoin...');
-          network = this.bwcProvider.getBitcoreSafe().Address(address).network.name;
-        } catch (e) {
-          try {
-            this.logger.warn('No valid safecoin address. Trying bitcoinz...');
-            network = this.bwcProvider.getBitcoreBtcz().Address(address).network.name;
-          } catch (e) {
-            try {
-              this.logger.warn('No valid bitcoinz address. Trying ravencoin...');
-              network = this.bwcProvider.getBitcoreRvn().Address(address).network.name;
-            } catch (e) {
-              try {
-                this.logger.warn('No valid ravencoin address. Trying anonymous...');
-                network = this.bwcProvider.getBitcoreAnon().Address(address).network.name;
-              } catch (e) {
-              try {
-                this.logger.warn('No valid anonymous address. Trying zclassic...');
-                network = this.bwcProvider.getBitcoreZcl().Address(address).network.name;
-              } catch (e) {
-               try {
-                  this.logger.warn('No valid zclassic address. Trying zelcash...');
-                  network = this.bwcProvider.getBitcoreZel().Address(address).network.name;
-                } catch (e) {
-                  this.logger.warn('No valid zelcash address. Trying litecoin...');
-                  network = this.bwcProvider.getBitcoreLtc().Address(address).network.name;
-                }
-                }
-              }
-            } 
-          }
-        }
+        this.logger.warn('No valid ' + coin + ' address:' + address);
+        network = "";
       }
     }
     return network;
   }
 
   public get(addr: string): Promise<any> {
-// debugger;
     return new Promise((resolve, reject) => {
       this.persistenceProvider
         .getAddressBook('testnet')
@@ -119,9 +98,9 @@ debugger;
 
   public add(entry): Promise<any> {
     return new Promise((resolve, reject) => {
-      var network = this.getNetwork(entry.address);
+      var network = this.getNetwork(entry.address, entry.coin);
       if (_.isEmpty(network)) {
-        let msg = this.translate.instant('Not valid bitcoin address');
+        let msg = this.translate.instant('Not valid ' + entry.coin + ' address:' + entry.address);
         return reject(msg);
       }
       entry.network = network;
@@ -159,7 +138,7 @@ debugger;
   }
 
   public remove(addr: string, network: string): Promise<any> {
- debugger;
+// debugger;
     return new Promise((resolve, reject) => {
       // var network = this.getNetwork(addr);
       if (_.isEmpty(network)) {

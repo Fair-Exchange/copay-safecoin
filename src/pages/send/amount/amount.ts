@@ -233,6 +233,14 @@ export class AmountPage extends WalletTabsChild {
       });
     }
 
+    if (parentWalletCoin === 'zen' || !parentWalletCoin) {
+      this.availableUnits.push({
+        name: 'Horizen',
+        id: 'zen',
+        shortName: 'ZEN'
+      });
+    }
+
     if (parentWalletCoin === 'rvn' || !parentWalletCoin) {
       this.availableUnits.push({
         name: 'Ravencoin',
@@ -324,8 +332,8 @@ export class AmountPage extends WalletTabsChild {
         this.showSendMax = true;
         nextPage = ConfirmPage;
     }
-/*    switch (this.navParams.data.nextPage) {
-      case 'BitPayCardTopUpPage':
+    switch (this.navParams.data.nextPage) {
+/*      case 'BitPayCardTopUpPage':
         this.showSendMax = true;
         nextPage = BitPayCardTopUpPage;
         break;
@@ -343,21 +351,21 @@ export class AmountPage extends WalletTabsChild {
         break;
       case 'SellCoinbasePage':
         nextPage = SellCoinbasePage;
-        break;
+        break; */
       case 'CustomAmountPage':
         nextPage = CustomAmountPage;
         break;
-      case 'BuyMercadoLibrePage':
+/*      case 'BuyMercadoLibrePage':
         nextPage = BuyMercadoLibrePage;
         break;
       case 'ShapeshiftConfirmPage':
         this.showSendMax = true;
         nextPage = ShapeshiftConfirmPage;
-        break; 
+        break; */
       default:
         this.showSendMax = true;
         nextPage = ConfirmPage;
-    }          */
+    }          
     return nextPage;
   }
 

@@ -68,6 +68,7 @@ export class HomePage {
   public walletsZcl;
   public walletsAnon;
   public walletsZel;
+  public walletsZen;
   public walletsRvn;
   public walletsLtc;
   public cachedBalanceUpdateOn: string;
@@ -99,6 +100,7 @@ export class HomePage {
   public showReorderZcl: boolean;
   public showReorderAnon: boolean;
   public showReorderZel: boolean;
+  public showReorderZen: boolean;
   public showReorderRvn: boolean;
   public showReorderLtc: boolean;
   public showIntegration;
@@ -150,6 +152,7 @@ export class HomePage {
     this.showReorderZcl = false;
     this.showReorderAnon = false;
     this.showReorderZel = false;
+    this.showReorderZen = false;
     this.showReorderRvn = false;
     this.showReorderLtc = false;
     this.showReorderBch = false;
@@ -384,6 +387,9 @@ export class HomePage {
       this.walletsZel = _.filter(this.wallets, (x: any) => {
         return x.credentials.coin == 'zel';
       });
+      this.walletsZen = _.filter(this.wallets, (x: any) => {
+        return x.credentials.coin == 'zen';
+      });
       this.walletsRvn = _.filter(this.wallets, (x: any) => {
         return x.credentials.coin == 'rvn';
       });
@@ -464,7 +470,7 @@ export class HomePage {
         if (!this.validDataFromClipboard) {
           return;
         }
-        const dataToIgnore = ['BitcoinAddress', 'SafecoinAddress', 'BitcoinzAddress', 'ZclassicAddress', 'AnonymousAddress', 'ZelcashAddress', 'RavencoinAddress', 'LitecoinAddress', 'BitcoinCashAddress'];
+        const dataToIgnore = ['BitcoinAddress', 'SafecoinAddress', 'BitcoinzAddress', 'ZclassicAddress', 'AnonymousAddress', 'ZelcashAddress', 'HorizenAddress', 'RavencoinAddress', 'LitecoinAddress', 'BitcoinCashAddress'];
         if (dataToIgnore.indexOf(this.validDataFromClipboard.type) > -1) {
           this.validDataFromClipboard = null;
           return;
@@ -675,13 +681,13 @@ export class HomePage {
     this.externalLinkProvider.open(url);
   }
 
-  public goToAddView(): void {
-    this.navCtrl.push(AddPage);
+  public goToAddView(coinname: string): void {
+    this.navCtrl.push(AddPage, {coin: coinname});
   }
 
   public goToWalletDetails(wallet): void {
     if (this.showReorderAll || this.showReorderBtc || this.showReorderSafe || this.showReorderBtcz || 
-        this.showReorderZcl || this.showReorderAnon || this.showReorderZel || this.showReorderRvn || 
+        this.showReorderZcl || this.showReorderAnon || this.showReorderZel || this.showReorderZen || this.showReorderRvn || 
         this.showReorderLtc || this.showReorderBch) return;
     this.events.unsubscribe('finishIncomingDataMenuEvent');
     this.events.unsubscribe('bwsEvent');
@@ -741,6 +747,9 @@ export class HomePage {
   }
   public reorderZel(): void {
     this.showReorderZel = !this.showReorderZel;
+  }
+  public reorderZen(): void {
+    this.showReorderZen = !this.showReorderZen;
   }
   public reorderRvn(): void {
     this.showReorderRvn = !this.showReorderRvn;
@@ -806,6 +815,14 @@ export class HomePage {
     this.walletsZel.splice(indexes.from, 1);
     this.walletsZel.splice(indexes.to, 0, element);
     _.each(this.walletsZel, (wallet, index: number) => {
+      this.profileProvider.setWalletOrder(wallet.id, index);
+    });
+  }
+  public reorderWalletsZen(indexes): void {
+    let element = this.walletsZen[indexes.from];
+    this.walletsZen.splice(indexes.from, 1);
+    this.walletsZen.splice(indexes.to, 0, element);
+    _.each(this.walletsZen, (wallet, index: number) => {
       this.profileProvider.setWalletOrder(wallet.id, index);
     });
   }

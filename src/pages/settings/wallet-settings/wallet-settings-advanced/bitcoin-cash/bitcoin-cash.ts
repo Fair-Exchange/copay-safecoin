@@ -112,7 +112,8 @@ export class BitcoinCashPage extends WalletTabsChild {
       n: wallet.n,
       myName: wallet.credentials.copayerName,
       networkName: wallet.network,
-      coin: Coin.BCH,
+//      coin: Coin.BCH,
+      coin: Coin.BTC,
       walletPrivKey: wallet.credentials.walletPrivKey,
       compliantDerivation: wallet.credentials.compliantDerivation
     };

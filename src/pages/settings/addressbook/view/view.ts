@@ -26,12 +26,13 @@ export class AddressbookViewPage {
   public network: string;
 
   private bitcore;
-  private bitcoreCash;
+//  private bitcoreCash;
   private bitcoreSafe;
   private bitcoreBtcz;
   private bitcoreZcl;
   private bitcoreAnon;
   private bitcoreZel;
+  private bitcoreZen;
   private bitcoreRvn;
   private bitcoreLtc;
 //  private coin: string;
@@ -46,12 +47,13 @@ export class AddressbookViewPage {
     private translate: TranslateService
   ) {
     this.bitcore = this.bwcProvider.getBitcore();
-    this.bitcoreCash = this.bwcProvider.getBitcoreCash();
+//    this.bitcoreCash = this.bwcProvider.getBitcoreCash();
     this.bitcoreSafe = this.bwcProvider.getBitcoreSafe();
     this.bitcoreBtcz = this.bwcProvider.getBitcoreBtcz();
     this.bitcoreZcl = this.bwcProvider.getBitcoreZcl();
     this.bitcoreAnon = this.bwcProvider.getBitcoreAnon();
     this.bitcoreZel = this.bwcProvider.getBitcoreZel();
+    this.bitcoreZen = this.bwcProvider.getBitcoreZen();
     this.bitcoreRvn = this.bwcProvider.getBitcoreRvn();
     this.bitcoreLtc = this.bwcProvider.getBitcoreLtc();
     this.address = this.navParams.data.contact.address;
@@ -63,8 +65,8 @@ export class AddressbookViewPage {
 
     const btcAddress = this.bitcore.Address.isValid(
       this.address, this.network);
-    const cashAddress = this.bitcoreCash.Address.isValid(
-      this.address, this.network);
+//    const cashAddress = this.bitcoreCash.Address.isValid(
+//      this.address, this.network);
     const safeAddress = this.bitcoreSafe.Address.isValid(
       this.address, this.network);
     const btczAddress = this.bitcoreBtcz.Address.isValid(
@@ -75,11 +77,13 @@ export class AddressbookViewPage {
       this.address, this.network);
     const zelAddress = this.bitcoreZel.Address.isValid(
       this.address, this.network);
+    const zenAddress = this.bitcoreZen.Address.isValid(
+      this.address, this.network);
     const rvnAddress = this.bitcoreRvn.Address.isValid(
       this.address, this.network);
     const ltcAddress = this.bitcoreLtc.Address.isValid(
       this.address, this.network);
-    if (this.coinname == 'Bitcoin Cash (BCH)' && cashAddress){
+    if (this.coinname == 'Bitcoin Cash (BCH)' /* && cashAddress*/ ){
       this.coin = 'bch';
     } else  if (this.coinname == 'Safecoin (SAFE)' && safeAddress ){
       this.coin = 'safe';
@@ -87,6 +91,8 @@ export class AddressbookViewPage {
       this.coin = 'btcz';
     } else  if (this.coinname == 'Zelcash (ZEL)' &&  zelAddress){
       this.coin = 'zel';
+    } else  if (this.coinname == 'Horizen (ZEN)' &&  zenAddress){
+      this.coin = 'zen';
     } else  if (this.coinname == 'Zclassic (ZCL)' && zclAddress){
       this.coin = 'zcl';
     } else  if (this.coinname == 'Anonymous (ANON)' && anonAddress){

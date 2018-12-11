@@ -6,12 +6,15 @@ import { Logger } from '../../../providers/logger/logger';
 import { AddressbookAddPage } from './add/add';
 import { AddressbookViewPage } from './view/view';
 
+import { Coin_Spec } from '../../../providers/wallet/wallet';
+
 @Component({
   selector: 'page-addressbook',
   templateUrl: 'addressbook.html'
 })
 export class AddressbookPage {
   private cache: boolean = false;
+  private Coins = Coin_Spec;
   public addressbook: object[] = [];
   public filteredAddressbook: object[] = [];
 
@@ -25,13 +28,14 @@ export class AddressbookPage {
     private addressbookProvider: AddressBookProvider
   ) {
     this.initAddressbook();
-  }
+}
 
   ionViewDidEnter() {
     if (this.cache) this.initAddressbook();
     this.cache = true;
+    this.Coins = Coin_Spec;
   }
-
+  
   private initAddressbook(): void {
     this.addressbookProvider
       .list()
@@ -43,7 +47,7 @@ export class AddressbookPage {
           contacts.push({
             name: _.isObject(contact) ? contact.name : contact,
             address: k,
-            coin: _.isObject(contact) ? contact.coin : '???',
+            coin: _.isObject(contact) ? this.Coins[this.Coins.indexOf(this.Coins.filter(function foo(item) {return item[0] == contact.coin})[0])][2] : '???',
             email: _.isObject(contact) ? contact.email : null,
             note: _.isObject(contact) ? contact.note : null,
             network: _.isObject(contact) ? contact.network : null

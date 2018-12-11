@@ -99,13 +99,14 @@ export class TxFormatProvider {
     if (
       (!this.rate.isBtcAvailable() && coin == 'btc') ||
       (!this.rate.isSafeAvailable() && coin == 'safe') ||
-      (!this.rate.isSafeAvailable() && coin == 'btcz') ||
-      (!this.rate.isSafeAvailable() && coin == 'zcl') ||
-      (!this.rate.isSafeAvailable() && coin == 'anon') ||
-      (!this.rate.isSafeAvailable() && coin == 'zel') ||
-      (!this.rate.isSafeAvailable() && coin == 'rvn') ||
-      (!this.rate.isSafeAvailable() && coin == 'ltc') ||
-      (!this.rate.isBchAvailable() && coin == 'bch')
+      (!this.rate.isBtczAvailable() && coin == 'btcz') ||
+//      (!this.rate.isZclAvailable() && coin == 'zcl') ||
+//      (!this.rate.isAnonAvailable() && coin == 'anon') ||
+      (!this.rate.isZelAvailable() && coin == 'zel') ||
+      (!this.rate.isZenAvailable() && coin == 'zen') ||
+      (!this.rate.isRvnAvailable() && coin == 'rvn') ||
+      (!this.rate.isLtcAvailable() && coin == 'ltc') // ||
+//      (!this.rate.isBchAvailable() && coin == 'bch')
     )
       return null;
     return val();
@@ -240,7 +241,7 @@ export class TxFormatProvider {
     // If fiat currency
     if (currency != 'BCH' && currency != 'BTC' && currency != 'SAFE' && currency != 'BTCZ' &&
         currency != 'ZCL' && currency != 'ANON' && currency != 'ZEL' && currency != 'RVN' && 
-        currency != 'LTC' && currency != 'sat') {
+        currency != 'LTC' && currency != 'ZEN' && currency != 'sat') {
       let formattedAmount = onlyIntegers
         ? this.filter.formatFiatAmount(amount.toFixed(0))
         : this.filter.formatFiatAmount(amount);

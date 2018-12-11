@@ -60,15 +60,7 @@
     <ion-item *ngIf="selectedTab != 'file'">
       <ion-label stacked>{{'Coin' | translate}}</ion-label>
       <ion-select okText="{{okText}}" cancelText="{{cancelText}}" placeholder="{{'Select a coin' | translate}}" formControlName="coin" (ionChange)="setDerivationPath()">
-        <ion-option value="safe">Safecoin (SAFE)</ion-option>
-        <ion-option value="btcz">BitcoinZ (BTCZ)</ion-option>
-        <ion-option value="anon" disabled>Anonymous (ANON)</ion-option>
-        <ion-option value="zcl">Zclassic (ZCL)</ion-option>
-        <ion-option value="zel">Zelcash (ZEL)</ion-option>
-        <ion-option value="rvn">Ravencoin (RVN)</ion-option>
-        <ion-option value="ltc">Litecoin (LTC)</ion-option>
-        <ion-option value="btc">Bitcoin (BTC)</ion-option>
-        <ion-option value="bch">Bitcoin Cash (BCH)</ion-option>
+        <ion-option *ngFor="let item of CoinsOptions.description; let i = index" [value]="CoinsOptions.value[i]" [disabled]="CoinsOptions.disabled[i]">{{item}}</ion-option>
       </ion-select>
     </ion-item>
 

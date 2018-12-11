@@ -21,7 +21,7 @@
     </ion-item>
 
     <ion-item>
-      <ion-label stacked>{{ 'Bitcoin Address' | translate }}</ion-label>
+      <ion-label stacked>{{ 'Coin Address' | translate }}</ion-label>
       <ion-input formControlName="address" type="text" [value]="addressBookAdd.value.address" address-validator></ion-input>
 
       <ion-icon *ngIf="addressBookAdd.controls.address.status == 'VALID' && coinSet(addressBookAdd.value.address)" name="ios-checkmark-circle" class="check success" item-right></ion-icon>
@@ -39,7 +39,7 @@
     <ion-item>
       <ion-label stacked>{{'Coin' | translate}}</ion-label>
          <ion-select okText="{{okText}}" cancelText="{{cancelText}}" formControlName="coin" placeholder="{{'Select a coin' | translate}}" (ionChange)="coinSet('set')">
-          <ion-option *ngFor="let coinname of coinslist" [value]="coinname">{{coinname}}</ion-option>
+          <ion-option *ngFor="let item of CoinsOptions.description; let i = index" [value]="CoinsOptions.value[i]" [disabled]="CoinsOptions.disabled[i]">{{item}}</ion-option>
       </ion-select>                           
     </ion-item>
 

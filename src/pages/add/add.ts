@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, NavParams} from 'ionic-angular';
 import { Logger } from '../../providers/logger/logger';
 
 // pages
@@ -12,21 +12,21 @@ import { JoinWalletPage } from './join-wallet/join-wallet';
   templateUrl: 'add.html'
 })
 export class AddPage {
-  constructor(private navCtrl: NavController, private logger: Logger) {}
+  constructor(private navCtrl: NavController, private navParams: NavParams, private logger: Logger) {}
 
   ionViewDidLoad() {
     this.logger.info('ionViewDidLoad AddPage');
   }
 
   public goToCreateWallet(isShared: boolean): void {
-    this.navCtrl.push(CreateWalletPage, { isShared });
+    this.navCtrl.push(CreateWalletPage, { isShared, coin: this.navParams.data.coin });
   }
 
   public goToJoinWallet(): void {
-    this.navCtrl.push(JoinWalletPage);
+    this.navCtrl.push(JoinWalletPage, { coin: this.navParams.data.coin });
   }
 
   public goToImportWallet(): void {
-    this.navCtrl.push(ImportWalletPage);
+    this.navCtrl.push(ImportWalletPage, { coin: this.navParams.data.coin });
   }
 }

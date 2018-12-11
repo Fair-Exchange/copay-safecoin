@@ -17,6 +17,7 @@ import { PopupProvider } from '../../../providers/popup/popup';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { PushNotificationsProvider } from '../../../providers/push-notifications/push-notifications';
 import {
+  Coin_Spec,
   WalletOptions,
   WalletProvider
 } from '../../../providers/wallet/wallet';
@@ -31,16 +32,22 @@ export class JoinWalletPage {
   public seedOptions;
   public okText: string;
   public cancelText: string;
-  public coins: string[];
+//  public coins: string[];
+  public CoinsOptions: any = {};
 
   private joinForm: FormGroup;
   private regex: RegExp;
-  private derivationPathByDefault: string;
+/*  private derivationPathByDefault: string;
   private derivationPathForTestnet: string;
-  private derivationPathForLtc: string;
+  private derivationPathForBtcz: string;
   private derivationPathForZcl: string;
+  private derivationPathForLtc: string;
+  private derivationPathForZen: string;
+  private derivationPathForZel: string;
   private derivationPathForRvn: string;
-  private derivationPathForSafe: string;
+  private derivationPathForSafe: string;*/
+  private DerivationPath;
+  private Coins = Coin_Spec;
 
   constructor(
     private app: App,
@@ -59,16 +66,50 @@ export class JoinWalletPage {
     private pushNotificationsProvider: PushNotificationsProvider,
     private actionSheetProvider: ActionSheetProvider
   ) {
+      this.DerivationPath = {
+      def: this.derivationPathHelperProvider.default,
+      safe: this.derivationPathHelperProvider.defaultSafe,
+      btcz: this.derivationPathHelperProvider.defaultBtcz,
+      zel:  this.derivationPathHelperProvider.defaultZel,
+      zen:  this.derivationPathHelperProvider.defaultZen,
+      anon: this.derivationPathHelperProvider.defaultAnon,
+      zcl:  this.derivationPathHelperProvider.defaultZcl,
+      rvn:  this.derivationPathHelperProvider.defaultRvn,
+      ltc:  this.derivationPathHelperProvider.defaultLtc,
+      btc:  this.derivationPathHelperProvider.default,
+//      bch:  this.derivationPathHelperProvider.defaultBch,
+      testnet: this.derivationPathHelperProvider.defaultTestnet
+    };
+    let tmp_i: number = -1;
+    for (var iii = 0; iii < this.Coins.length; iii++) {
+      if (this.Coins[iii][1] == "1") tmp_i++;
+    }
+    this.CoinsOptions.value = new Array(tmp_i + 1);
+    this.CoinsOptions.description = new Array(tmp_i + 1);
+    this.CoinsOptions.disabled = new Array(tmp_i + 1);
+    tmp_i = -1;
+
+    for (iii = 0; iii < this.Coins.length; iii++) {
+      if (this.Coins[iii][1] == "1") {
+         tmp_i++; 
+         this.CoinsOptions.value[tmp_i] = this.Coins[iii][0];
+         this.CoinsOptions.description[tmp_i] = this.Coins[iii][2];
+         this.CoinsOptions.disabled[tmp_i] = "false";
+      }
+    }
     this.okText = this.translate.instant('Ok');
     this.cancelText = this.translate.instant('Cancel');
     this.defaults = this.configProvider.getDefaults();
-    this.derivationPathByDefault = this.derivationPathHelperProvider.default;
+/*    this.derivationPathByDefault = this.derivationPathHelperProvider.default;
     this.derivationPathForTestnet = this.derivationPathHelperProvider.defaultTestnet;
     this.derivationPathForLtc = this.derivationPathHelperProvider.defaultLtc;
+    this.derivationPathForBtcz = this.derivationPathHelperProvider.defaultBtcz;
     this.derivationPathForZcl = this.derivationPathHelperProvider.defaultZcl;
+    this.derivationPathForZen = this.derivationPathHelperProvider.defaultZen;
+    this.derivationPathForZel = this.derivationPathHelperProvider.defaultZel;
     this.derivationPathForRvn = this.derivationPathHelperProvider.defaultRvn;
     this.derivationPathForSafe = this.derivationPathHelperProvider.defaultSafe;
-    this.coins = ['safe', 'btcz', 'zel', 'zcl', 'anon', 'rvn', 'ltc', 'btc', 'bch' ];
+    this.coins = ['safe', 'btcz', 'zel', 'zen', 'zcl', 'anon', 'rvn', 'ltc', 'btc', 'bch' ];*/
 
     this.showAdvOpts = false;
 
@@ -82,11 +123,12 @@ export class JoinWalletPage {
       bwsURL: [this.defaults.bws.url],
       selectedSeed: ['new'],
       recoveryPhrase: [null],
-      derivationPath: [this.derivationPathByDefault],
+//      derivationPath: [this.derivationPathByDefault],
+      derivationPath: [this.DerivationPath['def']],
       coin: [null, Validators.required]
     });
-    this.joinForm.controls['coin'].setValue(this.coins[0]);
-    this.joinForm.controls['derivationPath'].setValue(this.derivationPathForSafe);
+    this.joinForm.controls['coin'].setValue(this.navParams.data.coin || '');
+    this.joinForm.controls['derivationPath'].setValue(this.DerivationPath['def']);
 
     this.seedOptions = [
       {
@@ -107,16 +149,10 @@ export class JoinWalletPage {
   }
   public setDerivationPath(): void {
     let path: string = this.joinForm.value.testnet
-      ? this.derivationPathForTestnet
-       : this.joinForm.value.coin == 'ltc'
-        ? this.derivationPathForLtc
-         : this.joinForm.value.coin == 'zcl'
-          ? this.derivationPathForZcl
-           : this.joinForm.value.coin == 'rvn'
-            ? this.derivationPathForRvn
-             : this.joinForm.value.coin == 'safe'
-              ? this.derivationPathForSafe
-               : this.derivationPathByDefault;
+      ? this.DerivationPath['testnet']
+       : this.joinForm.value.coin
+        ? this.DerivationPath[this.joinForm.value.coin]
+         : this.DerivationPath['def'];
     this.joinForm.controls['derivationPath'].setValue(path);
   }
 

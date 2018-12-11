@@ -11,18 +11,20 @@ export class RateProvider {
   private ratesBCH;
   private ratesSAFE;
   private ratesBTCZ;
-  private ratesZCL;
-  private ratesANON;
+//  private ratesZCL;
+//  private ratesANON;
   private ratesZEL;
+  private ratesZEN;
   private ratesRVN;
   private ratesLTC;
   private ratesBtcAvailable: boolean;
   private ratesBchAvailable: boolean;
   private ratesSafeAvailable: boolean;
   private ratesBtczAvailable: boolean;
-  private ratesZclAvailable: boolean;
-  private ratesAnonAvailable: boolean;
+//  private ratesZclAvailable: boolean;
+//  private ratesAnonAvailable: boolean;
   private ratesZelAvailable: boolean;
+  private ratesZenAvailable: boolean;
   private ratesRvnAvailable: boolean;
   private ratesLtcAvailable: boolean;
 
@@ -33,9 +35,10 @@ export class RateProvider {
   private bchRateServiceUrl = env.ratesAPI.bch;
   private safeRateServiceUrl = env.ratesAPI.safe;
   private btczRateServiceUrl = env.ratesAPI.btcz;
-  private zclRateServiceUrl = env.ratesAPI.zcl;
-  private anonRateServiceUrl = env.ratesAPI.anon;
+//  private zclRateServiceUrl = env.ratesAPI.zcl;
+//  private anonRateServiceUrl = env.ratesAPI.anon;
   private zelRateServiceUrl = env.ratesAPI.zel;
+  private zenRateServiceUrl = env.ratesAPI.zen;
   private rvnRateServiceUrl = env.ratesAPI.rvn;
   private ltcRateServiceUrl = env.ratesAPI.ltc;
 /*  private names = {
@@ -148,9 +151,10 @@ export class RateProvider {
     this.ratesBCH = {};
     this.ratesSAFE = {};
     this.ratesBTCZ = {};
-    this.ratesZCL = {};
-    this.ratesANON = {};
+//    this.ratesZCL = {};
+//    this.ratesANON = {};
     this.ratesZEL = {};
+    this.ratesZEN = {};
     this.ratesRVN = {};
     this.ratesLTC = {};
     this.SAT_TO_BTC = 1 / 1e8;
@@ -166,8 +170,9 @@ export class RateProvider {
     this.updateRatesBtcz();
     this.updateRatesLtc();
     this.updateRatesZel();
-    this.updateRatesZcl();
-    this.updateRatesAnon();
+    this.updateRatesZen();
+//    this.updateRatesZcl();
+//    this.updateRatesAnon();
     this.updateRatesRvn();
   }
 
@@ -225,7 +230,7 @@ export class RateProvider {
         });
     });
   }
-  public updateRatesZcl(): Promise<any> {
+/*  public updateRatesZcl(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.getZCL()
         .then(dataZCL => {
@@ -258,7 +263,7 @@ export class RateProvider {
         });
     });
   }
-
+  */
   public updateRatesZel(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.getZEL()
@@ -272,6 +277,23 @@ export class RateProvider {
         .catch(errorZEL => {
           this.logger.error(errorZEL);
           reject(errorZEL);
+        });
+    });
+  }
+
+  public updateRatesZen(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.getZEN()
+        .then(dataZEN => {
+          _.each(dataZEN, currency => {
+            this.ratesZEN[currency.code] = currency.rate;
+          });
+          this.ratesZenAvailable = true;
+          resolve();
+        })
+        .catch(errorZEN => {
+          this.logger.error(errorZEN);
+          reject(errorZEN);
         });
     });
   }
@@ -309,7 +331,7 @@ export class RateProvider {
         });
     });
   }
-
+      
   public updateRatesBch(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.getBCH()
@@ -326,7 +348,7 @@ export class RateProvider {
         });
     });
   }
-
+    
   public getBTC(): Promise<any> {
     return new Promise(resolve => {
       this.http.get(this.btcrateServiceUrl).subscribe(data => {
@@ -348,7 +370,7 @@ export class RateProvider {
       });
     });
   }
-  public getZCL(): Promise<any> {
+/*  public getZCL(): Promise<any> {
     return new Promise(resolve => {
       this.http.get(this.zclRateServiceUrl).subscribe(data => {
         resolve(data);
@@ -361,10 +383,17 @@ export class RateProvider {
         resolve(data);
       });
     });
-  }
+  } */
   public getZEL(): Promise<any> {
     return new Promise(resolve => {
       this.http.get(this.zelRateServiceUrl).subscribe(data => {
+        resolve(data);
+      });
+    });
+  }
+  public getZEN(): Promise<any> {
+    return new Promise(resolve => {
+      this.http.get(this.zenRateServiceUrl).subscribe(data => {
         resolve(data);
       });
     });
@@ -391,15 +420,16 @@ export class RateProvider {
       });
     });
   }
-
+  
   public getRate(code: string, chain?: string): number {
-    if (chain == 'bch') return this.ratesBCH[code];
-    else if (chain == 'btc') return this.ratesBTC[code];
+    if (chain == 'btc') return this.ratesBTC[code];
+    else if (chain == 'bch') return this.ratesBCH[code];
     else if (chain == 'safe') return this.ratesSAFE[code];
     else if (chain == 'btcz') return this.ratesBTCZ[code];
-    else if (chain == 'zcl') return this.ratesZCL[code];
-    else if (chain == 'anon') return this.ratesANON[code];
+//    else if (chain == 'zcl') return this.ratesZCL[code];
+//    else if (chain == 'anon') return this.ratesANON[code];
     else if (chain == 'zel') return this.ratesZEL[code];
+    else if (chain == 'zen') return this.ratesZEL[code];
     else if (chain == 'rvn') return this.ratesRVN[code];
     else return this.ratesLTC[code];
   }
@@ -419,13 +449,16 @@ export class RateProvider {
   public isBtczAvailable() {
     return this.ratesBtczAvailable;
   }
-  public isZclAvailable() {
+/*  public isZclAvailable() {
     return this.ratesZclAvailable;
   }
   public isAnonAvailable() {
     return this.ratesAnonAvailable;
-  }
+  } */
   public isZelAvailable() {
+    return this.ratesZelAvailable;
+  }
+  public isZenAvailable() {
     return this.ratesZelAvailable;
   }
   public isRvnAvailable() {
@@ -439,15 +472,16 @@ export class RateProvider {
   public isBchAvailable() {
     return this.ratesBchAvailable;
   }
-
+  
   public toFiat(satoshis: number, code: string, chain: string): number {
     if (
       (!this.isBtcAvailable() && chain == 'btc') ||
       (!this.isSafeAvailable() && chain == 'safe') ||
       (!this.isBtczAvailable() && chain == 'btcz') ||
-      (!this.isZclAvailable() && chain == 'zcl') ||
-      (!this.isAnonAvailable() && chain == 'anon') ||
+//      (!this.isZclAvailable() && chain == 'zcl') ||
+//      (!this.isAnonAvailable() && chain == 'anon') ||
       (!this.isZelAvailable() && chain == 'zel') ||
+      (!this.isZenAvailable() && chain == 'zen') ||
       (!this.isRvnAvailable() && chain == 'rvn') ||
       (!this.isLtcAvailable() && chain == 'ltc') ||
       (!this.isBchAvailable() && chain == 'bch')
@@ -462,9 +496,10 @@ export class RateProvider {
       (!this.isBtcAvailable() && chain == 'btc') ||
       (!this.isSafeAvailable() && chain == 'safe') ||
       (!this.isBtczAvailable() && chain == 'btcz') ||
-      (!this.isZclAvailable() && chain == 'zcl') ||
-      (!this.isAnonAvailable() && chain == 'anon') ||
+//      (!this.isZclAvailable() && chain == 'zcl') ||
+//      (!this.isAnonAvailable() && chain == 'anon') ||
       (!this.isZelAvailable() && chain == 'zel') ||
+      (!this.isZenAvailable() && chain == 'zen') ||
       (!this.isRvnAvailable() && chain == 'rvn') ||
       (!this.isLtcAvailable() && chain == 'ltc') ||
       (!this.isBchAvailable() && chain == 'bch')
@@ -495,11 +530,12 @@ export class RateProvider {
         (this.ratesBtcAvailable && chain == 'btc') ||
         (this.ratesSafeAvailable && chain == 'safe') ||
         (this.ratesBtczAvailable && chain == 'btcz') ||
-        (this.ratesZclAvailable && chain == 'zcl') ||
-        (this.ratesAnonAvailable && chain == 'anon') ||
+//        (this.ratesZclAvailable && chain == 'zcl') ||
+//        (this.ratesAnonAvailable && chain == 'anon') ||
         (this.ratesZelAvailable && chain == 'zel') ||
+        (this.ratesZenAvailable && chain == 'zen') ||
         (this.ratesRvnAvailable && chain == 'rvn') ||
-        (this.ratesLtcAvailable && chain == 'ltc') ||
+        (this.ratesLtcAvailable && chain == 'ltc')  ||
         (this.ratesBchAvailable && chain == 'bch')
       )
         resolve();
@@ -513,7 +549,7 @@ export class RateProvider {
           this.updateRatesBch().then(() => {
             resolve();
           });
-        }
+        } 
         if (chain == 'safe') {
           this.updateRatesSafe().then(() => {
             resolve();
@@ -524,7 +560,7 @@ export class RateProvider {
             resolve();
           });
         }
-        if (chain == 'zcl') {
+/*        if (chain == 'zcl') {
           this.updateRatesZcl().then(() => {
             resolve();
           });
@@ -533,9 +569,14 @@ export class RateProvider {
           this.updateRatesAnon().then(() => {
             resolve();
           });
-        }
+        } */
         if (chain == 'zel') {
           this.updateRatesZel().then(() => {
+            resolve();
+          });
+        }
+        if (chain == 'zen') {
+          this.updateRatesZen().then(() => {
             resolve();
           });
         }

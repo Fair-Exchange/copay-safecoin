@@ -109,12 +109,13 @@ export interface Config {
 
   blockExplorerUrl: {
     btc: string;
-    bch: string;
+//    bch: string;
     safe: string;
     btcz: string;
     zcl: string;
-    anon: string;
+//    anon: string;
     zel: string;
+    zen: string;
     rvn: string;
     ltc: string;
   };
@@ -150,7 +151,7 @@ const configDefault: Config = {
   // Bitcore wallet service URL
   bws: {
     url: 'https://bwss.safecoin.org/bwss/api'
-//    url: 'http://192.168.91.206:3232/bws/api'
+//    url: 'http://192.168.91.209:3233/bwss/api'
   },
 
   download: {
@@ -226,12 +227,13 @@ const configDefault: Config = {
 
   blockExplorerUrl: {
     btc: 'insight.bitpay.com',
-    bch: 'bch-insight.bitpay.com/#',
+//    bch: 'bch-insight.bitpay.com/#',
     safe: 'explorer.safecoin.org',
     btcz: 'explorer.btcz.rocks',
     zcl: 'explorer.zclassicblue.org:3001/insight',
-    anon: 'explorer.anonfork.io/insight',
+//    anon: 'explorer.anonfork.io/insight',
     zel: 'explorer2.zel.cash',
+    zen: 'explorer.zensystem.io',
     rvn: 'ravencoin.network',
     ltc: 'insight.litecore.io'
   }

@@ -49,6 +49,7 @@ export class PaperWalletPage {
   private bitcoreZcl;
   private bitcoreAnon;
   private bitcoreZel;
+  private bitcoreZen;
   private bitcoreRvn;
   private bitcoreLtc;
 
@@ -77,6 +78,7 @@ export class PaperWalletPage {
     this.bitcoreZcl = this.bwcProvider.getBitcoreZcl();
     this.bitcoreAnon = this.bwcProvider.getBitcoreAnon();
     this.bitcoreZel = this.bwcProvider.getBitcoreZel();
+    this.bitcoreZen = this.bwcProvider.getBitcoreZen();
     this.bitcoreRvn = this.bwcProvider.getBitcoreRvn();
     this.bitcoreLtc = this.bwcProvider.getBitcoreLtc();
     this.isCordova = this.platformProvider.isCordova;
@@ -173,6 +175,9 @@ export class PaperWalletPage {
     } else if (coin == 'zel') {
       try {new this.bitcoreZel.PrivateKey(privateKey, 'livenet');}
       catch (err) {return false;}
+    } else if (coin == 'zen') {
+      try {new this.bitcoreZen.PrivateKey(privateKey, 'livenet');}
+      catch (err) {return false;}
     } else if (coin == 'rvn') {
       try {new this.bitcoreRvn.PrivateKey(privateKey, 'livenet');}
       catch (err) {return false;}
@@ -180,7 +185,7 @@ export class PaperWalletPage {
       try {new this.bitcoreLtc.PrivateKey(privateKey, 'livenet');}
       catch (err) {return false;}
     } else {
-      debugger;
+//      debugger;
       return false;
     }
     return true;
@@ -194,7 +199,7 @@ export class PaperWalletPage {
         this.passphrase,
         (err, privateKey: string) => {
           if (err) return reject(err);
-          debugger;
+//          debugger;
           if (!this.checkPrivateKey(privateKey, coin))
             return reject(new Error('Invalid private key'));
 

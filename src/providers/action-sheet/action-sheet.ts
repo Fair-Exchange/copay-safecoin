@@ -12,6 +12,8 @@ export type InfoSheetType =
   | 'backup-failed'
   | 'backup-ready'
   | 'backup-warning'
+  | 'backup-warning2'
+  | 'backup-warning3'
   | 'copayers'
   | 'copy-to-clipboard'
   | 'custom-amount'

@@ -77,7 +77,7 @@
           {{pk}}
         </ion-note>
       </div>
-      <span *ngIf="$index == 0">({{basePath}})</span>
+      <span *ngIf="$index != 0">({{basePath}})</span>
     </ion-item>
     <div *ngIf="!needsBackup && canSign">
       <ion-item-divider></ion-item-divider>

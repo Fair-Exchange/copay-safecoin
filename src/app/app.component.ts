@@ -433,6 +433,9 @@ export class CopayApp {
     } else if (pathData.indexOf('zelcash:/') != -1) {
       this.logger.debug('Zelcash URL found');
       this.handleOpenUrl(pathData.substring(pathData.indexOf('zelcash:/')));
+    } else if (pathData.indexOf('zen:/') != -1) {
+      this.logger.debug('Horizen URL found');
+      this.handleOpenUrl(pathData.substring(pathData.indexOf('zen:/')));
     } else if (pathData.indexOf('ravencoin:/') != -1) {
       this.logger.debug('Ravencoin URL found');
       this.handleOpenUrl(pathData.substring(pathData.indexOf('ravencoin:/')));

@@ -52,6 +52,7 @@ export class SettingsPage {
   public walletsZcl;
   public walletsAnon;
   public walletsZel;
+  public walletsZen;
   public walletsRvn;
   public walletsLtc;
   public config;
@@ -86,6 +87,7 @@ export class SettingsPage {
     this.walletsZcl = [];
     this.walletsAnon = [];
     this.walletsZel = [];
+    this.walletsZen = [];
     this.walletsRvn = [];
     this.walletsLtc = [];
     this.isCordova = this.platformProvider.isCordova;
@@ -117,6 +119,9 @@ export class SettingsPage {
     });
     this.walletsZel = this.profileProvider.getWallets({
       coin: 'zel'
+    });
+    this.walletsZen = this.profileProvider.getWallets({
+      coin: 'zen'
     });
     this.walletsRvn = this.profileProvider.getWallets({
       coin: 'rvn'

@@ -133,9 +133,6 @@ export class FeeProvider {
               };
               return resolve({ levels: this.cache.data });
           }
-//          this.cache.data = {
-//            livenet: levelsLivenet
-//          };
 /*
           walletClient.getFeeLevels(
             'btc',

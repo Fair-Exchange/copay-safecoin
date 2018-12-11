@@ -1,4 +1,4 @@
-import { fakeAsync, tick } from '@angular/core/testing';
+// import { fakeAsync, tick } from '@angular/core/testing';
 import { Events } from 'ionic-angular';
 import { AppProvider, PopupProvider } from '..';
 import { TestUtils } from '../../test';
@@ -150,7 +150,7 @@ describe('Provider: Incoming Data Provider', () => {
     it('Should handle BTC and BCH BitPay Invoices', () => {
       let data = [
         'bitcoin:?r=https://bitpay.com/i/CtcM753gnZ4Wpr5pmXU6i9',
-        'bitcoincash:?r=https://bitpay.com/i/Rtz1RwWA7kdRRU3Wyo4YDY'
+//        'bitcoincash:?r=https://bitpay.com/i/Rtz1RwWA7kdRRU3Wyo4YDY'
       ];
       data.forEach(element => {
         expect(
@@ -161,7 +161,7 @@ describe('Provider: Incoming Data Provider', () => {
         );
       });
     });
-    it('Should handle Bitcoin cash Copay/BitPay format and CashAddr format plain Address', () => {
+/*    it('Should handle Bitcoin cash Copay/BitPay format and CashAddr format plain Address', () => {
       let data = [
         'qr00upv8qjgkym8zng3f663n9qte9ljuqqcs8eep5w',
         'CcnxtMfvBHGTwoKGPSuezEuYNpGPJH6tjN'
@@ -213,7 +213,7 @@ describe('Provider: Incoming Data Provider', () => {
         );
         expect(eventsSpy).toHaveBeenCalledWith('IncomingDataRedir', nextView);
       });
-    });
+    }); */
     it('Should handle Bitcoin URI', () => {
       let data = [
         'bitcoin:1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', // Genesis Bitcoin Address
@@ -256,7 +256,7 @@ describe('Provider: Incoming Data Provider', () => {
         }
       });
     });
-    it(
+/*    it(
       'Should Handle Bitcoin Cash URI with legacy address',
       fakeAsync(() => {
         let data = 'bitcoincash:1ML5KKKrJEHw3fQqhhajQjHWkh3yKhNZpa';
@@ -294,7 +294,7 @@ describe('Provider: Incoming Data Provider', () => {
         tick();
         expect(eventsSpy).toHaveBeenCalledWith('IncomingDataRedir', nextView);
       })
-    );
+    ); */
     it('Should handle Bitcoin Livenet and Testnet Plain Address', () => {
       let data = [
         '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', // Genesis Bitcoin Address
