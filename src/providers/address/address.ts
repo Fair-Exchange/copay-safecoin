@@ -10,6 +10,7 @@ export class AddressProvider {
   private bitcoreSafe;
   private bitcoreBtcz;
   private bitcoreZcl;
+  private bitcoreRito;
   private bitcoreAnon;
   private bitcoreZel;
   private bitcoreZen;
@@ -23,6 +24,7 @@ export class AddressProvider {
     this.bitcoreSafe = this.bwcProvider.getBitcoreSafe();
     this.bitcoreBtcz = this.bwcProvider.getBitcoreBtcz();
     this.bitcoreZcl = this.bwcProvider.getBitcoreZcl();
+    this.bitcoreRito = this.bwcProvider.getBitcoreRito();
     this.bitcoreAnon = this.bwcProvider.getBitcoreAnon();
     this.bitcoreZel = this.bwcProvider.getBitcoreZel();
     this.bitcoreZen = this.bwcProvider.getBitcoreZen();
@@ -44,6 +46,10 @@ export class AddressProvider {
       zcl: {
         lib: this.bitcoreZcl,
         translateTo: 'zcl'
+      },
+      rito: {
+        lib: this.bitcoreRito,
+        translateTo: 'rito'
       },
       anon: {
         lib: this.bitcoreAnon,
@@ -95,10 +101,10 @@ export class AddressProvider {
               return 'rvn';
             } catch (e) {
               try {
-              //  new this.Bitcore['zcl'].lib.Address(address);
-              //  return 'zcl';
-             // } catch (e) {
-              //  try {
+                new this.Bitcore['rito'].lib.Address(address);
+                return 'rito';
+              } catch (e) {
+                try {
                   new this.Bitcore['ltc'].lib.Address(address);
                   return 'ltc';
                 } catch (e) {
@@ -107,7 +113,7 @@ export class AddressProvider {
               }
             }
           }
-        // }
+        }
       }
     }
   }
@@ -141,6 +147,7 @@ export class AddressProvider {
     if (coiN == 'Zelcash (ZEL)') coiN = 'zel';
     if (coiN == 'Horizen (ZEN)') coiN = 'zen';
 //    if (coiN == 'Zclassic (ZCL)') coiN = 'zcl';
+    if (coiN == 'Ritocoin (RITO)') coiN = 'rito';
 //    if (coiN == 'ANONymous (ANON)') coiN = 'anon';
     if (coiN == 'Ravencoin (RVN)') coiN = 'rvn';
 
@@ -200,6 +207,16 @@ export class AddressProvider {
       return {
         address,
         isValid: isLivenetZcl,
+        network: 'livenet',
+        coin: coiN,
+        translation: {}
+      };
+    } else if (coiN == 'rito' ) {
+      let AddressRito = this.bitcoreRito.Address;
+      let isLivenetRito = AddressRito.isValid(address, 'livenet');
+      return {
+        address,
+        isValid: isLivenetRito,
         network: 'livenet',
         coin: coiN,
         translation: {}
@@ -265,7 +282,7 @@ export class AddressProvider {
   public extractAddress(address: string): string {
     let extractedAddress = address
 //      .replace(/^(bitcoincash:|bitcoin:|safecoin:|bitcoinz:|zclassic:|anonymous:|zelcash:|zen:|ravencoin:|litecoin:)/, '')
-      .replace(/^(bitcoin:|safecoin:|bitcoinz:|zclassic:|anonymous:|zelcash:|zen:|ravencoin:|litecoin:)/, '')
+      .replace(/^(bitcoin:|safecoin:|bitcoinz:|zclassic:|ritocoin:|anonymous:|zelcash:|zen:|ravencoin:|litecoin:)/, '')
       .replace(/\?.*/, '');
     return extractedAddress || address;
   }
@@ -285,6 +302,8 @@ export class AddressProvider {
     let AddressBtcz = this.bitcoreBtcz.Address;
     let URIZcl = this.bitcoreZcl.URI;
     let AddressZcl = this.bitcoreZcl.Address;
+    let URIRito = this.bitcoreRito.URI;
+    let AddressRito = this.bitcoreRito.Address;
     let URIAnon = this.bitcoreAnon.URI;
     let AddressAnon = this.bitcoreAnon.Address;
     let URIZel = this.bitcoreZel.URI;
@@ -366,6 +385,18 @@ export class AddressProvider {
       if (isUriValid && isAddressValidLivenet /* || isAddressValidTestnet) */) {
         return true;
       }
+    } else if (/^ritocoin:/.test(address)) {
+      let isUriValid = URIRito.isValid(address);
+      if (isUriValid) {
+        uri = new URIRito(address);
+        isAddressValidLivenet = AddressRito.isValid(
+          uri.address.toString(),
+          'livenet'
+        );
+      }
+      if (isUriValid && isAddressValidLivenet /* || isAddressValidTestnet) */) {
+        return true;
+      }
     } else if (/^anonymous:/.test(address)) {
       let isUriValid = URIAnon.isValid(address);
       if (isUriValid) {
@@ -438,6 +469,7 @@ export class AddressProvider {
     let regularAddressZelLivenet = AddressZel.isValid(address, 'livenet');
     let regularAddressZenLivenet = AddressZen.isValid(address, 'livenet');
 //    let regularAddressZclLivenet = AddressZcl.isValid(address, 'livenet');
+    let regularAddressRitoLivenet = AddressRito.isValid(address, 'livenet');
 //    let regularAddressAnonLivenet = AddressAnon.isValid(address, 'livenet');
     let regularAddressRvnLivenet = AddressRvn.isValid(address, 'livenet');
     let regularAddressLtcLivenet = AddressLtc.isValid(address, 'livenet');
@@ -449,6 +481,7 @@ export class AddressProvider {
       regularAddressZelLivenet ||
       regularAddressZenLivenet ||
 //      regularAddressZclLivenet ||
+      regularAddressRitoLivenet ||
 //      regularAddressAnonLivenet ||
       regularAddressRvnLivenet ||
       regularAddressLtcLivenet 

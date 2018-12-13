@@ -12,6 +12,8 @@ import * as CORELTC from 'bitcore-lib-ltc-mini';
 import * as CORERVN from 'bitcore-lib-rvn-mini';
 import * as CORESAFE from 'bitcore-lib-safe-mini';
 
+import * as CORERITO from 'bitcore-lib-rito-mini';
+
 import * as COREZCL from 'bitcore-lib-zcl-mini';
 import * as COREZEL from 'bitcore-lib-zel-mini';
 import * as COREZEN from 'bitcore-lib-zen-mini';
@@ -46,6 +48,10 @@ export class BwcProvider {
 
   public getBitcoreZcl() {
     return COREZCL;
+  }
+
+  public getBitcoreRito() {
+    return CORERITO;
   }
 
   public getBitcoreAnon() {

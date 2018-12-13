@@ -26,6 +26,7 @@ export enum Coin {
   RVN = 'rvn',
   BTC = 'btc',
   LTC = 'ltc',
+  RITO = 'rito',
   ZEN = 'zen'
 /*  ANON = 'anon',
   ZCL = 'zcl',
@@ -37,6 +38,7 @@ export const Coin_Spec: string[][] = [
     ["btcz","1","BitcoinZ (BTCZ)",   "177"  ],
     ["zel", "1","Zelcash (ZEL)",     "19167"],
     ["rvn", "1","Ravencoin (RVN)",   "175"  ],
+    ["rito","1","Ritocoin (RITO)",   "19169"],
     ["ltc", "1","Litecoin (LTC)",    "2"    ],
     ["btc", "1","Bitcoin (BTC)",     "0"    ],
     ["zen", "0","Horizen (ZEN)",     "121"  ],
@@ -1671,6 +1673,8 @@ export class WalletProvider {
       return 'bitcoinz';
     } else if (coin == 'zcl'){
       return 'zclassic';
+    } else if (coin == 'rito'){
+      return 'ritocoin';
     } else if (coin == 'anon'){
       return 'bitcoinanon';
     } else if (coin == 'zel'){

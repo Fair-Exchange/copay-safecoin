@@ -217,6 +217,14 @@ export class AmountPage extends WalletTabsChild {
       });
     }
 
+    if (parentWalletCoin === 'rito' || !parentWalletCoin) {
+      this.availableUnits.push({
+        name: 'Ritocoin',
+        id: 'rito',
+        shortName: 'RITO'
+      });
+    }
+
     if (parentWalletCoin === 'anon' || !parentWalletCoin) {
       this.availableUnits.push({
         name: 'Anonymous',

@@ -72,6 +72,7 @@ export class AddressbookAddPage {
       zen:  this.bwcProvider.getBitcoreZen(),
       anon: this.bwcProvider.getBitcoreAnon(),
       zcl:  this.bwcProvider.getBitcoreZcl(),
+      rito:  this.bwcProvider.getBitcoreRito(),
       rvn:  this.bwcProvider.getBitcoreRvn(),
       ltc:  this.bwcProvider.getBitcoreLtc(),
       btc:  this.bwcProvider.getBitcore()
@@ -126,7 +127,7 @@ export class AddressbookAddPage {
       this.addressBookAdd.controls['address'].setValue(this.navParams.data.addressbookEntry);
     }
     this.events.subscribe('update:address', data => {
-      let address = data.value.replace(/^bitcoin(cash)?:|safecoin:|bitcoinz:|zelcash:|zen:|zclassic:|anonymous:|revencoin:|litecoin:/, '');
+      let address = data.value.replace(/^bitcoin(cash)?:|safecoin:|bitcoinz:|zelcash:|zen:|zclassic:|ritocoin:|anonymous:|revencoin:|litecoin:/, '');
       this.addressBookAdd.controls['address'].setValue(address);
     });
   }

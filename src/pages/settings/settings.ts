@@ -50,6 +50,7 @@ export class SettingsPage {
   public walletsSafe;
   public walletsBtcz;
   public walletsZcl;
+  public walletsRito;
   public walletsAnon;
   public walletsZel;
   public walletsZen;
@@ -85,6 +86,7 @@ export class SettingsPage {
     this.walletsSafe = [];
     this.walletsBtcz = [];
     this.walletsZcl = [];
+    this.walletsRito = [];
     this.walletsAnon = [];
     this.walletsZel = [];
     this.walletsZen = [];
@@ -113,6 +115,9 @@ export class SettingsPage {
     });
     this.walletsZcl = this.profileProvider.getWallets({
       coin: 'zcl'
+    });
+    this.walletsRito = this.profileProvider.getWallets({
+      coin: 'rito'
     });
     this.walletsAnon = this.profileProvider.getWallets({
       coin: 'anon'

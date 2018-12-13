@@ -30,6 +30,7 @@ export class AddressbookViewPage {
   private bitcoreSafe;
   private bitcoreBtcz;
   private bitcoreZcl;
+  private bitcoreRito;
   private bitcoreAnon;
   private bitcoreZel;
   private bitcoreZen;
@@ -51,6 +52,7 @@ export class AddressbookViewPage {
     this.bitcoreSafe = this.bwcProvider.getBitcoreSafe();
     this.bitcoreBtcz = this.bwcProvider.getBitcoreBtcz();
     this.bitcoreZcl = this.bwcProvider.getBitcoreZcl();
+    this.bitcoreRito = this.bwcProvider.getBitcoreRito();
     this.bitcoreAnon = this.bwcProvider.getBitcoreAnon();
     this.bitcoreZel = this.bwcProvider.getBitcoreZel();
     this.bitcoreZen = this.bwcProvider.getBitcoreZen();
@@ -72,6 +74,8 @@ export class AddressbookViewPage {
     const btczAddress = this.bitcoreBtcz.Address.isValid(
       this.address, this.network);
     const zclAddress = this.bitcoreZcl.Address.isValid(
+      this.address, this.network);
+    const ritoAddress = this.bitcoreRito.Address.isValid(
       this.address, this.network);
     const anonAddress = this.bitcoreAnon.Address.isValid(
       this.address, this.network);
@@ -95,6 +99,8 @@ export class AddressbookViewPage {
       this.coin = 'zen';
     } else  if (this.coinname == 'Zclassic (ZCL)' && zclAddress){
       this.coin = 'zcl';
+    } else  if (this.coinname == 'Ritocoin (RITO)' && ritoAddress){
+      this.coin = 'rito';
     } else  if (this.coinname == 'Anonymous (ANON)' && anonAddress){
       this.coin = 'anon';
     } else  if (this.coinname == 'Ravencoin (RVN)' && rvnAddress){

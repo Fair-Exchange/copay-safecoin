@@ -79,6 +79,10 @@ export class IncomingDataProvider {
     data = this.sanitizeUri(data);
     return !!this.bwcProvider.getBitcoreBtcz().URI.isValid(data);
   }
+  private isValidRitocoinUri(data: string): boolean {
+    data = this.sanitizeUri(data);
+    return !!this.bwcProvider.getBitcoreRito().URI.isValid(data);
+  }
 /*  private isValidZclassicUri(data: string): boolean {
     data = this.sanitizeUri(data);
     return !!this.bwcProvider.getBitcoreZcl().URI.isValid(data);
@@ -152,7 +156,12 @@ export class IncomingDataProvider {
       this.bwcProvider.getBitcoreZcl().Address.isValid(data, 'livenet')
     );
   }
-*/  private isValidZenAddress(data: string): boolean {
+*/  private isValidRitocoinAddress(data: string): boolean {
+    return !!(
+      this.bwcProvider.getBitcoreRito().Address.isValid(data, 'livenet')
+    );
+  }
+  private isValidZenAddress(data: string): boolean {
     return !!(
       this.bwcProvider.getBitcoreZen().Address.isValid(data, 'livenet')
     );
@@ -243,6 +252,8 @@ export class IncomingDataProvider {
                    ? Coin.SAFE 
 //                    : data.indexOf('zclassic') === 0
 //                     ? Coin.ZCL 
+                    : data.indexOf('ritocoin') === 0
+                     ? Coin.RITO 
 //                    : data.indexOf('anonymous') === 0
 //                     ? Coin.ANON 
                     : data.indexOf('zelcash') === 0
@@ -309,7 +320,20 @@ export class IncomingDataProvider {
     let amount = parsed.amount || amountFromRedirParams;
     if (parsed.r) this.goToPayPro(data, coin);
     else this.goSend(address, amount, message, coin);
+  }*/
+  private handleRitocoinUri(data: string, redirParams?: RedirParams): void {
+    this.logger.debug('Incoming-data: Ritocoin URI');
+    let amountFromRedirParams =
+      redirParams && redirParams.amount ? redirParams.amount : '';
+    const coin = Coin.RITO;
+    let parsed = this.bwcProvider.getBitcoreRito().URI(data);
+    let address = parsed.address ? parsed.address.toString() : '';
+    let message = parsed.message;
+    let amount = parsed.amount || amountFromRedirParams;
+    if (parsed.r) this.goToPayPro(data, coin);
+    else this.goSend(address, amount, message, coin);
   }
+/*
   private handleAnonymousUri(data: string, redirParams?: RedirParams): void {
     this.logger.debug('Incoming-data: Anonymous URI');
     let amountFromRedirParams =
@@ -499,7 +523,26 @@ export class IncomingDataProvider {
     } else {
       this.goToAmountPage(data, coin);
     }
+  } */
+  private handlePlainRitocoinAddress(
+    data: string,
+    redirParams?: RedirParams
+  ): void {
+    this.logger.debug('Incoming-data: Ritocoin plain address');
+    const coin = Coin.RITO;
+    if (redirParams && redirParams.activePage === 'ScanPage') {
+      this.showMenu({
+        data,
+        type: 'ritocoinAddress',
+        coin
+      });
+    } else if (redirParams && redirParams.amount) {
+      this.goSend(data, redirParams.amount, '', coin);
+    } else {
+      this.goToAmountPage(data, coin);
+    }
   }
+/*
   private handlePlainAnonymousAddress(
     data: string,
     redirParams?: RedirParams
@@ -718,8 +761,13 @@ export class IncomingDataProvider {
 /*    } else if (this.isValidZclassicUri(data)) {
       this.handleZclassicUri(data, redirParams);
       return true;
+*/
+      // Ritocoin URI
+    } else if (this.isValidRitocoinUri(data)) {
+      this.handleRitocoinUri(data, redirParams);
+      return true;
 
-      // Anonymous URI
+/*      // Anonymous URI
     } else if (this.isValidAnonymousUri(data)) {
       this.handleAnonymousUri(data, redirParams);
       return true;
@@ -778,8 +826,13 @@ export class IncomingDataProvider {
     } else if (this.isValidZclassicAddress(data)) {
       this.handlePlainZclassicAddress(data, redirParams);
       return true;
+*/
+      // Plain Address (Ritocoin)
+    } else if (this.isValidRitocoinAddress(data)) {
+      this.handlePlainRitocoinAddress(data, redirParams);
+      return true;
 
-      // Plain Address (Anonymous)
+/*      // Plain Address (Anonymous)
     } else if (this.isValidAnonymousAddress(data)) {
       this.handlePlainAnonymousAddress(data, redirParams);
       return true;
@@ -974,8 +1027,16 @@ export class IncomingDataProvider {
         type: 'ZclassicAddress',
         title: this.translate.instant('Zclassic Address')
       };
+*/
+      // Plain Address (Ritocoin)
+    } else if (this.isValidRitocoinAddress(data)) {
+      return {
+        data,
+        type: 'RitocoinAddress',
+        title: this.translate.instant('Ritocoin Address')
+      };
 
-      // Plain Address (Anonymous)
+/*      // Plain Address (Anonymous)
     } else if (this.isValidAnonymousAddress(data)) {
       return {
         data,
@@ -1126,7 +1187,11 @@ export class IncomingDataProvider {
               try {
                 this.bwcProvider.getBitcoreRvn().PrivateKey(privateKey, 'livenet');
               } catch (err) {
+              try {
+                this.bwcProvider.getBitcoreRito().PrivateKey(privateKey, 'livenet');
+              } catch (err) {
                 return false;
+              }
               }
             }
           }
@@ -1230,6 +1295,8 @@ export class IncomingDataProvider {
                      ? Coin.ZEL 
                       : data.indexOf('ravencoin') === 0
                        ? Coin.RVN 
+                      : data.indexOf('ritocoin') === 0
+                       ? Coin.RITO 
                         : data.indexOf('litecoin') === 0
                          ? Coin.LTC 
                           : data.indexOf('zen') === 0

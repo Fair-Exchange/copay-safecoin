@@ -57,6 +57,7 @@ export class CustomAmountPage {
       this.amountUnitStr = parsedAmount.amountUnitStr;
 
       if (_currency != 'BTC' && _currency != 'BCH' && _currency != 'SAFE' && _currency != 'BTCZ' && 
+          _currency != 'RITO' &&
           _currency != 'ZCL' && _currency != 'ANON' && _currency != 'ZEL' && _currency != 'ZEN' && _currency != 'RVN' && _currency != 'LTC') {
         // Convert to BTC or BCH
         let amountUnit = this.txFormatProvider.satToUnit(

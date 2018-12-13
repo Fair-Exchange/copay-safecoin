@@ -12,6 +12,7 @@ const env: EnvironmentSchema = {
     safe: `https://api.safecoin.org/rates/safe`,
     btcz: `https://api.safecoin.org/rates/btcz`,
     zcl: `https://api.safecoin.org/rates/zcl`,
+    rito: `https://api.safecoin.org/rates/rito`,
     anon: `https://api.safecoin.org/rates/anon`,
     zel: `https://api.safecoin.org/rates/zel`,
     zen: `https://api.safecoin.org/rates/zen`,

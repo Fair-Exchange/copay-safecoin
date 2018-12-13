@@ -38,7 +38,7 @@
   </div>
 
   <div *ngIf="!shouldShowZeroState()">
-    <div *ngIf="hasBtcWallets || hasBchWallets || hasSafeWallets || hasBtczWallets || hasZclWallets || hasAnonWallets || hasZelWallets || hasZenWallets || hasRvnWallets || hasLtcWallets">
+    <div *ngIf="hasBtcWallets || hasBchWallets || hasSafeWallets || hasBtczWallets || hasZclWallets || hasRitoWallets || hasAnonWallets || hasZelWallets || hasZenWallets || hasRvnWallets || hasLtcWallets">
       <div class="send-header-wrapper">
         <span class="send-heading" translate>Recipient</span>
         <ion-item class="search-wrapper" [ngClass]="{'invalid': invalidAddress && search != ''}">
@@ -236,6 +236,34 @@
         </ion-list>
       </div>
 
+      <div class="card" *ngIf="walletRitoList && walletRitoList[0]">
+        <ion-item-divider class="title">
+          <img src="assets/img/icon-ritocoin.png" alt="Ritocoin Wallets" width="16" />
+          <span translate>Transfer to Ritocoin Wallet</span>
+        </ion-item-divider>
+
+        <ion-list>
+          <button ion-item *ngFor="let wallet of filteredWallets[0] ? filteredWallets : walletRitoList" (click)="goToAmount(wallet)">
+            <ion-icon class="item-img" item-start>
+              <img *ngIf="wallet.network == 'testnet'" [ngStyle]="{'background-color': wallet.color}" src="assets/img/icon-wallet-testnet.svg"
+                class="icon-wallet" />
+              <img *ngIf="wallet.network != 'testnet'" [ngStyle]="{'background-color': wallet.color}" src="assets/img/icon-ritocoin.png"
+                class="icon-wallet" />
+            </ion-icon>
+            <span class="item-title">{{wallet.name}}</span>
+            <ion-note class="wallet-warning" *ngIf="!wallet.isComplete" item-end>
+              {{'Incomplete' | translate}}
+            </ion-note>
+            <ion-note class="wallet-warning" *ngIf="wallet.isComplete && wallet.needsBackup" item-end>
+              {{'Paper Key Unverified' | translate}}
+            </ion-note>
+            <ion-note *ngIf="wallet.m > 1 && wallet.isComplete && !wallet.needsBackup" item-end>
+              {{wallet.m}}-{{wallet.n}}
+            </ion-note>
+          </button>
+        </ion-list>
+      </div>
+
       <div class="card" *ngIf="walletAnonList && walletAnonList[0]">
         <ion-item-divider class="title">
           <img src="assets/img/icon-anonymous.png" alt="Anonymous Wallets" width="16" />
@@ -348,7 +376,7 @@
         </ion-list>
       </div>
     </div>
-    <div *ngIf="!hasBtcWallets && !hasBchWallets && !hasSafeWallets && !hasBtczWallets && !hasZelWallets && !hasZenWallets && !hasZclWallets && !hasAnonWallets && !hasRvnWallets && !hasLtcWallets" class="no-wallet-message">
+    <div *ngIf="!hasBtcWallets && !hasBchWallets && !hasSafeWallets && !hasBtczWallets && !hasZelWallets && !hasZenWallets && !hasZclWallets && !hasRitoWallets && !hasAnonWallets && !hasRvnWallets && !hasLtcWallets" class="no-wallet-message">
       <span translate>To get started, you'll need to create a bitcoin wallet and get some bitcoin.</span>
     </div>
   </div>

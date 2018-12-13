@@ -101,6 +101,7 @@ export class TxFormatProvider {
       (!this.rate.isSafeAvailable() && coin == 'safe') ||
       (!this.rate.isBtczAvailable() && coin == 'btcz') ||
 //      (!this.rate.isZclAvailable() && coin == 'zcl') ||
+      (!this.rate.isRitoAvailable() && coin == 'rito') ||
 //      (!this.rate.isAnonAvailable() && coin == 'anon') ||
       (!this.rate.isZelAvailable() && coin == 'zel') ||
       (!this.rate.isZenAvailable() && coin == 'zen') ||
@@ -241,6 +242,7 @@ export class TxFormatProvider {
     // If fiat currency
     if (currency != 'BCH' && currency != 'BTC' && currency != 'SAFE' && currency != 'BTCZ' &&
         currency != 'ZCL' && currency != 'ANON' && currency != 'ZEL' && currency != 'RVN' && 
+        currency != 'RITO' &&
         currency != 'LTC' && currency != 'ZEN' && currency != 'sat') {
       let formattedAmount = onlyIntegers
         ? this.filter.formatFiatAmount(amount.toFixed(0))

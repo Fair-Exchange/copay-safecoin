@@ -47,6 +47,7 @@ export class PaperWalletPage {
   private bitcoreSafe;
   private bitcoreBtcz;
   private bitcoreZcl;
+  private bitcoreRito;
   private bitcoreAnon;
   private bitcoreZel;
   private bitcoreZen;
@@ -76,6 +77,7 @@ export class PaperWalletPage {
     this.bitcoreSafe = this.bwcProvider.getBitcoreSafe();
     this.bitcoreBtcz = this.bwcProvider.getBitcoreBtcz();
     this.bitcoreZcl = this.bwcProvider.getBitcoreZcl();
+    this.bitcoreRito = this.bwcProvider.getBitcoreRito();
     this.bitcoreAnon = this.bwcProvider.getBitcoreAnon();
     this.bitcoreZel = this.bwcProvider.getBitcoreZel();
     this.bitcoreZen = this.bwcProvider.getBitcoreZen();
@@ -168,6 +170,9 @@ export class PaperWalletPage {
       catch (err) {return false;}
     } else if (coin == 'zcl') {
       try {new this.bitcoreZcl.PrivateKey(privateKey, 'livenet');}
+      catch (err) {return false;}
+    } else if (coin == 'rito') {
+      try {new this.bitcoreRito.PrivateKey(privateKey, 'livenet');}
       catch (err) {return false;}
     } else if (coin == 'anon') {
       try {new this.bitcoreAnon.PrivateKey(privateKey, 'livenet');}

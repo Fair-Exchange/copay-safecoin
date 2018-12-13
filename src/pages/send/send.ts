@@ -44,6 +44,7 @@ export class SendPage extends WalletTabsChild {
   public walletsSafe;
   public walletsBtcz;
   public walletsZcl;
+  public walletsRito;
   public walletsAnon;
   public walletsZel;
   public walletsZen;
@@ -54,6 +55,7 @@ export class SendPage extends WalletTabsChild {
   public walletSafeList: FlatWallet[];
   public walletBtczList: FlatWallet[];
   public walletZclList: FlatWallet[];
+  public walletRitoList: FlatWallet[];
   public walletAnonList: FlatWallet[];
   public walletZelList: FlatWallet[];
   public walletZenList: FlatWallet[];
@@ -67,6 +69,7 @@ export class SendPage extends WalletTabsChild {
   public hasSafeWallets: boolean;
   public hasBtczWallets: boolean;
   public hasZclWallets: boolean;
+  public hasRitoWallets: boolean;
   public hasAnonWallets: boolean;
   public hasZelWallets: boolean;
   public hasZenWallets: boolean;
@@ -118,6 +121,7 @@ export class SendPage extends WalletTabsChild {
     this.walletsSafe = this.profileProvider.getWallets({ coin: 'safe' });
     this.walletsBtcz = this.profileProvider.getWallets({ coin: 'btcz' });
     this.walletsZcl = this.profileProvider.getWallets({ coin: 'zcl' });
+    this.walletsRito = this.profileProvider.getWallets({ coin: 'rito' });
     this.walletsAnon = this.profileProvider.getWallets({ coin: 'anon' });
     this.walletsZel = this.profileProvider.getWallets({ coin: 'zel' });
     this.walletsZen = this.profileProvider.getWallets({ coin: 'zen' });
@@ -128,6 +132,7 @@ export class SendPage extends WalletTabsChild {
     this.hasSafeWallets = !_.isEmpty(this.walletsSafe);
     this.hasBtczWallets = !_.isEmpty(this.walletsBtcz);
     this.hasZclWallets = !_.isEmpty(this.walletsZcl);
+    this.hasRitoWallets = !_.isEmpty(this.walletsRito);
     this.hasAnonWallets = !_.isEmpty(this.walletsAnon);
     this.hasZelWallets = !_.isEmpty(this.walletsZel);
     this.hasZenWallets = !_.isEmpty(this.walletsZen);
@@ -138,6 +143,7 @@ export class SendPage extends WalletTabsChild {
     this.walletSafeList = this.getSafeWalletsList();
     this.walletBtczList = this.getBtczWalletsList();
     this.walletZclList = this.getZclWalletsList();
+    this.walletRitoList = this.getRitoWalletsList();
     this.walletAnonList = this.getAnonWalletsList();
     this.walletZelList = this.getZelWalletsList();
     this.walletZenList = this.getZenWalletsList();
@@ -168,6 +174,10 @@ export class SendPage extends WalletTabsChild {
 
   private getZclWalletsList(): FlatWallet[] {
     return this.hasZclWallets ? this.getRelevantWallets(this.walletsZcl) : [];
+  }
+
+  private getRitoWalletsList(): FlatWallet[] {
+    return this.hasRitoWallets ? this.getRelevantWallets(this.walletsRito) : [];
   }
 
   private getAnonWalletsList(): FlatWallet[] {
@@ -275,6 +285,8 @@ export class SendPage extends WalletTabsChild {
 //        coinn = 'zen';
 //      } else if (this.wallet.coin === Coin.ZCL){
 //        coinn = 'zclassic';
+      } else if (this.wallet.coin === Coin.RITO){
+        coinn = 'ritocoin';
       } else if (this.wallet.coin === Coin.RVN){
         coinn = 'ravencoin';
       } else if (this.wallet.coin === Coin.LTC){
@@ -406,6 +418,11 @@ export class SendPage extends WalletTabsChild {
     }
     if (this.hasZclWallets && this.wallet.coin === 'zcl') {
       this.filteredWallets = this.walletZclList.filter(wallet => {
+        return _.includes(wallet.name.toLowerCase(), this.search.toLowerCase());
+      });
+    }
+    if (this.hasRitoWallets && this.wallet.coin === 'rito') {
+      this.filteredWallets = this.walletRitoList.filter(wallet => {
         return _.includes(wallet.name.toLowerCase(), this.search.toLowerCase());
       });
     }

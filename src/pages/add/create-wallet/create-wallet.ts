@@ -91,6 +91,7 @@ export class CreateWalletPage implements OnInit {
       zen:  this.derivationPathHelperProvider.defaultZen,
       anon: this.derivationPathHelperProvider.defaultAnon,
       zcl:  this.derivationPathHelperProvider.defaultZcl,
+      rito:  this.derivationPathHelperProvider.defaultRito,
       rvn:  this.derivationPathHelperProvider.defaultRvn,
       ltc:  this.derivationPathHelperProvider.defaultLtc,
       btc:  this.derivationPathHelperProvider.default,

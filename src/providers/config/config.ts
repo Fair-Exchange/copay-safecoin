@@ -113,6 +113,7 @@ export interface Config {
     safe: string;
     btcz: string;
     zcl: string;
+    rito: string;
 //    anon: string;
     zel: string;
     zen: string;
@@ -231,6 +232,7 @@ const configDefault: Config = {
     safe: 'explorer.safecoin.org',
     btcz: 'explorer.btcz.rocks',
     zcl: 'explorer.zclassicblue.org:3001/insight',
+    rito: 'rito.safc.cc',
 //    anon: 'explorer.anonfork.io/insight',
     zel: 'explorer2.zel.cash',
     zen: 'explorer.zensystem.io',

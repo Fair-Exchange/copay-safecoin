@@ -11,6 +11,7 @@ export interface EnvironmentSchema {
     safe: string;
     btcz: string;
     zcl: string;
+    rito: string;
     anon: string;
     zel: string;
     zen: string;

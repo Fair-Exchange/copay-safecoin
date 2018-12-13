@@ -47,6 +47,7 @@ export class ConfirmPage extends WalletTabsChild {
   private bitcoreSafe;
   private bitcoreBtcz;
 //  private bitcoreZcl;
+  private bitcoreRito;
 //  private bitcoreAnon;
   private bitcoreZel;
   private bitcoreZen;
@@ -114,6 +115,7 @@ export class ConfirmPage extends WalletTabsChild {
     this.bitcoreSafe = this.bwcProvider.getBitcoreSafe();
     this.bitcoreBtcz = this.bwcProvider.getBitcoreBtcz();
 //    this.bitcoreZcl = this.bwcProvider.getBitcoreZcl();
+    this.bitcoreRito = this.bwcProvider.getBitcoreRito();
 //    this.bitcoreAnon = this.bwcProvider.getBitcoreAnon();
     this.bitcoreZel = this.bwcProvider.getBitcoreZel();
     this.bitcoreZen = this.bwcProvider.getBitcoreZen();
@@ -148,6 +150,8 @@ export class ConfirmPage extends WalletTabsChild {
                  ? this.bitcoreBtcz 
 //                  : this.navParams.data.coin == 'zcl' 
 //                   ? this.bitcoreZcl 
+                  : this.navParams.data.coin == 'rito' 
+                   ? this.bitcoreRito 
 //                  : this.navParams.data.coin == 'anon' 
 //                   ? this.bitcoreAnon 
                   : this.navParams.data.coin == 'zel' 
@@ -210,8 +214,9 @@ export class ConfirmPage extends WalletTabsChild {
         this.tx.coin && (this.tx.coin == 'bch' ||  this.tx.coin == 'safe' || 
                          this.tx.coin == 'btcz' ||  this.tx.coin == 'zen' ||
                          this.tx.coin == 'anon' || this.tx.coin == 'zcl' ||
-                          this.tx.coin == 'zel' || this.tx.coin == 'rvn' ||
-                          this.tx.coin == 'ltc') ? 'normal' : this.configFeeLevel;
+                         this.tx.coin == 'rito' ||
+                         this.tx.coin == 'zel' || this.tx.coin == 'rvn' ||
+                         this.tx.coin == 'ltc') ? 'normal' : this.configFeeLevel;
     }                                   
 
 /*    if (this.tx.coin && this.tx.coin == 'bch') {
@@ -240,7 +245,13 @@ export class ConfirmPage extends WalletTabsChild {
         .Address(this.tx.toAddress)
         .toString();
     }
-    if (this.tx.coin && this.tx.coin == 'anon') {
+*/      if (this.tx.coin && this.tx.coin == 'rito') {
+      // Use legacy address
+      this.tx.toAddress = this.bitcoreRito
+        .Address(this.tx.toAddress)
+        .toString();
+    }
+/*    if (this.tx.coin && this.tx.coin == 'anon') {
       // Use legacy address
       this.tx.toAddress = this.bitcoreAnon
         .Address(this.tx.toAddress)
@@ -395,8 +406,9 @@ export class ConfirmPage extends WalletTabsChild {
 
     if (!this.usingCustomFee && !this.usingMerchantFee) {
       this.tx.feeLevel = (wallet.coin == 'bch' ||  wallet.coin == 'safe' || wallet.coin == 'btcz' || 
-                           wallet.coin == 'zen' ||  wallet.coin == 'zcl' || wallet.coin == 'anon' ||
-            wallet.coin == 'zel' || wallet.coin == 'rvn' || wallet.coin == 'ltc') ? 'normal' : this.configFeeLevel;
+                          wallet.coin == 'zen' ||  wallet.coin == 'zcl' || wallet.coin == 'anon' ||
+                          wallet.coin == 'rito' ||
+                          wallet.coin == 'zel' || wallet.coin == 'rvn' || wallet.coin == 'ltc') ? 'normal' : this.configFeeLevel;
     }
 
     this.setButtonText(this.wallet.credentials.m > 1, !!this.tx.paypro);
@@ -494,6 +506,7 @@ export class ConfirmPage extends WalletTabsChild {
         bch: 'normal',
         btcz: 'normal',
 //        zcl: 'normal',
+        rito: 'normal',
 //        anon: 'normal',
         zel: 'normal',
         zen: 'normal',
@@ -632,7 +645,9 @@ export class ConfirmPage extends WalletTabsChild {
                    ? 'Bitcoinz' 
 /*                    : this.wallet.coin === Coin.ZCL 
                      ? 'Zclassic' 
-                    : this.wallet.coin === Coin.ANON 
+*/                    : this.wallet.coin === Coin.RITO 
+                     ? 'Ritocoin' 
+  /*                  : this.wallet.coin === Coin.ANON 
                      ? 'Anonymous' */
                     : this.wallet.coin === Coin.ZEL 
                      ? 'Zelcash' 
@@ -705,6 +720,8 @@ export class ConfirmPage extends WalletTabsChild {
            ? 'BitcoinZ (BTCZ)'
 //            : this.wallet.coin === Coin.ZCL 
 //             ? 'Zclassic (ZCL)'
+            : this.wallet.coin === Coin.RITO 
+             ? 'Ritocoin (RITO)'
 //            : this.wallet.coin === Coin.ANON 
 //             ? 'Anonymous (ANON)'
             : this.wallet.coin === Coin.ZEL 
@@ -1019,6 +1036,7 @@ export class ConfirmPage extends WalletTabsChild {
     if (this.tx.coin == 'safe') return;
     if (this.tx.coin == 'btcz') return;
     if (this.tx.coin == 'zcl') return;
+    if (this.tx.coin == 'rito') return;
     if (this.tx.coin == 'anon') return;
     if (this.tx.coin == 'zel') return;
     if (this.tx.coin == 'zen') return;

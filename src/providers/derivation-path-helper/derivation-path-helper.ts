@@ -11,6 +11,7 @@ export class DerivationPathHelperProvider {
   public defaultZel: string;
   public defaultZen: string;
   public defaultZcl: string;
+  public defaultRito: string;
   public defaultAnon: string;
   public defaultRvn: string;
   public defaultSafe: string;
@@ -25,6 +26,7 @@ export class DerivationPathHelperProvider {
     this.defaultZen = "m/44'/121'/0'";
     this.defaultLtc = "m/44'/2'/0'";
     this.defaultZcl = "m/44'/147'/0'";
+    this.defaultRito = "m/44'/19169'/0'";
     this.defaultAnon = "m/44'/19168'/0'";
     this.defaultRvn = "m/44'/175'/0'";
     this.defaultSafe = "m/44'/19165'/0'";
@@ -94,6 +96,14 @@ export class DerivationPathHelperProvider {
       case "19167'":
         ret.networkName = 'livenet';
         ret.cointype = '19167';
+        break;
+      case "19168'":
+        ret.networkName = 'livenet';
+        ret.cointype = '19168';
+        break;
+      case "19169'":
+        ret.networkName = 'livenet';
+        ret.cointype = '19169';
         break;
       default:
         return false;

@@ -23,6 +23,7 @@ export class AddressBookProvider {
       zen:  this.bwcProvider.getBitcoreZen(),
 //      anon: this.bwcProvider.getBitcoreAnon(),
 //      zcl:  this.bwcProvider.getBitcoreZcl(),
+      rito:  this.bwcProvider.getBitcoreRito(),
       rvn:  this.bwcProvider.getBitcoreRvn(),
       ltc:  this.bwcProvider.getBitcoreLtc(),
       btc:  this.bwcProvider.getBitcore()

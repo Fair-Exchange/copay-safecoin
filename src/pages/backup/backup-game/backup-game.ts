@@ -325,6 +325,8 @@ export class BackupGamePage {
                  ? 'bitcoinz'
                   : this.wallet.coin === 'zcl' 
                    ? 'zclassic'
+                  : this.wallet.coin === 'rito' 
+                   ? 'ritocoin'
                   : this.wallet.coin === 'anon' 
                    ? 'anonymous'
                   : this.wallet.coin === 'zel' 

@@ -66,6 +66,7 @@ export class HomePage {
   public walletsSafe;
   public walletsBtcz;
   public walletsZcl;
+  public walletsRito;
   public walletsAnon;
   public walletsZel;
   public walletsZen;
@@ -98,6 +99,7 @@ export class HomePage {
   public showReorderSafe: boolean;
   public showReorderBtcz: boolean;
   public showReorderZcl: boolean;
+  public showReorderRito: boolean;
   public showReorderAnon: boolean;
   public showReorderZel: boolean;
   public showReorderZen: boolean;
@@ -150,6 +152,7 @@ export class HomePage {
     this.showReorderSafe = false;
     this.showReorderBtcz = false;
     this.showReorderZcl = false;
+    this.showReorderRito = false;
     this.showReorderAnon = false;
     this.showReorderZel = false;
     this.showReorderZen = false;
@@ -381,6 +384,9 @@ export class HomePage {
       this.walletsZcl = _.filter(this.wallets, (x: any) => {
         return x.credentials.coin == 'zcl';
       });
+      this.walletsRito = _.filter(this.wallets, (x: any) => {
+        return x.credentials.coin == 'rito';
+      });
       this.walletsAnon = _.filter(this.wallets, (x: any) => {
         return x.credentials.coin == 'anon';
       });
@@ -470,7 +476,7 @@ export class HomePage {
         if (!this.validDataFromClipboard) {
           return;
         }
-        const dataToIgnore = ['BitcoinAddress', 'SafecoinAddress', 'BitcoinzAddress', 'ZclassicAddress', 'AnonymousAddress', 'ZelcashAddress', 'HorizenAddress', 'RavencoinAddress', 'LitecoinAddress', 'BitcoinCashAddress'];
+        const dataToIgnore = ['BitcoinAddress', 'SafecoinAddress', 'BitcoinzAddress', 'ZclassicAddress', 'RitocoinAddress', 'AnonymousAddress', 'ZelcashAddress', 'HorizenAddress', 'RavencoinAddress', 'LitecoinAddress', 'BitcoinCashAddress'];
         if (dataToIgnore.indexOf(this.validDataFromClipboard.type) > -1) {
           this.validDataFromClipboard = null;
           return;
@@ -687,6 +693,7 @@ export class HomePage {
 
   public goToWalletDetails(wallet): void {
     if (this.showReorderAll || this.showReorderBtc || this.showReorderSafe || this.showReorderBtcz || 
+        this.showReorderRito || 
         this.showReorderZcl || this.showReorderAnon || this.showReorderZel || this.showReorderZen || this.showReorderRvn || 
         this.showReorderLtc || this.showReorderBch) return;
     this.events.unsubscribe('finishIncomingDataMenuEvent');
@@ -741,6 +748,9 @@ export class HomePage {
   }
   public reorderZcl(): void {
     this.showReorderZcl = !this.showReorderZcl;
+  }
+  public reorderRito(): void {
+    this.showReorderRito = !this.showReorderRito;
   }
   public reorderAnon(): void {
     this.showReorderAnon = !this.showReorderAnon;
@@ -799,6 +809,14 @@ export class HomePage {
     this.walletsZcl.splice(indexes.from, 1);
     this.walletsZcl.splice(indexes.to, 0, element);
     _.each(this.walletsZcl, (wallet, index: number) => {
+      this.profileProvider.setWalletOrder(wallet.id, index);
+    });
+  }
+  public reorderWalletsRito(indexes): void {
+    let element = this.walletsRito[indexes.from];
+    this.walletsRito.splice(indexes.from, 1);
+    this.walletsRito.splice(indexes.to, 0, element);
+    _.each(this.walletsRito, (wallet, index: number) => {
       this.profileProvider.setWalletOrder(wallet.id, index);
     });
   }

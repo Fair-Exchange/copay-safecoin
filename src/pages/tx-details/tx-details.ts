@@ -76,6 +76,8 @@ export class TxDetailsPage {
            ? defaults.blockExplorerUrl.btcz
 //            : this.wallet.coin === 'zcl' 
 //             ? defaults.blockExplorerUrl.zcl
+            : this.wallet.coin === 'rito' 
+             ? defaults.blockExplorerUrl.rito
 //            : this.wallet.coin === 'anon' 
 //             ? defaults.blockExplorerUrl.anon
             : this.wallet.coin === 'zel' 
@@ -269,7 +271,7 @@ export class TxDetailsPage {
   public viewOnBlockchain(): void {
     let btx = this.btx;
     let https = 'https://';
-    if (this.btx.amountUnitStr == 'ZCL') https = 'http://';
+    if (this.btx.amountUnitStr == 'ZCL' ) https = 'http://';
     let url =
       https +
       (this.getShortNetworkName() == 'test' ? 'test-' : '') +
