@@ -10,7 +10,7 @@ import * as COREBTCZ from 'bitcore-lib-btcz-mini';
 
 import * as CORELTC from 'bitcore-lib-ltc-mini';
 import * as CORERVN from 'bitcore-lib-rvn-mini';
-import * as CORESAFE from 'bitcore-lib-safe-mini';
+import * as CORESAFE from 'bitcore-lib-safecoin';
 
 import * as CORERITO from 'bitcore-lib-rito-mini';
 

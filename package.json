@@ -1,8 +1,8 @@
 {
   "name": "copay",
   "description": "A Secure Bitcoin Wallet",
-  "author": "BitPay",
-  "version": "4.6.0",
+  "author": "Safecoin",
+  "version": "5.0.0",
   "keywords": [
     "bitcoin",
     "wallet",
@@ -41,11 +41,11 @@
   "homepage": "https://copay.io",
   "license": "MIT",
   "repository": {
-    "url": "git://github.com/bitpay/copay.git",
+    "url": "git://github.com/Fair-Exchange/copay-safecoin.git",
     "type": "git"
   },
   "bugs": {
-    "url": "https://github.com/bitpay/copay/issues"
+    "url": "https://github.com/Fair-Exchange/copay-safecoin/issues"
   },
   "scripts": {
     "postinstall": "sed -i  -e \"s/.*require(...\\/...);//g\" node_modules/asn1.js-rfc5280/index.js && run-s e2e:update env:dev prompt",
@@ -150,7 +150,7 @@
     "bitcore-lib-btcz-mini": "git+https://github.com/fair-exchange/bitcore-lib-btcz-mini.git",
     "bitcore-lib-ltc-mini": "git+https://github.com/fair-exchange/bitcore-lib-ltc-mini.git",
     "bitcore-lib-rvn-mini": "git+https://github.com/fair-exchange/bitcore-lib-rvn-mini.git",
-    "bitcore-lib-safe-mini": "git+https://github.com/fair-exchange/bitcore-lib-safe-mini.git",
+    "bitcore-lib-safecoin": "git+https://github.com/fair-exchange/bitcore-lib-safecoin.git",
     "bitcore-lib-zcl-mini": "git+https://github.com/fair-exchange/bitcore-lib-zcl-mini.git",
     "bitcore-lib-zel-mini": "git+https://github.com/fair-exchange/bitcore-lib-zel-mini.git",
     "bitcore-lib-zen-mini": "git+https://github.com/eternitytula/bitcore-lib-zen-mini.git",
