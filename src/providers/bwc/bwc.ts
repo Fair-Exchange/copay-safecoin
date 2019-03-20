@@ -15,7 +15,7 @@ import * as CORESAFE from 'bitcore-lib-safecoin';
 import * as CORERITO from 'bitcore-lib-rito-mini';
 
 import * as COREZCL from 'bitcore-lib-zcl-mini';
-import * as COREZEL from 'bitcore-lib-zel-mini';
+import * as COREZEL from 'bitcore-lib-zel';
 import * as COREZEN from 'bitcore-lib-zen-mini';
 
 import * as BWC from 'bitcore-wallet-client-safecoin';
